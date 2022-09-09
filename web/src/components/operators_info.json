@@ -1,0 +1,28 @@
+{
+    "Clean": {
+        "text": "Data cleaning is the process of fixing or removing incorrect, corrupted, incorrectly formatted, or incomplete data within a dataset. <br> Here we consider two techniques:<ul><li>  <b>KNN Padding:</b>  Each sample’s missing values are imputed using the mean value from  n_neighbors nearest neighbors found in the training set. Two  samples are close if the features that neither is missing are  close.</li><li>  <b>Mean Padding:</b>Replace missing values using the mean along  each feature. Can only be used with numeric data.</li></ul>",
+        "img": "",
+        "link": ""
+    },
+    "Normalize": {
+        "text": "Scales and translates each feature individually such that it is in the given range on the dataset, e.g. between zero and one (by default).<br>It uses this formula: <img src='https://i.stack.imgur.com/EuitP.png' height='50px'>",
+        "img": "",
+        "link": ""
+    },
+    "Linear Transformation": {
+        "text": "LNN Lorem ipsum",
+        "img": "",
+        "link": ""
+    },
+    "Trend":{
+        "text": "The trend shows the general tendency of the data to increase or decrease during a long period of time. A trend is a smooth, general, long-term, average tendency. It is not always necessary that the increase or decrease is in the same direction throughout the given period of time. It is observable that the tendencies may increase, decrease or are stable in different sections of time.  But the overall trend must be upward, downward or stable.<br> <b>Linear and Non-Linear Trend</b> <br> If we plot the time series values on a graph in accordance with time t. The pattern of the data clustering shows the type of trend. If the set of data cluster more or less round a straight line, then the trend is linear otherwise it is non-linear (Curvilinear).",
+        "img": "",
+        "link": ""
+    },
+    "Cyclicity": {
+        "text": "The variations in a time series which operate themselves over a span of more than one year are the cyclic variations. This oscillatory movement has a period of oscillation of more than a year. One complete period is a cycle. This cyclic movement is sometimes called the ‘Business Cycle’. It is a four-phase cycle comprising of the phases of prosperity, recession, depression, and recovery. The cyclic variation may be regular are not periodic. The upswings and the downswings in business depend upon the joint nature of the economic forces and the interaction between them."
+    },
+    "Seasonality": {
+        "text": "These are the rhythmic forces which operate in a regular and periodic manner over a span of less than a year. They have the same or almost the same pattern during a period of 12 months. This variation will be present in a time series if the data are recorded hourly, daily, weekly, quarterly, or monthly. These variations come into play either because of the natural forces or man-made conventions. The various seasons or climatic conditions play an important role in seasonal variations."
+    }
+}
