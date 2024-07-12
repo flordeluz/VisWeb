@@ -1,0 +1,33 @@
+{
+    "Clean": {
+        "text": "Data cleaning is the process of fixing incorrect or incomplete data. Here there are some implemented techniques:<ul><li>Fill simple datasets with Rolling mean and Moving median.</li><li>Regression algorithms like Decision trees, Stochastic grading booting, and Bagging kNN.</li><li>Polynomials like Robust locally weighted regression and Legendre.</li></ul>",
+        "img": "",
+        "link": ""
+    },
+    "Normalize": {
+        "text": "Features Scaling/Normalization of a given Dataset.<ul><li>MinMax and Standard transformed values lie in a [0, 1] range.</li><li>MaxAbs transformed values lie in a [-1, 1] range.</li><li>Robust Scaler transformed values lie in a [-2, 3] range and deal with outliers.</li></ul>",
+        "img": "",
+        "link": ""
+    },
+    "Transform": {
+        "text": "Data transforms are intended to remove noise and improve the signal in time series.<ul><li>Linear and quadratic transformations are for enhancing series.</li><li>A time series that has a quadratic growth trend can be made linear by taking the square root.</li><li>Time series with extreme trends -often graphed as a hockey stick- are exponential distribution, it can be made linear by taking the logarithm of the values.</li><li>Differencing applied to a series works well in removing trend and cycles.</li></ul>",
+        "img": "",
+        "link": ""
+    },
+    "Dim.Reduce": {
+	"text": "Principal Component Analysis (PCA) and Factor Analysis (FA) allow us to reduce the dimensionality of the dataset down to fewer unobserved variables. PCA assumes that their common variances take up all of the total variance. FA assumes partitions of the total variance into common and unique variances. FA shows us what features to drop while PCA needs evaluation, mostly visual, between components.",
+        "img": "",
+        "link": ""
+    },
+    "Trend":{
+        "text": "The trend shows the general tendency of the data to increase or decrease during a long period of time. A trend is a smooth, general, long-term, average tendency. It is not always necessary that the increase or decrease is in the same direction throughout the given period of time. It is observable that the tendencies may increase, decrease or are stable in different sections of time.  But the overall trend must be upward, downward or stable.<br> <b>Linear and Non-Linear Trend</b> <br> If we plot the time series values on a graph in accordance with time t. The pattern of the data clustering shows the type of trend. If the set of data cluster more or less round a straight line, then the trend is linear otherwise it is non-linear (Curvilinear).",
+        "img": "",
+        "link": ""
+    },
+    "Cyclicity": {
+        "text": "The variations in a time series which operate themselves over a span of more than one year are the cyclic variations. This oscillatory movement has a period of oscillation of more than a year. One complete period is a cycle. This cyclic movement is sometimes called the ‘Business Cycle’. It is a four-phase cycle comprising of the phases of prosperity, recession, depression, and recovery. The cyclic variation may be regular are not periodic. The upswings and the downswings in business depend upon the joint nature of the economic forces and the interaction between them."
+    },
+    "Seasonality": {
+        "text": "These are the rhythmic forces which operate in a regular and periodic manner over a span of less than a year. They have the same or almost the same pattern during a period of 12 months. This variation will be present in a time series if the data are recorded hourly, daily, weekly, quarterly, or monthly. These variations come into play either because of the natural forces or man-made conventions. The various seasons or climatic conditions play an important role in seasonal variations."
+    }
+}

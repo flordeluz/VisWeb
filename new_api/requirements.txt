@@ -1,0 +1,8 @@
+bottle
+sklearn
+statsmodels
+simplejson
+tables
+pingouin
+tensorflow
+hurst
