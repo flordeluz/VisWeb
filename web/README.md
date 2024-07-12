@@ -1,4 +1,4 @@
-# janotubeweb
+# VisWeb
 
 ## Project setup
 ```
