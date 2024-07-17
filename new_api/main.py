@@ -36,6 +36,7 @@ from algoritmosTransformacion import comprobarTransformacion
 from algoritmosReduccion2 import comprobarReduccion, verificar_dimensionality_reduction_fa
 from algoritmosEstacionalidad import comprobarEstacionalidad
 from algoritmosCiclicidad2 import comprobarCiclicidad, verificar_ciclo_fft
+from algoritmosEstadisticas import describe_data, null_values_data, addinfo_data, corrmat_data, bivaran_data, boxplot_data
 # -------------------------------
 
 # HINT: Main Transformers Class For Data Transformation
@@ -224,6 +225,76 @@ def get_time_span(dataset, station, resample):
     timespan = int(timespan)
     return { "periods": np.unique(timespan).tolist(),
              "timespan": str(timespan) }
+
+
+@route("/stats/describe/<dataset>/<station>")
+@enable_cors
+def get_describe(dataset, station):
+    response.headers["Content-Type"] = "application/json"
+    global full_station_ds
+    global current_df
+    descriptivestats = describe_data(full_station_ds)
+    # print("[ HTML ]:", descriptivestats)
+    return { "describe": str(descriptivestats) }
+
+
+@route("/stats/nulls/<dataset>/<station>")
+@enable_cors
+def get_nulls(dataset, station):
+    response.headers["Content-Type"] = "application/json"
+    global full_station_ds
+    global current_df
+    reshtml = null_values_data(full_station_ds)
+    # print("[ HTML ]:", reshtml)
+    return { "nulls": str(reshtml) }
+
+
+@route("/stats/addinfo/<dataset>/<station>")
+@enable_cors
+def get_addinfo(dataset, station):
+    response.headers["Content-Type"] = "application/json"
+    global full_station_ds
+    global current_df
+    loader = loaders[dataset]
+    reshtml = addinfo_data(full_station_ds, loader.cols_list, loader.catg_list)
+    # print("[ HTML ]:", reshtml)
+    return { "addinfo": str(reshtml) }
+
+
+@route("/stats/corrmat/<dataset>/<station>")
+@enable_cors
+def get_corrmat(dataset, station):
+    response.headers["Content-Type"] = "application/json"
+    global full_station_ds
+    global current_df
+    loader = loaders[dataset]
+    reshtml = corrmat_data(full_station_ds, loader.cols_list)
+    # print("[ HTML ]:", reshtml)
+    return { "corrmat": str(reshtml) }
+
+
+@route("/stats/bivaran/<dataset>/<station>")
+@enable_cors
+def get_bivaran(dataset, station):
+    response.headers["Content-Type"] = "application/json"
+    global full_station_ds
+    global current_df
+    loader = loaders[dataset]
+    reshtml = bivaran_data(full_station_ds, loader.cols_list)
+    # print("[ HTML ]:", reshtml)
+    return { "bivaran": str(reshtml) }
+
+
+@route("/stats/boxplot/<dataset>/<station>")
+@enable_cors
+def get_boxplot(dataset, station):
+    response.headers["Content-Type"] = "application/json"
+    global full_station_ds
+    global current_df
+    loader = loaders[dataset]
+    reshtml = boxplot_data(full_station_ds, loader.cols_list)
+    # print("[ HTML ]:", reshtml)
+    return { "boxplot": str(reshtml) }
 
 
 @route("/recommendation/<dataset>/<station>")

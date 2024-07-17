@@ -1,8 +1,9 @@
 <template>
 <v-container fluid>
-  <!-- <operations v-model="operation" @input="newOperation" /> -->
   <div class="text-center load-layer" v-if="loading_data">
-    <v-progress-circular :size="100" class="loader" color="primary" indeterminate></v-progress-circular>
+    <v-progress-circular :size="100" class="loader" color="primary" indeterminate>
+      Loading data...
+    </v-progress-circular>
   </div>
   <v-row justify="center" dense>
     <v-col class="text-center text-h4 text-capitalize">Dataset: {{ this.dataset }} - {{ this.station }}</v-col>
@@ -763,6 +764,9 @@ export default {
 	this.algoritms = {}
 	this.dataset = this.$route.params.dataset
 	this.station = this.$route.params.station
+	document.getElementById("dynVisualize").href=`/visualize/${this.dataset}/${this.station}`;
+	document.getElementById("dynStats").href=`/stats/${this.dataset}/${this.station}`;
+	document.getElementById("dynSpiral").href=`/spiral/${this.dataset}/${this.station}`;
 	this.getRecommendations(this.dataset, this.station)
 	console.log("[ Time Series ]", this.dataset, this.station, this.recommendations)
 	axios
@@ -833,9 +837,9 @@ table.blockTable {
     min-width: 50px;
     /* for firefox */
 }
-    .firstRow {
-	height: 38vh;
-    }
+.firstRow {
+    height: 38vh;
+}
 table.pastTable {
     margin-left: auto;
 }

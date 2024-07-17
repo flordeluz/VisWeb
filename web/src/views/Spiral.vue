@@ -1,21 +1,5 @@
 <template>
 <v-container class="my-6" fluid>
-  <v-row
-    dense
-    class="text-center"
-    justify="center"
-    align="center"
-    v-if="!datasetSelected">
-    <v-col cols="3">
-      <h1>Dataset:</h1>
-    </v-col>
-    <v-col cols="3">
-      <v-select v-model="dataset" :items="items" item-text="text" item-value="value" label="Select" persistent-hint single-line />
-    </v-col>
-    <v-col cols="2">
-      <v-btn color="primary" @click="showDatasetSpiral">Use</v-btn>
-    </v-col>
-  </v-row>
   <v-row dense align="center" justify="center" v-if="datasetSelected">
     <h2>Dataset: {{ dataset.toUpperCase() }}, Station: {{ station.toUpperCase() }}</h2>
     <v-col cols="12" class="text-center">
@@ -484,6 +468,9 @@ export default {
     mounted: function() {
 	this.dataset = this.$route.params.dataset;
 	this.station = this.$route.params.station;
+	document.getElementById("dynVisualize").href=`/visualize/${this.dataset}/${this.station}`;
+	document.getElementById("dynStats").href=`/stats/${this.dataset}/${this.station}`;
+	document.getElementById("dynSpiral").href=`/spiral/${this.dataset}/${this.station}`;
 	this.items = [{ text: this.station, value: this.station }]
 	console.log("[ Mounted Radial View ]: (", this.dataset, ",", this.station, ")");
 	this.showDatasetSpiral()

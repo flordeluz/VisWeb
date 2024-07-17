@@ -1,55 +1,52 @@
 <template>
-  <v-container class="my-6" fluid>
-    <v-row justify="center" dense v-if="!this.station">
-      <v-col class="text-center text-h4 text-capitalize">Dataset Metadata</v-col>
-    </v-row>
-    <v-row class="text-center" justify="center" align="center" v-if="!this.station">
-      <v-col cols="5">
-        <v-select v-model="dataset" :items="items" item-text="text" item-value="value" label="Select" persistent-hint
-		  single-line></v-select>
-      </v-col>
-      <v-col cols="2">
-        <v-btn color="primary" @click="getMetadata">Show</v-btn>
-      </v-col>
-    </v-row>
-    <v-row v-if="datasetSelected && !this.station">
-      <v-col class="text-center" v-if="loading">
-        <v-progress-circular :size="200" class="loader" color="primary" indeterminate>
-          Getting metadata...
-        </v-progress-circular>
-      </v-col>
-      <v-col v-else>
-        <v-treeview :items="tree_data" item-key="id" open-on-click color="info" dense>
-          <template v-slot:prepend="{ item, open }">
-            <v-icon v-if="!item.end">
-              {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
+<v-container class="my-6" fluid>
+  <v-row justify="center" dense v-if="!this.station">
+    <v-col class="text-center text-h4 text-capitalize">Dataset Metadata</v-col>
+  </v-row>
+  <v-row class="text-center" justify="center" align="center" v-if="!this.station">
+    <v-col cols="5">
+      <v-select v-model="dataset" :items="items" item-text="text" item-value="value" label="Select" persistent-hint
+		single-line></v-select>
+    </v-col>
+    <v-col cols="2">
+      <v-btn color="primary" @click="getMetadata">Show</v-btn>
+    </v-col>
+  </v-row>
+  <v-row v-if="datasetSelected && !this.station">
+    <v-col class="text-center" v-if="loading">
+      <v-progress-circular :size="200" class="loader" color="primary" indeterminate>
+        Loading data...
+      </v-progress-circular>
+    </v-col>
+    <v-col v-else>
+      <v-treeview :items="tree_data" item-key="id" open-on-click color="info" dense>
+        <template v-slot:prepend="{ item, open }">
+          <v-icon v-if="!item.end">
+            {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
+          </v-icon>
+        </template>
+        <template v-slot:append="{ item }">
+          <div v-if="item.parent" @click="openStation(item)">
+            <b>Go </b>
+            <v-icon v-if="item.parent" color="primary">
+	      mdi-arrow-right-thin-circle-outline
             </v-icon>
-            <!-- <v-icon v-else>
-		 {{ files[item.file] }}
-		 </v-icon> -->
-          </template>
-          <template v-slot:append="{ item }">
-            <div v-if="item.parent" @click="openStation(item)">
-              <b>Go </b>
-              <v-icon v-if="item.parent" color="primary">
-		mdi-arrow-right-thin-circle-outline
-              </v-icon>
-            </div>
-          </template>
-          <template v-slot:label="{ item }">
-            <span v-if="item.end">
-              <b>{{ item.key }}</b>: {{ item.value }}
-            </span>
-            <span v-else>{{ item.name }}</span>
-          </template>
-        </v-treeview>
-      </v-col>
-    </v-row>
-  </v-container>
+          </div>
+        </template>
+        <template v-slot:label="{ item }">
+          <span v-if="item.end">
+            <b>{{ item.key }}</b>: {{ item.value }}
+          </span>
+          <span v-else>{{ item.name }}</span>
+        </template>
+      </v-treeview>
+    </v-col>
+  </v-row>
+</v-container>
 </template>
 
 <script>
-    // -*- mode: JavaScript -*-
+// -*- mode: JavaScript -*-
 import axios from "axios"
 //import TimeSeries from "../components/TimeSeries.vue"
 export default {
@@ -78,6 +75,8 @@ export default {
 	    console.log("[ Dataset ]:", this.dataset)
 	    console.log("[ Station ]:", this.station)
 	    this.$router.push(`/visualize/${this.dataset}/${this.station}`);
+	    document.getElementById("dynVisualize").href=`/visualize/${this.dataset}/${this.station}`;
+	    document.getElementById("dynStats").href=`/stats/${this.dataset}/${this.station}`;
 	    document.getElementById("dynSpiral").href=`/spiral/${this.dataset}/${this.station}`;
 	},
 	async getRecommendations(dataset, station) {

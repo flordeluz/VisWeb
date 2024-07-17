@@ -18,6 +18,14 @@ const routes = [
 	}
     },
     {
+	path: "/stats/:dataset/:station",
+	name: "Statistics",
+	component: () => import("../views/Stats.vue"),
+	meta: {
+	    reload: true
+	}
+    },
+    {
 	path: "/visualize/:dataset/:station",
 	name: "Visualize Database",
 	component: () => import("../components/TimeSeries.vue"),
