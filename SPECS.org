@@ -198,11 +198,11 @@ The backend will support dataset uploading. The structure has been defined on fo
 
 - Statistics of the time series (size, nulls, type of columns, or dimensions). *In progress*.
 
-- Distribution type of the time series (e.g., normal). *In progress*.
+- Distribution type of the time series (e.g., normal). *Done*.
 
-- Outliers. *In progress*.
+- Outliers. *Done*.
 
-- Correlation matrix. *In progress*.
+- Correlation matrix. *Done*.
 
 ** TODO Flow diagram improvement
 
@@ -367,6 +367,7 @@ The backend will support dataset uploading. The structure has been defined on fo
 | -rw-r--r-- |  91786 | Jul |   7 | 01:55 | 20240707-015505.diff |
 | -rw-r--r-- |  46989 | Jul |   9 | 01:33 | 20240709-013313.diff |
 | -rw-r--r-- |  96392 | Jul |  12 | 01:51 | 20240712-015153.diff |
+| -rw-r--r-- | 231634 | Jul |  17 | 01:38 | 20240717-013822.diff |
 \rmfamily
 
 ** Backlog
