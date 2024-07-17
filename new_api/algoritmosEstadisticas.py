@@ -30,7 +30,7 @@ def null_values_data(ds):
         #
     if (have_nulls):
         nullspercentage = (ds.isnull().sum() / ds.shape[0])*100
-        reshtml += "<h5><b>Dataset has null values</b></h5>"
+        reshtml += '<p style="text-align:center"><h5><b>Dataset has null values</b></h5></p>'
         for gtix in nullspercentage.keys():
             if (nullspercentage[gtix] >= 50):
                 gt50.append(gtix)
@@ -38,14 +38,15 @@ def null_values_data(ds):
                 if (nullspercentage[gtix] > 20):
                     gt20.append(gtix)
                     #
-        reshtml += "<u><b>Features with high percentage of null values</b></u><br>"
+        reshtml += "<p><u><b>Features with high percentage of null values</b></u><br>"
         reshtml += str(gt50) + " more than ~50% null values<br>"
-        reshtml += str(gt20) + " between ~20% and ~50% null values<br>"
-        reshtml += "<u><b>Percentage of features with null values</b></u><br>"
+        reshtml += str(gt20) + " between ~20% and ~50% null values</p>"
+        reshtml += "<p><u><b>Percentage of features with null values</b></u><br>"
         reshtml += nullspercentage.to_frame("Nulls(%)").to_html(classes="table table-stripped")
+        reshtml += "</p>"
         #
     else:
-        reshtml += "<h5><b>Dataset has non-null values</b></h5>"
+        reshtml += '<p style="text-align:center"><h5><b>Dataset has not null values</b></h5></p>'
         #
     return reshtml
 
@@ -53,11 +54,13 @@ def null_values_data(ds):
 def addinfo_data(ds, cols_list, catg_list):
     reshtml = ""
     if (ds.duplicated().sum() > 0):
-        reshtml += "<h5><b>Dataset has duplicate records</b></h5><br>"
+        reshtml += '<p style="text-align:center"><h5><b>Dataset has duplicate records</b></h5></p>'
     else:
-        reshtml += "<h5><b>Dataset has non-duplicate records</b></h5><br>"
+        reshtml += '<p style="text-align:center"><h5><b>Dataset has not duplicate records</b></h5></p>'
         #
     descriptivestats = ds.describe(include = "all")
+    reshtml += '<p style="text-align:center"><h5><b>Detecting outliers with IQR</b></h5></p>'
+    reshtml += "<p>"
     for nfld in cols_list:
         IQR = descriptivestats[nfld]["75%"] - descriptivestats[nfld]["25%"]
         UPF = descriptivestats[nfld]["75%"] + (1.5 * IQR)
@@ -67,8 +70,9 @@ def addinfo_data(ds, cols_list, catg_list):
         else:
             reshtml += "<b>" + str(nfld) + " is left skewed" + (", high values outliers" if(UPF < descriptivestats[nfld]["max"]) else "") + (", low values outliers" if(LOF > descriptivestats[nfld]["min"]) else "") + "</b><br>"
             #
+    reshtml += "</p>"
     for cfld in catg_list:
-        reshtml += "<b>" + cfld + " has " + str(descriptivestats[cfld]["unique"]) + " categories, \"" + descriptivestats[cfld]["top"] + "\" is the top one with " + str(descriptivestats[cfld]["freq"]) + "marks</b><br>"
+        reshtml += "<p><b>" + cfld + " has " + str(descriptivestats[cfld]["unique"]) + " categories, \"" + descriptivestats[cfld]["top"] + "\" is the top one with " + str(descriptivestats[cfld]["freq"]) + "marks</b></p>"
         #
     return reshtml
 
@@ -107,7 +111,7 @@ def annotate_heatmap(im, data=None, valfmt="{x:.2f}", textcolors=("black", "whit
 
 
 def corrmat_data(ds, cols_list):
-    reshtml = "<h5><b>Correlation</b></h5><br>"
+    reshtml = '<p style="text-align:center"><h5><b>Correlation Matrix</b></h5></p>'
     fig, ax = plt.subplots(figsize = (12, 6), dpi = 100)
     im, cbar = heatmap(ds[cols_list].corr(), cols_list, cols_list, ax=ax, cmap = "Spectral", vmin=-1, vmax=1, cbarlabel="Coef. corr.")
     texts = annotate_heatmap(im, threshold=0.99, textcolors=("black", "white"))
@@ -121,7 +125,7 @@ def corrmat_data(ds, cols_list):
 
 
 def bivaran_data(ds, cols_list):
-    reshtml = "<h5><b>Bivariate Analysis</b></h5><br>"
+    reshtml = '<p style="text-align:center"><h5><b>Bivariate Analysis</b></h5></p>'
     plt.figure(figsize = (12, 6), dpi = 100)
     sns_plot = sns.pairplot(data=ds[cols_list])
     s = io.BytesIO()
@@ -135,7 +139,7 @@ def boxhisf(data, feature, figsize = (10, 5), kde = True, dpi = 100):
     fig, (ax_box, ax_his) = plt.subplots(nrows = 2, sharex = True, gridspec_kw = {"height_ratios": (1/4, 3/4)}, figsize = figsize, dpi = dpi)
     sns.boxplot(data = data, x = feature, ax = ax_box, showmeans = True, color = "violet")
     ax_box.set(xlabel=None)
-    ax_box.set_title("Campo/Columna " + str(feature))
+    ax_box.set_title("Feature " + str(feature))
     sns.histplot(data = data, x = feature, kde = kde, ax = ax_his)
     ax_his.axvline(data[feature].mean(), color = "green", linestyle = "--")
     ax_his.axvline(data[feature].median(), color = "black", linestyle = "-")
@@ -144,7 +148,7 @@ def boxhisf(data, feature, figsize = (10, 5), kde = True, dpi = 100):
 
 
 def boxplot_data(ds, cols_list):
-    reshtml = "<h5><b>Outliers</b></h5><br>"
+    reshtml = '<p style="text-align:center"><h5><b>Outliers and Distribution</b></h5></p>'
     for coln in cols_list:
         s = io.BytesIO()
         box_plot = boxhisf(ds, coln, figsize = (12, 6), dpi = 100)

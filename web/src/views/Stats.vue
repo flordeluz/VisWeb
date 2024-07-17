@@ -4,6 +4,14 @@
     <h2>Dataset: {{ dataset.toUpperCase() }}, Station: {{ station.toUpperCase() }}</h2>
   </v-row>
   <v-row dense align="center" justify="center" v-if="datasetSelected">
+    <v-col cols="6">
+      <div v-html="crmatrix"></div>
+    </v-col>
+    <v-col cols="5">
+      <div v-html="numnumsc"></div>
+    </v-col>
+  </v-row>
+  <v-row dense align="center" justify="center" v-if="datasetSelected">
     <v-col cols="12">
       <div v-html="describes"></div>
     </v-col>
@@ -14,14 +22,6 @@
     </v-col>
     <v-col cols="5">
       <div v-html="cmsummary"></div>
-    </v-col>
-  </v-row>
-  <v-row dense align="center" justify="center" v-if="datasetSelected">
-    <v-col cols="5">
-      <div v-html="crmatrix"></div>
-    </v-col>
-    <v-col cols="5">
-      <div v-html="numnumsc"></div>
     </v-col>
   </v-row>
   <v-row dense align="center" justify="center" v-if="datasetSelected">
@@ -144,6 +144,10 @@ export default {
 </script>
 
 <style>
+img {
+  width: 100%;
+  height: auto;
+}
 .labels.segment {
     font: sans-serif;
     font-size: 13px;
@@ -184,15 +188,15 @@ td.slideOp:hover {
     background-color: rgba(6, 10, 223, 0.109);
     cursor: pointer;
 }
-/* .dataframe tbody tr th:only-of-type { */
-/*     vertical-align: middle; */
-/* } */
+.dataframe tbody tr th:only-of-type {
+    vertical-align: middle;
+}
 
-/* .dataframe tbody tr th { */
-/*     vertical-align: top; */
-/* } */
+.dataframe tbody tr th {
+    vertical-align: top;
+}
 
-/* .dataframe thead th { */
-/*     text-align: right; */
-/* } */
+.dataframe thead th {
+    text-align: right;
+}
 </style>
