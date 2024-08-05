@@ -26,6 +26,14 @@ const routes = [
 	}
     },
     {
+	path: "/net/:dataset/:station",
+	name: "Network",
+	component: () => import("../views/Network.vue"),
+	meta: {
+	    reload: true
+	}
+    },
+    {
 	path: "/visualize/:dataset/:station",
 	name: "Visualize Database",
 	component: () => import("../components/TimeSeries.vue"),

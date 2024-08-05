@@ -72,7 +72,7 @@
   <v-row class="pt-4">
     <v-col align-self="end" ref="macroTaskContainer">
       <diagram ref="macroTaskDiagram" v-on:taskSelected="selectedTask" v-on:macrotaskRec="recMacrotask"
-	       :dataset="dataset" :station="station" :recommendations="recommendations" :algoritms="algoritms" />
+	       :dataset="dataset" :station="station" :recommendations="recommendations" :algorithms="algorithms" />
     </v-col>
   </v-row>
   <v-dialog v-model="dialog" width="500">
@@ -140,7 +140,7 @@ export default {
 	dataset: "",
 	station: null,
 	recommendations: {},
-	algoritms: {},
+	algorithms: {},
 	tareasHechas: [],
 	reUpdateMacroTask: [],
 	chart: null,
@@ -218,20 +218,20 @@ export default {
 	    let num = "0"
 	    let recomends = dataOb.data[0]
 	    this.recommendations = recomends
-	    this.algoritms = dataOb.data[1]
+	    this.algorithms = dataOb.data[1]
 	    await this.$emit("update:recommendations", this.recommendations);
-	    await this.$emit("update:algoritms", this.algoritms);
-	    console.log("recomendaciones ", this.recommendations)
-	    console.log("Algoritmos recomendados", this.algoritms.Clean)
+	    await this.$emit("update:algorithms", this.algorithms);
+	    console.log("[ Recommendations ]: ", this.recommendations)
+	    console.log("[ Recommended algorithms to fix ]:", this.algorithms.Clean)
 	    this.$refs.macroTaskDiagram.actualizarDiagrama(num);
 	    //this.recommendations = recommendations
 	    //console.log("Recomendatios:", recommendations)
 	},
-	newRecommendations(data) {
-	    console.log("Nuevas recomendaciones obtenidas", data.recomends)
-	    this.recommendations = data.recomends
-	    console.log("Rec Updated: ", this.recommendations)
-	},
+	// newRecommendations(data) {
+	//     console.log("[ Additional recommendations ]:", data.recomends)
+	//     this.recommendations = data.recomends
+	//     console.log("[ Updated recommendations ]:", this.recommendations)
+	// },
 	minmaxInterval(raw_data) {
 	    let min_value = 0;
 	    let max_value = 0;
@@ -451,12 +451,12 @@ export default {
 		let recomends = dataOb.data[0]
 		console.log("Recomendaciones antes: ", this.recommendations)
 		this.recommendations = recomends
-		this.algoritms = dataOb.data[1]
+		this.algorithms = dataOb.data[1]
 		//await this.$emit("newRec", { recomends })
 		await this.$emit("update:recommendations", this.recommendations);
-		await this.$emit("update:algoritms", this.algoritms);
+		await this.$emit("update:algorithms", this.algorithms);
 		console.log("recomendaciones despues", this.recommendations)
-		console.log("Algoritmos recomendados", this.algoritms.Clean)
+		console.log("Algoritmos recomendados", this.algorithms.Clean)
 		this.$refs.macroTaskDiagram.actualizarDiagrama(num);
 		if (this.reUpdateMacroTask.length !== 0) {
 		    console.log("MACRO TAREAS POR HABILITAR: ", this.reUpdateMacroTask)
@@ -613,9 +613,9 @@ export default {
 		let recomends = dataOb.data[0]
 		//await this.$emit("newRec", { recomends })
 		this.recommendations = recomends
-		this.algoritms = dataOb.data[1]
+		this.algorithms = dataOb.data[1]
 		await this.$emit("update:recommendations", this.recommendations);
-		await this.$emit("update:algoritms", this.algoritms);
+		await this.$emit("update:algorithms", this.algorithms);
 		this.$refs.macroTaskDiagram.actualizarDiagrama(num);
 		console.log("diagrama actualizado:", num)
 		this.loading_data = false
@@ -637,9 +637,9 @@ export default {
 		let recomends = dataOb.data[0]
 		//await this.$emit("newRec", { recomends })
 		this.recommendations = recomends
-		this.algoritms = dataOb.data[1]
+		this.algorithms = dataOb.data[1]
 		await this.$emit("update:recommendations", this.recommendations);
-		await this.$emit("update:algoritms", this.algoritms);
+		await this.$emit("update:algorithms", this.algorithms);
 		this.$refs.macroTaskDiagram.actualizarDiagrama(num);
 		console.log("diagrama actualizado:", num)
 		this.loading_data = false
@@ -761,9 +761,10 @@ export default {
     mounted: function () {
 	this.isClean = false
 	this.isCleanFT = false
-	this.algoritms = {}
+	this.algorithms = {}
 	this.dataset = this.$route.params.dataset
 	this.station = this.$route.params.station
+	document.getElementById("dynNet").href=`/net/${this.dataset}/${this.station}`;
 	document.getElementById("dynVisualize").href=`/visualize/${this.dataset}/${this.station}`;
 	document.getElementById("dynStats").href=`/stats/${this.dataset}/${this.station}`;
 	document.getElementById("dynSpiral").href=`/spiral/${this.dataset}/${this.station}`;

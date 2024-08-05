@@ -162,14 +162,14 @@ export default {
     },
 
     components: {},
-    props: ["dataset", "station", "recommendations", "algoritms"],
+    props: ["dataset", "station", "recommendations", "algorithms"],
     mounted: async function () {
 	console.log(
 	    "Diagram props",
 	    this.dataset,
 	    this.station,
 	    this.recommendations,
-	    this.algoritms
+	    this.algorithms
 	)
 	//this.$on("ejecutarMetodo", this.actualizarDiagrama);
 	const ref = this.$refs.diagram
@@ -200,7 +200,7 @@ export default {
 	    let currentMacroTask = this.macroTasks[mt]
 	    console.log("currentMacroTask es:", currentMacroTask)
 	    console.log("recomendaciones actual:", this.recommendations)
-	    console.log("Algoritmos en diagram", this.algoritms)
+	    console.log("Algoritmos en diagram", this.algorithms)
 	    let isRecommended = currentMacroTask.taskName in this.recommendations
 	    this.dagreChart.setNode(mt, {
 		// label: "Quality of Data " + this.arrow,
@@ -389,12 +389,12 @@ export default {
 	        `<td id="macro-${action.value}" class="border icon-inactive ${action.active ? "action active" : "" } ${action.required ? "required" : ""}"
 	    	     data-value="${action.value}" data-macroTask="${taskName}" ${action.active ? `style="background-color: #${action.bgColor}` : "" }"
 	    	     title="${action.description}
-	    		    ${action.name === "Clean" ? this.algoritms.Clean :
-	    		      action.name === "Normalize" ? this.algoritms.Normalize :
-	    		      action.name === "Transform" ? this.algoritms.Transform :
-	    	              action.name === "Dim.Reduce" ? this.algoritms.DimRed :
-	    		      action.name === "Cyclicity" ? this.algoritms.Cyclicity :
-	    	              action.name === "Seasonality" ? this.algoritms.Seasonality : ""}">
+	    		    ${action.name === "Clean" ? this.algorithms.Clean :
+	    		      action.name === "Normalize" ? this.algorithms.Normalize :
+	    		      action.name === "Transform" ? this.algorithms.Transform :
+	    	              action.name === "Dim.Reduce" ? this.algorithms.DimRed :
+	    		      action.name === "Cyclicity" ? this.algorithms.Cyclicity :
+	    	              action.name === "Seasonality" ? this.algorithms.Seasonality : ""}">
 	          ${action.name}
 	          <span class="mdi mdi-check-circle-outline check-icon"></span>
 	        </td>`

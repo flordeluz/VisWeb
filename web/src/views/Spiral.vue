@@ -186,7 +186,7 @@ import axios from "axios"
 import VueSlider from "vue-slider-component"
 import "vue-slider-component/theme/default.css"
 export default {
-    name: "Home",
+    name: "Spiral",
     components: {
 	VueSlider
     },
@@ -468,6 +468,7 @@ export default {
     mounted: function() {
 	this.dataset = this.$route.params.dataset;
 	this.station = this.$route.params.station;
+	document.getElementById("dynNet").href=`/net/${this.dataset}/${this.station}`;
 	document.getElementById("dynVisualize").href=`/visualize/${this.dataset}/${this.station}`;
 	document.getElementById("dynStats").href=`/stats/${this.dataset}/${this.station}`;
 	document.getElementById("dynSpiral").href=`/spiral/${this.dataset}/${this.station}`;

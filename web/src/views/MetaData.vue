@@ -75,6 +75,7 @@ export default {
 	    console.log("[ Dataset ]:", this.dataset)
 	    console.log("[ Station ]:", this.station)
 	    this.$router.push(`/visualize/${this.dataset}/${this.station}`);
+	    document.getElementById("dynNet").href=`/net/${this.dataset}/${this.station}`;
 	    document.getElementById("dynVisualize").href=`/visualize/${this.dataset}/${this.station}`;
 	    document.getElementById("dynStats").href=`/stats/${this.dataset}/${this.station}`;
 	    document.getElementById("dynSpiral").href=`/spiral/${this.dataset}/${this.station}`;
@@ -86,11 +87,11 @@ export default {
 	    this.recommendations = recommendations
 	    console.log("[ Recommendations ]:", recommendations)
 	},
-	newRecommendations(data) {
-	    console.log("[ New recommendations ]:", data.recomends)
-	    this.recommendations = data.recomends
-	    console.log("[ Recommendations Updated ]: ", this.recommendations)
-	},
+	// newRecommendations(data) {
+	//     console.log("[ Additional recommendations ]:", data.recomends)
+	//     this.recommendations = data.recomends
+	//     console.log("[ Updated recommendations ]:", this.recommendations)
+	// },
 	titleCase(str) {
 	    return str.toLowerCase().replace(/\b(\w)/g, s => s.toUpperCase())
 	},
