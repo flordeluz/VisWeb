@@ -321,8 +321,8 @@ def recommendation_by_station(dataset, station):
     station_metadata = loader.get_station_metadata(station)
     station_df, full_station_df = loader.get_station_df(station)
     recommendations = {
-        "Data reduction": [],
-        "Quality of Data": [],
+        "Data Reduction": [],
+        "Data Quality": [],
         "Variables Behavior": [],
     }
     global full_station_ds
@@ -340,7 +340,7 @@ def recommendation_by_station(dataset, station):
     current_station = station
     if (null_values > 0):
         dic["Clean"] = "Null Values"
-        recommendations["Quality of Data"].append("Clean")
+        recommendations["Data Quality"].append("Clean")
         print("[ Null Values:", null_values, "]")
     else:
         full_station_ds = full_station_df
@@ -355,11 +355,11 @@ def recommendation_by_station(dataset, station):
         dic["Normalize"] = messages_norm
         dic["Transform"] = messages_transform
         if status_cleaning:
-            recommendations["Quality of Data"].append("Clean")
+            recommendations["Data Quality"].append("Clean")
         if status_norm:
-            recommendations["Quality of Data"].append("Normalize")
+            recommendations["Data Quality"].append("Normalize")
         if status_transform:
-            recommendations["Quality of Data"].append("Transform")
+            recommendations["Data Quality"].append("Transform")
             #
     env = []
     res = {k: v for k, v in recommendations.items() if len(v) > 0}
@@ -373,8 +373,8 @@ def recommendation_by_station(dataset, station):
 @enable_cors
 def recommendation_by_macrotask(dataset, station, macrotarea):
     recommendations = {
-        "Data reduction": [],
-        "Quality of Data": [],
+        "Data Reduction": [],
+        "Data Quality": [],
         "Variables Behavior": [],
     }
     global current_df
@@ -390,18 +390,19 @@ def recommendation_by_macrotask(dataset, station, macrotarea):
         dic["Normalize"] = messages_norm
         dic["Transform"] = messages_transform
         if status_cleaning:
-            recommendations["Quality of Data"].append("Clean")
+            recommendations["Data Quality"].append("Clean")
         if status_norm:
-            recommendations["Quality of Data"].append("Normalize")
+            recommendations["Data Quality"].append("Normalize")
         if status_transform:
-            recommendations["Quality of Data"].append("Transform")
+            recommendations["Data Quality"].append("Transform")
             #
     elif macrotarea == "1":
         status_reduccion, messages_reduccion = comprobarReduccion(current_df, par = False)
         dic["DimRed"] = messages_reduccion
         messages_reduccion = []
         if status_reduccion:
-            recommendations["Data reduction"].append("Dim.Reduce")
+            # recommendations["Data Reduction"].append("Dim.Reduce")
+            recommendations["Data Reduction"].append("DimRed")
             #
     elif macrotarea == "1aux":
         global aux_df
@@ -414,7 +415,8 @@ def recommendation_by_macrotask(dataset, station, macrotarea):
         dic["DimRed"] = messages_reduccion
         messages_reduccion = []
         if status_reduccion:
-            recommendations["Data reduction"].append("Dim.Reduce")
+            # recommendations["Data Reduction"].append("Dim.Reduce")
+            recommendations["Data Reduction"].append("DimRed")
             #
     elif macrotarea == "2":
         status_estacionalidad, messages_estacionalidad = comprobarEstacionalidad(current_df, par = False)
@@ -447,7 +449,7 @@ def recommendation_by_macrotask(dataset, station, macrotarea):
             #
     else:
         print("Macrotarea no encontrada")
-        # recommendations["Quality of Data"].append("No encontrado")
+        # recommendations["Data Quality"].append("No encontrado")
         #
     env = []
     res = {k: v for k, v in recommendations.items() if len(v) > 0}

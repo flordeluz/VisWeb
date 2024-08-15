@@ -68,8 +68,8 @@ class GenLoader(MainloaderClass):
             dt = []
             for f in all_files:
                 dt.append(pd.read_csv(f, header = None, delimiter = " "))
-                va = re.sub("^.*/", "", f)
-                va = re.sub("\.txt$", "", va)
+                va = re.sub(r"^.*/", "", f)
+                va = re.sub(r"\.txt$", "", va)
                 dt[i]["station"] = va
                 i += 1
                 #

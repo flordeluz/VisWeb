@@ -196,18 +196,23 @@ export default {
     props: [],
     watch: {
 	dataset: function (newValue, oldValue) {
-	    this.seePresentChart = false
-	    console.log("[ Dataset Name ]:", newValue)
-	    console.log("[ Last Dataset Name ]:", oldValue)
-	    console.log("[ Dataset Station Name ]:", this.station)
+	    this.seePresentChart = false;
+	    console.log("[ Dataset Name ]:", newValue);
+	    console.log("[ Last Dataset Name ]:", oldValue);
+	    console.log("[ Dataset Station Name ]:", this.station);
 	    axios
 		.get(`http://localhost:8080/data/${newValue}/${this.station}`)
 		.then(async data => {
-		    let raw_data = data.data
-		    await this.disaggregateData(raw_data)
-		    console.log("[ Data Station Length ]: ", raw_data.length)
-		    this.chart.render()
-		    this.history = []
+		    let raw_data = data.data;
+		    await this.disaggregateData(raw_data);
+		    console.log("[ Data Station Length ]: ", raw_data.length);
+		    if ( this.chart == null) {
+			console.log("[ Watch Chart is Null yet ]");
+		    } else {
+			this.chart.render();
+			console.log("[ Watch Chart Rendered ]");
+		    }
+		    this.history = [];
 		})
 	},
     },
@@ -216,8 +221,8 @@ export default {
 	    let dataOb = await axios.get(`http://localhost:8080/recommendation/${dataset}/${this.titleCase(station)}`)
 	    console.log("dataOb", dataOb.data)
 	    let num = "0"
-	    let recomends = dataOb.data[0]
-	    this.recommendations = recomends
+	    let recommends = dataOb.data[0]
+	    this.recommendations = recommends
 	    this.algorithms = dataOb.data[1]
 	    await this.$emit("update:recommendations", this.recommendations);
 	    await this.$emit("update:algorithms", this.algorithms);
@@ -228,8 +233,8 @@ export default {
 	    //console.log("Recomendatios:", recommendations)
 	},
 	// newRecommendations(data) {
-	//     console.log("[ Additional recommendations ]:", data.recomends)
-	//     this.recommendations = data.recomends
+	//     console.log("[ Additional recommendations ]:", data.recommends)
+	//     this.recommendations = data.recommends
 	//     console.log("[ Updated recommendations ]:", this.recommendations)
 	// },
 	minmaxInterval(raw_data) {
@@ -307,7 +312,7 @@ export default {
 	    if ( this.operation.operation_name === "trend" ||
 		 this.operation.operation_name === "seasonality" ||
 		 this.operation.operation_name === "cyclicity" ) {
-		console.log("[ DISAGGREGATE: TREND, SEASONALITY AND CYCLICITY ]")
+		console.log("[ DISAGGREGATE: TREND, SEASONALITY AND CYCLICITY SECTION ]:", this.operation.operation_name)
 		let orig_data = await raw_data.map(el => {
 		    return { label: el.date, y: el.orig }
 		})
@@ -318,8 +323,9 @@ export default {
 		return [ { datapoints: orig_data },
 			 { datapoints: result_data },
 			 { datapoints: [] } ]
-	    } else if (this.operation.operation_name !== "reduce" || this.operation.operation_name == "reduce") {
-		console.log("[ DISAGGREGATE: NOT REDUCE AND REDUCE HAS TO BE ELSE ]")
+	    } else /* if (this.operation.operation_name !== "reduce" ||
+		       this.operation.operation_name == "reduce") */ {
+		console.log("[ DISAGGREGATE: ANY ]:", this.operation.operation_name)
 		this.tempMaxData = await raw_data.map (
 		    ({ date: label, tempMax: y }) => ({ label, y })
 		)
@@ -344,7 +350,7 @@ export default {
 		})
 		this.legends = keys
 		return resData
-	    } else {
+	    } /* else {
 		console.log("[ DISAGGREGATE: ELSE, IT WOULD BE NEVER USED ]")
 		let feature1 = await raw_data.map(({ date: label, 1: y }) => ({ label, y }))
 		let feature2 = await raw_data.map(({ date: label, 2: y }) => ({ label, y }))
@@ -354,7 +360,7 @@ export default {
 		    { datapoints: feature2 },
 		    { datapoints: [] }
 		]
-	    }
+	    } */
 	},
 	async rangeChanged(e) {
 	    this.chart2AxisX = Object.assign({}, e.axisX[0])
@@ -448,11 +454,11 @@ export default {
 		let num = "0"
 		let dataOb = await axios.get(string_rec, { params: extra_params })
 		console.log("dataOb", dataOb.data)
-		let recomends = dataOb.data[0]
+		let recommends = dataOb.data[0]
 		console.log("Recomendaciones antes: ", this.recommendations)
-		this.recommendations = recomends
+		this.recommendations = recommends
 		this.algorithms = dataOb.data[1]
-		//await this.$emit("newRec", { recomends })
+		//await this.$emit("newRec", { recommends })
 		await this.$emit("update:recommendations", this.recommendations);
 		await this.$emit("update:algorithms", this.algorithms);
 		console.log("recomendaciones despues", this.recommendations)
@@ -598,7 +604,7 @@ export default {
 	    let num = "0"
 	    if (this.isClean) {
 		this.loading_data = true
-		if (macrotaskName == "Data reduction") {
+		if (macrotaskName == "Data Reduction") {
 		    request = `http://localhost:8080/recommendation/${this.dataset}/${this.station}/1`
 		    console.log(request)
 		    num = "1"
@@ -610,9 +616,9 @@ export default {
 		}
 		let dataOb = await axios.get(request)
 		console.log("dataOb", dataOb.data)
-		let recomends = dataOb.data[0]
-		//await this.$emit("newRec", { recomends })
-		this.recommendations = recomends
+		let recommends = dataOb.data[0]
+		//await this.$emit("newRec", { recommends })
+		this.recommendations = recommends
 		this.algorithms = dataOb.data[1]
 		await this.$emit("update:recommendations", this.recommendations);
 		await this.$emit("update:algorithms", this.algorithms);
@@ -622,7 +628,7 @@ export default {
 	    } else {
 		console.log("FALTA REALIZAR LIMPIEZA")
 		this.loading_data = true
-		if (macrotaskName == "Data reduction") {
+		if (macrotaskName == "Data Reduction") {
 		    request = `http://localhost:8080/recommendation/${this.dataset}/${this.station}/1aux`
 		    console.log(request)
 		    num = "1"
@@ -634,9 +640,9 @@ export default {
 		}
 		let dataOb = await axios.get(request)
 		console.log("dataOb", dataOb.data)
-		let recomends = dataOb.data[0]
-		//await this.$emit("newRec", { recomends })
-		this.recommendations = recomends
+		let recommends = dataOb.data[0]
+		//await this.$emit("newRec", { recommends })
+		this.recommendations = recommends
 		this.algorithms = dataOb.data[1]
 		await this.$emit("update:recommendations", this.recommendations);
 		await this.$emit("update:algorithms", this.algorithms);

@@ -4,5 +4,4 @@ statsmodels
 simplejson
 tables
 pingouin
-tensorflow
 hurst

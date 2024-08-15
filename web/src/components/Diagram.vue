@@ -15,7 +15,7 @@ export default {
 	    macroTaskStages: [[0], [1], [2, 3, 5]],
 	    macroTasks: [
 		{
-		    taskName: "Quality of Data",
+		    taskName: "Data Quality",
 		    tasks: [
 			{
 			    name: "Clean",
@@ -45,7 +45,7 @@ export default {
 		    bgColor: "94bfa7"
 		},
 		{
-		    taskName: "Data reduction",
+		    taskName: "Data Reduction",
 		    tasks: [
 			{
 			    name: "Dim.Reduce",
@@ -150,7 +150,7 @@ export default {
 	console.log("nextTask1", this.nextTask)
 	let isRecommended = currentMacroTask.taskName in this.recommendations
 	this.dagreChart.setNode("0", {
-	    // label: "Quality of Data " + this.arrow,
+	    // label: "Data Quality " + this.arrow,
 	    label: this.getBlockHtml(currentMacroTask),
 	    labelType: "html",
 	    style: isRecommended ? "stroke: rgba(255, 0, 0, 0.808)" : ""
@@ -203,7 +203,7 @@ export default {
 	    console.log("Algoritmos en diagram", this.algorithms)
 	    let isRecommended = currentMacroTask.taskName in this.recommendations
 	    this.dagreChart.setNode(mt, {
-		// label: "Quality of Data " + this.arrow,
+		// label: "Data Quality " + this.arrow,
 		label: this.getBlockHtml(currentMacroTask),
 		labelType: "html",
 		style: isRecommended ? "stroke: rgba(255, 0, 0, 0.808)" : ""
