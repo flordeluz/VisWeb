@@ -341,6 +341,7 @@ def recommendation_by_station(dataset, station):
     if (null_values > 0):
         dic["Clean"] = "Null Values"
         recommendations["Data Quality"].append("Clean")
+        recommendations["Data Quality"].append("Nulls")
         print("[ Null Values:", null_values, "]")
     else:
         full_station_ds = full_station_df
@@ -356,6 +357,7 @@ def recommendation_by_station(dataset, station):
         dic["Transform"] = messages_transform
         if status_cleaning:
             recommendations["Data Quality"].append("Clean")
+            recommendations["Data Quality"].append("Outliers")
         if status_norm:
             recommendations["Data Quality"].append("Normalize")
         if status_transform:

@@ -63,13 +63,13 @@ def obtener_ruido_cv(X, threshold = 0.5):
     return ruido
 
 
-def obtener_ruido_ri(X):
+def obtener_outlier_iqr(X):
     if "date" in X.columns:
         X["date"] = pd.to_datetime(X["date"])
         X = X.set_index("date")
         #
     dataframe = X
-    ruido = False
+    outlier = False
     for feature in dataframe.columns:
         serie = dataframe[feature]
         q1 = np.percentile(serie, 25)
@@ -81,12 +81,12 @@ def obtener_ruido_ri(X):
         valores_atipicos = serie[(serie < lim_inf) | (serie > lim_sup)]
         num_valores_atipicos = len(valores_atipicos)
         if num_valores_atipicos > 0:
-            ruido = True
+            outlier = True
             break
         #
-    print("[ Interquartile Range Noise Detected:", ruido, "]")
-    res_threads.append({"message": "Interquartile Range Noise Detected", "status": ruido})
-    return ruido
+    print("[ Interquartile Range Outliers Detected:", outlier, "]")
+    res_threads.append({"message": "Interquartile Range Outliers Detected", "status": outlier})
+    return outlier
 
 
 def obtener_outlier_zscore(X, z_threshold = 2):
@@ -193,7 +193,7 @@ def obtener_outlier_dixon(X):
 
 
 # Crear un array con las funciones
-array_funciones = [ obtener_ruido_de, obtener_ruido_cv, obtener_ruido_ri,
+array_funciones = [ obtener_ruido_de, obtener_ruido_cv, obtener_outlier_iqr,
                     obtener_outlier_zscore, obtener_outlier_grubbs, obtener_outlier_dixon ]
 
 
@@ -214,7 +214,7 @@ def comprobarLimpieza(dataframe, par = True):
     else:
         obtener_ruido_de(dataframe)
         obtener_ruido_cv(dataframe)
-        obtener_ruido_ri(dataframe)
+        obtener_outlier_iqr(dataframe)
         obtener_outlier_zscore(dataframe)
         obtener_outlier_grubbs(dataframe)
         obtener_outlier_dixon(dataframe)
