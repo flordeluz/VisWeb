@@ -256,7 +256,8 @@ def get_addinfo(dataset, station):
     global full_station_ds
     global current_df
     loader = loaders[dataset]
-    reshtml = addinfo_data(full_station_ds, loader.cols_list, loader.catg_list)
+    # reshtml = addinfo_data(full_station_ds, loader.cols_list, loader.catg_list)
+    reshtml = addinfo_data(full_station_ds, loader.cols_list, [])
     # print("[ HTML ]:", reshtml)
     return { "addinfo": str(reshtml) }
 
@@ -318,7 +319,8 @@ def recommendation_by_station(dataset, station):
         print("[ last station", last_station, "updated ]")
         init_state = False
         #
-    station_metadata = loader.get_station_metadata(station)
+        station_metadata = loader.get_station_metadata(station)
+        # -- REVERT LINE ABOVE, -TAB, OUTSIDE IF
     station_df, full_station_df = loader.get_station_df(station)
     recommendations = {
         "Data Reduction": [],

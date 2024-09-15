@@ -1,5 +1,15 @@
 <template>
 <v-container class="my-6" fluid>
+  <div class="text-center load-layer" v-if="loading_data">
+    <v-progress-circular :size="100" class="loader" color="primary" indeterminate>
+      Loading data...
+    </v-progress-circular>
+  </div>
+  <div class="text-center load-layer" v-if="executing_task">
+    <v-progress-circular :size="100" class="loader" color="primary" indeterminate>
+      Executing Task...
+    </v-progress-circular>
+  </div>
   <v-row dense align="center" justify="center" v-if="datasetSelected">
     <h2>Dataset: {{ dataset.toUpperCase() }}, Station: {{ station.toUpperCase() }}</h2>
   </v-row>
@@ -39,6 +49,8 @@ export default {
 	graph: null,
 	renderer: null,
 	layout: null,
+	loading_data: true,
+	executing_task: false,
 	RED: "#FA4F40", // Enabled ACTION
 	BLUE: "#727EE0",
 	LIGHTBLUE: "#3399f8",
@@ -190,22 +202,41 @@ export default {
 	ACTVBY: []
     }),
     methods: {
-	execActivity(event, itemType, item) {
+	async execActivity(event, itemType, item) {
 	    if (event === "clickNode") {
+		let label;
+		let color;
+		let size;
+		let path;
+		let action = false;
 		if (item && itemType) {
 		    if (itemType === "node") {
-			const label = this.graph.getNodeAttribute(item, "label");
-			const color = this.graph.getNodeAttribute(item, "color");
-			const size = this.graph.getNodeAttribute(item, "size");
-			let action = false;
+			label = this.graph.getNodeAttribute(item, "label");
+			color = this.graph.getNodeAttribute(item, "color");
+			size = this.graph.getNodeAttribute(item, "size");
+			path = this.graph.getNodeAttribute(item, "path");
 			if (color == this.RED && size == this.ACTVSZ) action = true;
 			console.log("[", event, "]:", itemType, label, "action:", action);
 		    } else if (itemType === "edge") {
-			const label = this.graph.getEdgeAttribute(item, "label");
+			label = this.graph.getEdgeAttribute(item, "label");
 			console.log("[", event, "]:", itemType, label);
 		    } else {
 			console.log("[", event, "]:", itemType, "unhandled");
 		    }
+		}
+		if (action) {
+		    this.executing_task = true;
+		    let req_string;
+		    req_string = `http://localhost:8080/op/${this.dataset}/${path}`;
+		    // this.history.push({
+		    // 	name: `${this.operation.method}-clean`,
+		    // 	aux: req_string
+		    // })
+		    console.log(req_string);
+		    let actionrc = await axios.get(req_string, { crossdomain: true });
+		    console.log(actionrc);
+		    this.executing_task = false;
+		    location.reload();
 		}
 	    } else {	
 		console.log("[", event, "]:", "unhandled");
@@ -270,34 +301,34 @@ export default {
 	    this.graph.addNode("Clean", { size: this.SUBPSZ, label: "Cleanning", type: "gradient", color: this.SUBPCO["Data Quality"]["Clean"] });
 	    
 	    this.graph.addNode("Nulls", { size: this.SUBPSZ, label: "Nulls", type: "gradient", color: this.SUBPCO["Data Quality"]["Nulls"] });
-	    this.graph.addNode("Rolling Mean", { size: this.ACTVSZ, label: "Rolling Mean", type: "gradient", color: this.ACTVCO["Data Quality"]["Nulls"]["Rolling Mean"] });
-	    this.graph.addNode("Decision Tree", { size: this.ACTVSZ, label: "Decision Tree", type: "gradient", color: this.ACTVCO["Data Quality"]["Nulls"]["Decision Tree"] });
-	    this.graph.addNode("Stochastic Gradient", { size: this.ACTVSZ, label: "Stochastic Gradient", type: "gradient", color: this.ACTVCO["Data Quality"]["Nulls"]["Stochastic Gradient"] });
-	    this.graph.addNode("Locally Weighted", { size: this.ACTVSZ, label: "Locally Weighted", type: "gradient", color: this.ACTVCO["Data Quality"]["Nulls"]["Locally Weighted"] });
-	    this.graph.addNode("Legendre", { size: this.ACTVSZ, label: "Legendre", type: "gradient", color: this.ACTVCO["Data Quality"]["Nulls"]["Legendre"] });
-	    this.graph.addNode("Random Forest", { size: this.ACTVSZ, label: "Random Forest", type: "gradient", color: this.ACTVCO["Data Quality"]["Nulls"]["Random Forest"] });
-	    this.graph.addNode("KNN", { size: this.ACTVSZ, label: "KNN", type: "gradient", color: this.ACTVCO["Data Quality"]["Nulls"]["KNN"] });
+	    this.graph.addNode("Rolling Mean", { size: this.ACTVSZ, label: "Rolling Mean", path: "clean/rm", type: "gradient", color: this.ACTVCO["Data Quality"]["Nulls"]["Rolling Mean"] });
+	    this.graph.addNode("Decision Tree", { size: this.ACTVSZ, label: "Decision Tree", path: "clean/dtr", type: "gradient", color: this.ACTVCO["Data Quality"]["Nulls"]["Decision Tree"] });
+	    this.graph.addNode("Stochastic Gradient", { size: this.ACTVSZ, label: "Stochastic Gradient", path: "clean/sgb", type: "gradient", color: this.ACTVCO["Data Quality"]["Nulls"]["Stochastic Gradient"] });
+	    this.graph.addNode("Locally Weighted", { size: this.ACTVSZ, label: "Locally Weighted", path: "clean/lwr", type: "gradient", color: this.ACTVCO["Data Quality"]["Nulls"]["Locally Weighted"] });
+	    this.graph.addNode("Legendre", { size: this.ACTVSZ, label: "Legendre", path: "clean/lgd", type: "gradient", color: this.ACTVCO["Data Quality"]["Nulls"]["Legendre"] });
+	    this.graph.addNode("Random Forest", { size: this.ACTVSZ, label: "Random Forest", path: "clean/rfr", type: "gradient", color: this.ACTVCO["Data Quality"]["Nulls"]["Random Forest"] });
+	    this.graph.addNode("KNN", { size: this.ACTVSZ, label: "KNN", path: "clean/knn", type: "gradient", color: this.ACTVCO["Data Quality"]["Nulls"]["KNN"] });
 	    
 	    this.graph.addNode("Outliers", { size: this.SUBPSZ, label: "Outliers", type: "gradient", color: this.SUBPCO["Data Quality"]["Outliers"] });
-	    this.graph.addNode("Interquartile Range", { size: this.ACTVSZ, label: "Interquartile Range", type: "gradient", color: this.ACTVCO["Data Quality"]["Outliers"]["Interquartile Range"] });
-	    this.graph.addNode("Z-Score", { size: this.ACTVSZ, label: "Z-Score", type: "gradient", color: this.ACTVCO["Data Quality"]["Outliers"]["Z-Score"] });
+	    this.graph.addNode("Interquartile Range", { size: this.ACTVSZ, label: "Interquartile Range", path: "clean/iqr", type: "gradient", color: this.ACTVCO["Data Quality"]["Outliers"]["Interquartile Range"] });
+	    this.graph.addNode("Z-Score", { size: this.ACTVSZ, label: "Z-Score", path: "clean/sdv", type: "gradient", color: this.ACTVCO["Data Quality"]["Outliers"]["Z-Score"] });
 	    
 	    this.graph.addNode("Normalize", { size: this.SUBPSZ, label: "Normalization", type: "gradient", color: this.SUBPCO["Data Quality"]["Normalize"] });
-	    this.graph.addNode("MinMax", { size: this.ACTVSZ, label: "MinMax", type: "gradient", color: this.ACTVCO["Data Quality"]["Normalize"]["MinMax"] });
-	    this.graph.addNode("Standard", { size: this.ACTVSZ, label: "Standard", type: "gradient", color: this.ACTVCO["Data Quality"]["Normalize"]["Standard"] });
-	    this.graph.addNode("MaxAbs", { size: this.ACTVSZ, label: "MaxAbs", type: "gradient", color: this.ACTVCO["Data Quality"]["Normalize"]["MaxAbs"] });
-	    this.graph.addNode("Robust", { size: this.ACTVSZ, label: "Robust", type: "gradient", color: this.ACTVCO["Data Quality"]["Normalize"]["Robust"] });
+	    this.graph.addNode("MinMax", { size: this.ACTVSZ, label: "MinMax", path: "normalize/minmax", type: "gradient", color: this.ACTVCO["Data Quality"]["Normalize"]["MinMax"] });
+	    this.graph.addNode("Standard", { size: this.ACTVSZ, label: "Standard", path: "normalize/standard", type: "gradient", color: this.ACTVCO["Data Quality"]["Normalize"]["Standard"] });
+	    this.graph.addNode("MaxAbs", { size: this.ACTVSZ, label: "MaxAbs", path: "normalize/maxabs", type: "gradient", color: this.ACTVCO["Data Quality"]["Normalize"]["MaxAbs"] });
+	    this.graph.addNode("Robust", { size: this.ACTVSZ, label: "Robust", path: "normalize/robust", type: "gradient", color: this.ACTVCO["Data Quality"]["Normalize"]["Robust"] });
 	    
 	    this.graph.addNode("Transform", { size: this.SUBPSZ, label: "Transformation", type: "gradient", color: this.SUBPCO["Data Quality"]["Transform"] });
-	    this.graph.addNode("Linear", { size: this.ACTVSZ, label: "Linear", type: "gradient", color: this.ACTVCO["Data Quality"]["Transform"]["Linear"] });
-	    this.graph.addNode("Quadratic", { size: this.ACTVSZ, label: "Quadratic", type: "gradient", color: this.ACTVCO["Data Quality"]["Transform"]["Quadratic"] });
-	    this.graph.addNode("Square Root", { size: this.ACTVSZ, label: "Square Root", type: "gradient", color: this.ACTVCO["Data Quality"]["Transform"]["Square Root"] });
-	    this.graph.addNode("Logarithm", { size: this.ACTVSZ, label: "Logarithm", type: "gradient", color: this.ACTVCO["Data Quality"]["Transform"]["Logarithm"] });
-	    this.graph.addNode("Differencing", { size: this.ACTVSZ, label: "Differencing", type: "gradient", color: this.ACTVCO["Data Quality"]["Transform"]["Differencing"] });
+	    this.graph.addNode("Linear", { size: this.ACTVSZ, label: "Linear", path: "transform/linear", type: "gradient", color: this.ACTVCO["Data Quality"]["Transform"]["Linear"] });
+	    this.graph.addNode("Quadratic", { size: this.ACTVSZ, label: "Quadratic", path: "transform/quadratic", type: "gradient", color: this.ACTVCO["Data Quality"]["Transform"]["Quadratic"] });
+	    this.graph.addNode("Square Root", { size: this.ACTVSZ, label: "Square Root", path: "transform/sqrt", type: "gradient", color: this.ACTVCO["Data Quality"]["Transform"]["Square Root"] });
+	    this.graph.addNode("Logarithm", { size: this.ACTVSZ, label: "Logarithm", path: "transform/log", type: "gradient", color: this.ACTVCO["Data Quality"]["Transform"]["Logarithm"] });
+	    this.graph.addNode("Differencing", { size: this.ACTVSZ, label: "Differencing", path: "transform/diff", type: "gradient", color: this.ACTVCO["Data Quality"]["Transform"]["Differencing"] });
 	    
 	    this.graph.addNode("DimRed", { size: this.SUBPSZ, label: "Dim. Reduction", type: "gradient", color: this.SUBPCO["Data Reduction"]["DimRed"] });
-	    this.graph.addNode("Factor Analysis", { size: this.ACTVSZ, label: "Factor Analysis", type: "gradient", color: this.ACTVCO["Data Reduction"]["DimRed"]["Factor Analysis"] });
-	    this.graph.addNode("Manually Selected", { size: this.ACTVSZ, label: "Manually Selected", type: "gradient", color: this.ACTVCO["Data Reduction"]["DimRed"]["Manually Selected"] });
+	    this.graph.addNode("Factor Analysis", { size: this.ACTVSZ, label: "Factor Analysis", path: "reduce/factor", type: "gradient", color: this.ACTVCO["Data Reduction"]["DimRed"]["Factor Analysis"] });
+	    this.graph.addNode("Manually Selected", { size: this.ACTVSZ, label: "Manually Selected", path: "reduce/manual", type: "gradient", color: this.ACTVCO["Data Reduction"]["DimRed"]["Manually Selected"] });
 	    
 	    this.graph.addNode("Trend", { size: this.SUBPSZ, label: "Trend", type: "gradient", color: this.SUBPCO["Variables Behavior"]["Trend"] });
 	    
@@ -377,6 +408,7 @@ export default {
 	    
 	    // Create the spring layout and start it
 	    this.layout = new ForceLayout(this.graph, { maxIterations: 50 });
+	    this.loading_data = false
 	    this.layout.start();
 	    
 	    setTimeout(() => {this.layout.stop();}, 4000);
@@ -481,5 +513,21 @@ td.slideOp:hover {
 
 .dataframe thead th {
     text-align: right;
+}
+div.load-layer {
+    background-color: #efefef;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    top: 0px;
+    left: 0px;
+    opacity: 0.8;
+    /* in FireFox */
+    filter: alpha(opacity=80);
+    /* in IE */
+}
+.loader {
+    top: 20%;
 }
 </style>

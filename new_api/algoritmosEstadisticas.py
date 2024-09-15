@@ -149,7 +149,9 @@ def boxhisf(data, feature, figsize = (10, 5), kde = True, dpi = 100):
 
 def boxplot_data(ds, cols_list):
     reshtml = '<p style="text-align:center"><h5><b>Outliers and Distribution</b></h5></p>'
+    print("[ Boxplot DS shape ]:", ds.shape);
     for coln in cols_list:
+        print("[ Boxplot Feature ]:", coln, "[ shape ]:", ds[coln].shape);
         s = io.BytesIO()
         box_plot = boxhisf(ds, coln, figsize = (12, 6), dpi = 100)
         plt.savefig(s, format="png", bbox_inches="tight")
