@@ -123,14 +123,135 @@ class GenRedo(MainredoClass):
         self.name = "redo"
         self.prognl = ["RM", "DTR", "SGB", "LWR", "LGD", "RFR", "KNN"]
         self.methal = {
+            "outliers": ["iqr", "sdv"],
             "transform": ["linear", "quadratic", "log", "sqrt", "diff"],
             "norm": ["maxabs", "minmax", "standard", "robust"],
             "fill": ["meanmedian", "decisiontree", "gradientboosting", "locallyweighted", "legendre", "randomforest", "kneighbors"]
         }
         print("[ Enabled programs:", self.prognl, "]")
         print("[ Enabled methods algorithms:", json.dumps(self.methal, indent=4), "]")
-
-
+        
+        
+    def iqr_treatment(self, ds, smo, cols_list):
+        # Private constants by method and algo
+        method = "outliers"
+        algorm = "iqr"
+        # Structure init. It has to be done in each algo method.
+        if (self.name in smo):
+            if (method in smo[self.name]):
+                if (algorm not in smo[self.name][method]):
+                    smo[self.name][method][algorm] = False
+            else:
+                smo[self.name][method] = dict()
+                smo[self.name][method][algorm] = False
+        else:
+            smo[self.name] = dict()
+            smo[self.name][method] = dict()
+            smo[self.name][method][algorm] = False
+            # Algo's body
+        if not smo[self.name][method][algorm]:
+            # Algo's code goes here
+            # -------------------------------
+            
+            smo[algorm] = ds.copy()
+            for feature in cols_list:
+                serie = smo[algorm][feature]
+                q1 = np.percentile(serie, 25)
+                q3 = np.percentile(serie, 75)
+                iqr = q3 - q1
+                # Calcular los límites de los valores atípicos
+                lim_inf = q1 - 1.5 * iqr
+                lim_sup = q3 + 1.5 * iqr
+                serie[(serie < lim_inf) | (serie > lim_sup)] = np.nan
+                #
+            
+            # -------------------------------
+            smo[self.name][method][algorm] = True
+            print("[", algorm, ", done. ]")
+        else:
+            print("[", algorm, "already done. ]")
+        return smo[algorm].copy(), smo
+    
+    
+    def did_iqr_treatment(self, smo):
+        # Private constants by method and algo
+        method = "outliers"
+        algorm = "iqr"
+        # Look into structure
+        if (self.name in smo):
+            if (method in smo[self.name]):
+                if (algorm not in smo[self.name][method]):
+                    return False
+            else:
+                return False
+        else:
+            return False
+        # Look algo's value
+        if not smo[self.name][method][algorm]:
+            return False
+        else:
+            return True
+        
+        
+    def sdv_treatment(self, ds, smo, cols_list, z_threshold = 2):
+        # Private constants by method and algo
+        method = "outliers"
+        algorm = "sdv"
+        # Structure init. It has to be done in each algo method.
+        if (self.name in smo):
+            if (method in smo[self.name]):
+                if (algorm not in smo[self.name][method]):
+                    smo[self.name][method][algorm] = False
+            else:
+                smo[self.name][method] = dict()
+                smo[self.name][method][algorm] = False
+        else:
+            smo[self.name] = dict()
+            smo[self.name][method] = dict()
+            smo[self.name][method][algorm] = False
+            # Algo's body
+        if not smo[self.name][method][algorm]:
+            # Algo's code goes here
+            # -------------------------------
+            
+            smo[algorm] = ds.copy()
+            for feature in cols_list:
+                serie = smo[algorm][feature]
+                mean = np.mean(serie)
+                sd = np.std(serie)
+                # Calcular el Z-score
+                z_scores = np.abs((serie - mean) / sd)
+                serie[z_scores > z_threshold] = np.nan
+                #
+            
+            # -------------------------------
+            smo[self.name][method][algorm] = True
+            print("[", algorm, ", done. ]")
+        else:
+            print("[", algorm, "already done. ]")
+        return smo[algorm].copy(), smo
+    
+    
+    def did_sdv_treatment(self, smo):
+        # Private constants by method and algo
+        method = "outliers"
+        algorm = "sdv"
+        # Look into structure
+        if (self.name in smo):
+            if (method in smo[self.name]):
+                if (algorm not in smo[self.name][method]):
+                    return False
+            else:
+                return False
+        else:
+            return False
+        # Look algo's value
+        if not smo[self.name][method][algorm]:
+            return False
+        else:
+            return True
+        
+        
     def linear_transform(self, num, ds, smo, cols_list):
         # Private constants by method and algo
         method = "transform"
@@ -162,8 +283,8 @@ class GenRedo(MainredoClass):
         else:
             print("[", algorm, "already done. ]")
         return smo[algorm].copy(), smo
-
-
+    
+    
     def did_linear_transform(self, smo):
         # Private constants by method and algo
         method = "transform"
@@ -182,8 +303,8 @@ class GenRedo(MainredoClass):
             return False
         else:
             return True
-
-
+        
+        
     def quadratic_transform(self, ds, smo, cols_list):
         # Private constants by method and algo
         method = "transform"

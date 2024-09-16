@@ -574,6 +574,38 @@ def clean_dataset(dataset, method):
     return json_data
 
 
+@route("/op/<dataset>/outliers/<method>")
+@enable_cors
+def outliers_treatment(dataset, method):
+    loader = loaders[dataset]
+    response.headers["Content-Type"] = "application/json"
+    global current_station
+    global full_station_ds
+    global current_df
+    global aux_df
+    print("[ Old df:\n", current_df, "\n]")
+    if method == "iqr":
+        if gr.did_iqr_treatment(loader.smo):
+            loader.ds = loader.smo["iqr"].copy()
+        else:
+            loader.ds, loader.smo = gr.iqr_treatment(loader.smo["full"], loader.smo, loader.cols_list)
+            #
+    elif method == "sdv":
+        if gr.did_sdv_treatment(loader.smo):
+            loader.ds = loader.smo["sdv"].copy()
+        else:
+            loader.ds, loader.smo = gr.sdv_treatment(loader.smo["full"], loader.smo, loader.cols_list)
+            #
+    json_data, df, full_station_ds = loader.get_data(current_station, resample="D")
+    current_df = df
+    aux_df = df
+    # # historial_df["raw"] = df
+    # historial_df["raw"] = loader.smo["raw"].copy()
+    # current_df.fillna(-1, inplace=True) # DELETE
+    print("[ Current df:\n", current_df, "\n]")
+    return json_data
+
+
 @route("/op/<dataset>/transform/<method>/<number>")
 @enable_cors
 def transform_dataset(dataset, method, number):

@@ -310,8 +310,8 @@ export default {
 	    this.graph.addNode("KNN", { size: this.ACTVSZ, label: "KNN", path: "clean/knn", type: "gradient", color: this.ACTVCO["Data Quality"]["Nulls"]["KNN"] });
 	    
 	    this.graph.addNode("Outliers", { size: this.SUBPSZ, label: "Outliers", type: "gradient", color: this.SUBPCO["Data Quality"]["Outliers"] });
-	    this.graph.addNode("Interquartile Range", { size: this.ACTVSZ, label: "Interquartile Range", path: "clean/iqr", type: "gradient", color: this.ACTVCO["Data Quality"]["Outliers"]["Interquartile Range"] });
-	    this.graph.addNode("Z-Score", { size: this.ACTVSZ, label: "Z-Score", path: "clean/sdv", type: "gradient", color: this.ACTVCO["Data Quality"]["Outliers"]["Z-Score"] });
+	    this.graph.addNode("Interquartile Range", { size: this.ACTVSZ, label: "Interquartile Range", path: "outliers/iqr", type: "gradient", color: this.ACTVCO["Data Quality"]["Outliers"]["Interquartile Range"] });
+	    this.graph.addNode("Z-Score", { size: this.ACTVSZ, label: "Z-Score", path: "outliers/sdv", type: "gradient", color: this.ACTVCO["Data Quality"]["Outliers"]["Z-Score"] });
 	    
 	    this.graph.addNode("Normalize", { size: this.SUBPSZ, label: "Normalization", type: "gradient", color: this.SUBPCO["Data Quality"]["Normalize"] });
 	    this.graph.addNode("MinMax", { size: this.ACTVSZ, label: "MinMax", path: "normalize/minmax", type: "gradient", color: this.ACTVCO["Data Quality"]["Normalize"]["MinMax"] });

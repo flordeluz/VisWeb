@@ -10,6 +10,18 @@ class MainredoClass:
     def __init__(self) -> None:
         pass
 
+    def iqr_treatment(self, ds, smo, cols_list) -> (DataFrame, dict):
+        pass
+
+    def did_iqr_treatment(self, smo) -> bool:
+        pass
+
+    def sdv_treatment(self, ds, smo, cols_list) -> (DataFrame, dict):
+        pass
+
+    def did_sdv_treatment(self, smo) -> bool:
+        pass
+
     def linear_transform(self, num, ds, smo, cols_list) -> (DataFrame, dict):
         pass
 
