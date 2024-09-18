@@ -167,10 +167,15 @@ class GenRedo(MainredoClass):
             
             # -------------------------------
             smo[self.name][method][algorm] = True
+            # COPY TO FULL - COMMENT IF FAILS
+            smo["full"] = smo[algorm].copy()
+            print(smo["full"].info())
+            print(smo["full"]["station"].unique())
+            # END COPY TO FULL
             print("[", algorm, ", done. ]")
         else:
             print("[", algorm, "already done. ]")
-        return smo[algorm].copy(), smo
+        return smo[algorm].copy().reset_index(), smo
     
     
     def did_iqr_treatment(self, smo):
@@ -226,10 +231,15 @@ class GenRedo(MainredoClass):
             
             # -------------------------------
             smo[self.name][method][algorm] = True
+            # COPY TO FULL - COMMENT IF FAILS
+            smo["full"] = smo[algorm].copy()
+            print(smo["full"].info())
+            print(smo["full"]["station"].unique())
+            # END COPY TO FULL
             print("[", algorm, ", done. ]")
         else:
             print("[", algorm, "already done. ]")
-        return smo[algorm].copy(), smo
+        return smo[algorm].copy().reset_index(), smo
     
     
     def did_sdv_treatment(self, smo):
@@ -1533,6 +1543,7 @@ class GenRedo(MainredoClass):
         smo["full"].dropna(inplace=True)
         print("[ Full dropped shape: ", smo["full"].shape, "]")
         print(smo["full"].info())
+        print(smo["full"]["station"].unique())
         return smo, cols_list
 
 
