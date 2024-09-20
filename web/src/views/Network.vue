@@ -424,7 +424,7 @@ export default {
 	    // ] as const;
 	    // nodeEvents.forEach((eventType) => this.renderer.on(eventType, ({ node }) => this.logEvent(eventType, "node", node)));
 	    this.renderer.on("clickNode", ({ node }) => this.execActivity("clickNode", "node", node));
-
+	    
 	    onStoryDown(() => {
 		this.layout.kill();
 		this.renderer.kill();
@@ -445,6 +445,12 @@ export default {
 	document.getElementById("dynStats").href=`/stats/${this.dataset}/${this.station}`;
 	document.getElementById("dynSpiral").href=`/spiral/${this.dataset}/${this.station}`;
 	console.log("[ Mounted Network View ]: (", this.dataset, ",", this.station, ")");
+	axios.get(
+	    "http://localhost:8080/data/" + this.dataset + "/" + this.station,
+	    { crossdomain: true }
+	).then(async meta => {
+	    console.log("[ Mounted Raw Data Length ]:", meta.data.length)
+	});
 	this.showNetwork();
     },
     watch: {

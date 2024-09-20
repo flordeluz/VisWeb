@@ -78,6 +78,9 @@ def obtener_outlier_iqr(X):
         # Calcular los límites de los valores atípicos
         lim_inf = q1 - 1.5 * iqr
         lim_sup = q3 + 1.5 * iqr
+        print("[[Feature, q1, q3, iqr]]:", feature, q1, q3, iqr)
+        print("[[Feature, Lower bound, Upper bound]]:", feature, lim_inf, lim_sup)
+        print("[[Feature, Min, Max]]:", feature, serie.min(), serie.max())
         valores_atipicos = serie[(serie < lim_inf) | (serie > lim_sup)]
         num_valores_atipicos = len(valores_atipicos)
         if num_valores_atipicos > 0:

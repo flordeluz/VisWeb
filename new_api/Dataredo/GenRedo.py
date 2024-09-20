@@ -292,7 +292,7 @@ class GenRedo(MainredoClass):
             print("[", algorm, ", done. ]")
         else:
             print("[", algorm, "already done. ]")
-        return smo[algorm].copy(), smo
+        return smo[algorm].copy().reset_index(), smo
     
     
     def did_linear_transform(self, smo):
@@ -344,7 +344,7 @@ class GenRedo(MainredoClass):
             print("[", algorm, ", done. ]")
         else:
             print("[", algorm, "already done. ]")
-        return smo[algorm].copy(), smo
+        return smo[algorm].copy().reset_index(), smo
 
 
     def did_quadratic_transform(self, smo):
@@ -396,7 +396,7 @@ class GenRedo(MainredoClass):
             print("[", algorm, ", done. ]")
         else:
             print("[", algorm, "already done. ]")
-        return smo[algorm].copy(), smo
+        return smo[algorm].copy().reset_index(), smo
 
 
     def did_log_transform(self, smo):
@@ -448,7 +448,7 @@ class GenRedo(MainredoClass):
             print("[", algorm, ", done. ]")
         else:
             print("[", algorm, "already done. ]")
-        return smo[algorm].copy(), smo
+        return smo[algorm].copy().reset_index(), smo
 
 
     def did_sqrt_transform(self, smo):
@@ -501,7 +501,7 @@ class GenRedo(MainredoClass):
             print("[", algorm, ", done. ]")
         else:
             print("[", algorm, "already done. ]")
-        return smo[algorm].copy(), smo
+        return smo[algorm].copy().reset_index(), smo
 
 
     def did_diff_transform(self, smo):
@@ -554,7 +554,7 @@ class GenRedo(MainredoClass):
             print("[", algorm, ", done. ]")
         else:
             print("[", algorm, "already done. ]")
-        return smo[algorm].copy(), smo
+        return smo[algorm].copy().reset_index(), smo
 
 
     def did_norm_w_maxabs(self, smo):
@@ -607,7 +607,7 @@ class GenRedo(MainredoClass):
             print("[", algorm, ", done. ]")
         else:
             print("[", algorm, "already done. ]")
-        return smo[algorm].copy(), smo
+        return smo[algorm].copy().reset_index(), smo
 
 
     def did_norm_w_minmax(self, smo):
@@ -660,7 +660,7 @@ class GenRedo(MainredoClass):
             print("[", algorm, ", done. ]")
         else:
             print("[", algorm, "already done. ]")
-        return smo[algorm].copy(), smo
+        return smo[algorm].copy().reset_index(), smo
 
 
     def did_norm_w_standard(self, smo):
@@ -713,7 +713,7 @@ class GenRedo(MainredoClass):
             print("[", algorm, ", done. ]")
         else:
             print("[", algorm, "already done. ]")
-        return smo[algorm].copy(), smo
+        return smo[algorm].copy().reset_index(), smo
 
 
     def did_norm_w_robust(self, smo):
