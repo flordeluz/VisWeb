@@ -16,10 +16,16 @@ class MainredoClass:
     def did_iqr_treatment(self, smo) -> bool:
         pass
 
+    def reset_iqr_treatment(self, smo) -> bool:
+        pass
+
     def sdv_treatment(self, ds, smo, cols_list) -> (DataFrame, dict):
         pass
 
     def did_sdv_treatment(self, smo) -> bool:
+        pass
+
+    def reset_sdv_treatment(self, smo) -> bool:
         pass
 
     def linear_transform(self, num, ds, smo, cols_list) -> (DataFrame, dict):

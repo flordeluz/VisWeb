@@ -111,8 +111,20 @@ def nfindsf(h, o, prognl):
                         metricarf(h, [k, l, m] + metricvf(o[k][l][m]))
                     # else:
                     #     print("Warning:", [k, l, m] + ["EMPTY", np.NaN, np.NaN, np.NaN, np.NaN, np.NaN, np.NaN, np.NaN], "excluded.")
-                        #
+                    #     #
     return h
+
+
+def resetfillf(n, o, prognl):
+    for k in prognl:
+        if (k in o):
+            del o[k];
+            #
+    for a in o[n]["fill"]:
+        o[n]["fill"][a] = False;
+        #
+    return o
+
 
 # CLASS DEFINITION
 
@@ -175,6 +187,9 @@ class GenRedo(MainredoClass):
             print("[", algorm, ", done. ]")
         else:
             print("[", algorm, "already done. ]")
+        if (smo[algorm].isna().sum().sum() > 0):
+            resetfillf(self.name, smo, self.prognl)
+            #
         return smo[algorm].copy().reset_index(), smo
     
     
@@ -197,8 +212,29 @@ class GenRedo(MainredoClass):
         else:
             return True
         
+
+    def reset_iqr_treatment(self, smo):
+        # Private constants by method and algo
+        method = "outliers"
+        algorm = "iqr"
+        # Look into structure
+        if (self.name in smo):
+            if (method in smo[self.name]):
+                if (algorm not in smo[self.name][method]):
+                    return False
+            else:
+                return False
+        else:
+            return False
+        # Look algo's value
+        if not smo[self.name][method][algorm]:
+            return False
+        else:
+            smo[self.name][method][algorm] = False
+            return False
+
         
-    def sdv_treatment(self, ds, smo, cols_list, z_threshold = 2):
+    def sdv_treatment(self, ds, smo, cols_list, z_threshold = 3):
         # Private constants by method and algo
         method = "outliers"
         algorm = "sdv"
@@ -223,7 +259,7 @@ class GenRedo(MainredoClass):
             for feature in cols_list:
                 serie = smo[algorm][feature]
                 mean = np.mean(serie)
-                sd = np.std(serie)
+                sd = np.std(serie, ddof=1)
                 # Calcular el Z-score
                 z_scores = np.abs((serie - mean) / sd)
                 serie[z_scores > z_threshold] = np.nan
@@ -239,6 +275,9 @@ class GenRedo(MainredoClass):
             print("[", algorm, ", done. ]")
         else:
             print("[", algorm, "already done. ]")
+        if (smo[algorm].isna().sum().sum() > 0):
+            resetfillf(self.name, smo, self.prognl)
+            #
         return smo[algorm].copy().reset_index(), smo
     
     
@@ -260,8 +299,29 @@ class GenRedo(MainredoClass):
             return False
         else:
             return True
+
+
+    def reset_sdv_treatment(self, smo):
+        # Private constants by method and algo
+        method = "outliers"
+        algorm = "sdv"
+        # Look into structure
+        if (self.name in smo):
+            if (method in smo[self.name]):
+                if (algorm not in smo[self.name][method]):
+                    return False
+            else:
+                return False
+        else:
+            return False
+        # Look algo's value
+        if not smo[self.name][method][algorm]:
+            return False
+        else:
+            smo[self.name][method][algorm] = False
+            return False
         
-        
+
     def linear_transform(self, num, ds, smo, cols_list):
         # Private constants by method and algo
         method = "transform"

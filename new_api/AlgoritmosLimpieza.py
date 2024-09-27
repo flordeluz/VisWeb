@@ -42,7 +42,7 @@ def obtener_ruido_de(X, umbral = 5):
     return ruido
 
 
-def obtener_ruido_cv(X, threshold = 0.5):
+def obtener_ruido_cv(X, threshold = 2):
     if "date" in X.columns:
         X["date"] = pd.to_datetime(X["date"])
         X = X.set_index("date")
@@ -92,7 +92,7 @@ def obtener_outlier_iqr(X):
     return outlier
 
 
-def obtener_outlier_zscore(X, z_threshold = 2):
+def obtener_outlier_zscore(X, z_threshold = 3.5):
     if "date" in X.columns:
         X["date"] = pd.to_datetime(X["date"])
         X = X.set_index("date")
@@ -102,7 +102,7 @@ def obtener_outlier_zscore(X, z_threshold = 2):
     for feature in dataframe.columns:
         serie = dataframe[feature]
         mean = np.mean(serie)
-        sd = np.std(serie)
+        sd = np.std(serie, ddof=1)
         # Calcular el Z-score
         z_scores = (serie - mean) / sd
         # Identificar los outliers
@@ -120,22 +120,26 @@ def obtener_outlier_zscore(X, z_threshold = 2):
 def grubbs_max_test(data, alpha):
     n = len(data)
     mean = np.mean(data)
-    sd = np.std(data, ddof=1)
-    t_value = t.ppf(1 - alpha / (2 * n), n - 2)
-    critical_value = (n - 1) / np.sqrt(n) * np.sqrt(t_value ** 2 / (n - 2 + t_value ** 2))
-    g_max = np.max(np.abs(data - mean)) / sd
-    return g_max > critical_value, g_max
+    std_dev = np.std(data, ddof=1)
+    G_max = (np.max(data) - mean) / std_dev
+    t_dist = stats.t.ppf(1 - alpha / (2 * n), n - 2)
+    numerator = (n - 1) * t_dist
+    denominator = np.sqrt(n) * np.sqrt(n - 2 + t_dist**2)
+    G_critical = numerator / denominator
+    return G_max > G_critical, G_max
 
 
 # Definir la prueba de Grubbs para el outlier mínimo
 def grubbs_min_test(data, alpha):
     n = len(data)
     mean = np.mean(data)
-    sd = np.std(data, ddof=1)
-    t_value = t.ppf(1 - alpha / (2 * n), n - 2)
-    critical_value = (n - 1) / np.sqrt(n) * np.sqrt(t_value ** 2 / (n - 2 + t_value ** 2))
-    g_min = np.min(np.abs(data - mean)) / sd
-    return g_min > critical_value, g_min
+    std_dev = np.std(data, ddof=1)
+    G_min = (mean - np.min(data)) / std_dev
+    t_dist = stats.t.ppf(1 - alpha / (2 * n), n - 2)
+    numerator = (n - 1) * t_dist
+    denominator = np.sqrt(n) * np.sqrt(n - 2 + t_dist**2)
+    G_critical = numerator / denominator
+    return G_min > G_critical, G_min
 
 
 def obtener_outlier_grubbs(X, alpha = 0.05):

@@ -360,6 +360,8 @@ def recommendation_by_station(dataset, station):
         if status_cleaning:
             recommendations["Data Quality"].append("Clean")
             recommendations["Data Quality"].append("Outliers")
+            gr.reset_iqr_treatment(loader.smo)
+            gr.reset_sdv_treatment(loader.smo)
         if status_norm:
             recommendations["Data Quality"].append("Normalize")
         if status_transform:
