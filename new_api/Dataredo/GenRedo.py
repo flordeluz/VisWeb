@@ -174,7 +174,10 @@ class GenRedo(MainredoClass):
                 # Calcular los límites de los valores atípicos
                 lim_inf = q1 - 1.5 * iqr
                 lim_sup = q3 + 1.5 * iqr
-                serie[(serie < lim_inf) | (serie > lim_sup)] = np.nan
+                # IF NAN APPLIED THEN RESET FILL STATUS
+                # serie[(serie < lim_inf) | (serie > lim_sup)] = np.nan
+                # ELSE CLIPPING
+                smo[algorm][feature] = np.clip(serie, lim_inf, lim_sup)
                 #
             
             # -------------------------------
@@ -187,9 +190,13 @@ class GenRedo(MainredoClass):
             print("[", algorm, ", done. ]")
         else:
             print("[", algorm, "already done. ]")
-        if (smo[algorm].isna().sum().sum() > 0):
-            resetfillf(self.name, smo, self.prognl)
             #
+
+        # # FILL STATUS RESET
+        # if (smo[algorm].isna().sum().sum() > 0):
+        #     resetfillf(self.name, smo, self.prognl)
+        #     #
+
         return smo[algorm].copy().reset_index(), smo
     
     
@@ -234,7 +241,7 @@ class GenRedo(MainredoClass):
             return False
 
         
-    def sdv_treatment(self, ds, smo, cols_list, z_threshold = 3):
+    def sdv_treatment(self, ds, smo, cols_list, z_threshold = 2):
         # Private constants by method and algo
         method = "outliers"
         algorm = "sdv"
@@ -262,7 +269,10 @@ class GenRedo(MainredoClass):
                 sd = np.std(serie, ddof=1)
                 # Calcular el Z-score
                 z_scores = np.abs((serie - mean) / sd)
-                serie[z_scores > z_threshold] = np.nan
+                # # IF NAN APPLIED THEN RESET FILL STATUS
+                # serie[z_scores > z_threshold] = np.nan
+                # ELSE MEDIAN
+                serie[z_scores > z_threshold] = np.median(serie)
                 #
             
             # -------------------------------
@@ -275,9 +285,13 @@ class GenRedo(MainredoClass):
             print("[", algorm, ", done. ]")
         else:
             print("[", algorm, "already done. ]")
-        if (smo[algorm].isna().sum().sum() > 0):
-            resetfillf(self.name, smo, self.prognl)
             #
+            
+        # # FILL STATUS RESET
+        # if (smo[algorm].isna().sum().sum() > 0):
+        #     resetfillf(self.name, smo, self.prognl)
+        #     #
+
         return smo[algorm].copy().reset_index(), smo
     
     

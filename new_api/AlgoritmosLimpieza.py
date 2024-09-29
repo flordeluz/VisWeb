@@ -92,7 +92,8 @@ def obtener_outlier_iqr(X):
     return outlier
 
 
-def obtener_outlier_zscore(X, z_threshold = 3.5):
+# z_threshold possible values (2.5, 3, 3.5)
+def obtener_outlier_zscore(X, z_threshold = 2):
     if "date" in X.columns:
         X["date"] = pd.to_datetime(X["date"])
         X = X.set_index("date")
@@ -142,7 +143,8 @@ def grubbs_min_test(data, alpha):
     return G_min > G_critical, G_min
 
 
-def obtener_outlier_grubbs(X, alpha = 0.05):
+# alpha possible values (0.01, 0.05, 0.10)
+def obtener_outlier_grubbs(X, alpha = 0.01):
     if "date" in X.columns:
         X["date"] = pd.to_datetime(X["date"])
         X = X.set_index("date")
@@ -164,44 +166,47 @@ def obtener_outlier_grubbs(X, alpha = 0.05):
     return outlier 
 
 
-def obtener_outlier_dixon(X):
-    if "date" in X.columns:
-        X["date"] = pd.to_datetime(X["date"])
-        X = X.set_index("date")
-        #
-    dataframe = X
-    outlier = False
-    for feature in dataframe.columns:
-        data = dataframe[feature]
-        n = len(data)
-        # Calcular el valor crítico según la tabla de Dixon
-        q = [None, None, None, 0.941, 0.765, 0.642, 0.56, 0.507, 0.468, 0.437, 0.412, 0.392, 0.376, 0.361, 0.349, 0.338, 0.329, 0.32, 0.313, 0.306]
-        k = np.min([n-3, 19])
-        q_c = q[k]
-        # Calcular la diferencia entre el valor máximo y mínimo
-        range_data = data.nlargest(1).values[0] - data.nsmallest(1).values[0]
-        # Calcular la diferencia entre el valor máximo y el segundo máximo
-        max_diff = np.abs(data.nlargest(1).values[0] - data.nlargest(2).values[-1])
-        # Calcular la diferencia entre el valor mínimo y el segundo mínimo
-        min_diff = np.abs(data.nsmallest(1).values[0] - data.nsmallest(2).values[-1])
-        # Comparar las diferencias con el valor crítico
-        if max_diff > q_c*range_data:
-            outlier = True
-            break
-        elif min_diff > q_c*range_data:
-            outlier = True
-            break
-        else:
-            outlier = False
-            #
-    print("[ Dixon Outliers Detected:", outlier, "]")
-    res_threads.append({"message": "Dixon Outliers Detected", "status": outlier})
-    return outlier
+# DIXON APPLY TO SMALL DATASETS BETWEEN 3 AND 30 ELEMENTS
+# def obtener_outlier_dixon(X):
+#     if "date" in X.columns:
+#         X["date"] = pd.to_datetime(X["date"])
+#         X = X.set_index("date")
+#         #
+#     dataframe = X
+#     outlier = False
+#     for feature in dataframe.columns:
+#         data = dataframe[feature]
+#         n = len(data)
+#         # Calcular el valor crítico según la tabla de Dixon
+#         q = [None, None, None, 0.941, 0.765, 0.642, 0.56, 0.507, 0.468, 0.437, 0.412, 0.392, 0.376, 0.361, 0.349, 0.338, 0.329, 0.32, 0.313, 0.306]
+#         k = np.min([n-3, 19])
+#         q_c = q[k]
+#         # Calcular la diferencia entre el valor máximo y mínimo
+#         range_data = data.nlargest(1).values[0] - data.nsmallest(1).values[0]
+#         # Calcular la diferencia entre el valor máximo y el segundo máximo
+#         max_diff = np.abs(data.nlargest(1).values[0] - data.nlargest(2).values[-1])
+#         # Calcular la diferencia entre el valor mínimo y el segundo mínimo
+#         min_diff = np.abs(data.nsmallest(1).values[0] - data.nsmallest(2).values[-1])
+#         # Comparar las diferencias con el valor crítico
+#         if max_diff > q_c*range_data:
+#             outlier = True
+#             break
+#         elif min_diff > q_c*range_data:
+#             outlier = True
+#             break
+#         else:
+#             outlier = False
+#             #
+#     print("[ Dixon Outliers Detected:", outlier, "]")
+#     res_threads.append({"message": "Dixon Outliers Detected", "status": outlier})
+#     return outlier
 
 
 # Crear un array con las funciones
+# array_funciones = [ obtener_ruido_de, obtener_ruido_cv, obtener_outlier_iqr,
+#                     obtener_outlier_zscore, obtener_outlier_grubbs, obtener_outlier_dixon ]
 array_funciones = [ obtener_ruido_de, obtener_ruido_cv, obtener_outlier_iqr,
-                    obtener_outlier_zscore, obtener_outlier_grubbs, obtener_outlier_dixon ]
+                    obtener_outlier_zscore, obtener_outlier_grubbs ]
 
 
 #CREACION DE FUNCIONES MULTIHILO
@@ -224,7 +229,7 @@ def comprobarLimpieza(dataframe, par = True):
         obtener_outlier_iqr(dataframe)
         obtener_outlier_zscore(dataframe)
         obtener_outlier_grubbs(dataframe)
-        obtener_outlier_dixon(dataframe)
+        # obtener_outlier_dixon(dataframe)
         #
     val_positivos = 0
     messages = []
