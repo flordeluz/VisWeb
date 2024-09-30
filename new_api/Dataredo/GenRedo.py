@@ -7,12 +7,13 @@
 from .Mainredo import MainredoClass
 import numpy as np
 import pandas as pd
-pd.options.mode.chained_assignment = None
+# import statistics as st
+# pd.options.mode.chained_assignment = None
 import re
 import json
 # from IPython.display import display
 # Rolling Mean & Moving Median
-from statistics import mean, median, mode
+# from statistics import mean, median, mode
 from sklearn.metrics import mean_absolute_error, mean_squared_error, median_absolute_error, r2_score, mean_absolute_percentage_error
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MaxAbsScaler, MinMaxScaler, StandardScaler, RobustScaler
@@ -241,7 +242,7 @@ class GenRedo(MainredoClass):
             return False
 
         
-    def sdv_treatment(self, ds, smo, cols_list, z_threshold = 2):
+    def sdv_treatment(self, ds, smo, cols_list, z_threshold = 1.96):
         # Private constants by method and algo
         method = "outliers"
         algorm = "sdv"

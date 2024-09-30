@@ -78,9 +78,9 @@ def obtener_outlier_iqr(X):
         # Calcular los límites de los valores atípicos
         lim_inf = q1 - 1.5 * iqr
         lim_sup = q3 + 1.5 * iqr
-        print("[[Feature, q1, q3, iqr]]:", feature, q1, q3, iqr)
-        print("[[Feature, Lower bound, Upper bound]]:", feature, lim_inf, lim_sup)
-        print("[[Feature, Min, Max]]:", feature, serie.min(), serie.max())
+        print("[[Feature, q1, q3, IQR ]]:", feature, q1, q3, iqr)
+        print("[[Feature, Lower, Upper]]:", feature, lim_inf, lim_sup)
+        print("[[Feature, Min,   Max  ]]:", feature, serie.min(), serie.max())
         valores_atipicos = serie[(serie < lim_inf) | (serie > lim_sup)]
         num_valores_atipicos = len(valores_atipicos)
         if num_valores_atipicos > 0:
@@ -92,8 +92,8 @@ def obtener_outlier_iqr(X):
     return outlier
 
 
-# z_threshold possible values (2.5, 3, 3.5)
-def obtener_outlier_zscore(X, z_threshold = 2):
+# z_threshold possible values (1.96, 2, 2.5, 3, 3.5)
+def obtener_outlier_zscore(X, z_threshold = 3.5):
     if "date" in X.columns:
         X["date"] = pd.to_datetime(X["date"])
         X = X.set_index("date")
@@ -105,9 +105,12 @@ def obtener_outlier_zscore(X, z_threshold = 2):
         mean = np.mean(serie)
         sd = np.std(serie, ddof=1)
         # Calcular el Z-score
-        z_scores = (serie - mean) / sd
+        z_scores = np.abs((serie - mean) / sd)
         # Identificar los outliers
-        outliers = np.where(np.abs(z_scores) > z_threshold)
+        outliers = serie[z_scores > z_threshold]
+        print("[[Feature, Outliers 1 n]]:", feature, np.sort(outliers)[0] if len(outliers) > 0 else np.nan, np.sort(outliers)[-1] if len(outliers) > 0 else np.nan)
+        print("[[Feature, mean, median]]:", mean, np.median(serie))
+        print("[[Feature, Min,  Max   ]]:", feature, serie.min(), serie.max())
         if len(outliers) > 0:
             outlier = True
             break
