@@ -61,7 +61,7 @@ export default {
 	PROCSZ: 24, // Process
 	SUBPSZ: 18, // Subprocess
 	ACTVSZ: 12, // Activity ACTION
-	PROCCO: { // color
+	PROCCO: { // Default color GRAY
             "Data Quality": "#767686",
 	    "Data Reduction": "#767686",
             "Variables Behavior": "#767686"
@@ -72,7 +72,7 @@ export default {
             "Variables Behavior": 3
 	},
 	PROCBY: [], // bypass
-	SUBPCO: { // color
+	SUBPCO: { // Default color GRAY
 	    "Data Quality": {
 		"Clean": "#767686",
 		"Nulls": "#767686",
@@ -107,7 +107,7 @@ export default {
 	    }
 	},
 	SUBPBY: [], // bypass
-	ACTVCO: { // color
+	ACTVCO: { // Default color GRAY
 	    "Data Quality": {
 		"Clean": {
 		},
@@ -252,38 +252,48 @@ export default {
 	    let itrecommends = steprc.data[0];
 	    console.log("[ It Recommends ]");
 	    for (var process in itrecommends) {
-		console.log("[ Process ]:", process);
-		console.log("[ Subprocesses ]:", itrecommends[process]);
-		this.PROCCO[process] = this.RED;
-		this.PROCBY.push(this.PROCPR[process]);
-		for (var prio_coloring_p in this.PROCPR) {
-		    if (! this.PROCBY.includes(this.PROCPR[prio_coloring_p])) {
-			if (this.PROCPR[prio_coloring_p] < this.PROCPR[process]) {
-			    this.PROCCO[prio_coloring_p] = this.GREEN;
-			}
-		    }
-		}
-		for (var subprocess in itrecommends[process]) {
-		    this.SUBPCO[process][itrecommends[process][subprocess]] = this.RED;
-		    this.SUBPBY.push(this.SUBPPR[process][itrecommends[process][subprocess]]);
-		    for (var prio_coloring_s in this.SUBPPR[process]) {
-			if (! this.SUBPBY.includes(this.SUBPPR[process][prio_coloring_s])) {
-			    if (this.SUBPPR[process][prio_coloring_s] < this.SUBPPR[process][itrecommends[process][subprocess]]) {
-				this.SUBPCO[process][prio_coloring_s] = this.GREEN;
-				for (var inactv_s_g in this.ACTVCO[process][prio_coloring_s]) {
-				    this.ACTVCO[process][prio_coloring_s][inactv_s_g] = this.GREEN;
-				}
-			    } else {
-				this.SUBPCO[process][prio_coloring_s] = this.YELLOW;
-				for (var inactv_s_y in this.ACTVCO[process][prio_coloring_s]) {
-				    this.ACTVCO[process][prio_coloring_s][inactv_s_y] = this.YELLOW;
-				}
+		if (process != "Exclude Activities") {
+		    console.log("[ Process ]:", process);
+		    console.log("[ Subprocesses ]:", itrecommends[process]);
+		    console.log("[ Subprocess Excluded Activities ]:", itrecommends["Exclude Activities"]);
+		    this.PROCCO[process] = this.RED;
+		    this.PROCBY.push(this.PROCPR[process]);
+		    for (var prio_coloring_p in this.PROCPR) {
+			if (! this.PROCBY.includes(this.PROCPR[prio_coloring_p])) {
+			    if (this.PROCPR[prio_coloring_p] < this.PROCPR[process]) {
+				this.PROCCO[prio_coloring_p] = this.GREEN;
 			    }
 			}
 		    }
-		    for (var inactv in this.ACTVCO[process][itrecommends[process][subprocess]]) {
-			this.ACTVCO[process][itrecommends[process][subprocess]][inactv] = this.RED;
-			this.ACTVBY.push(this.ACTVPR[process][itrecommends[process][subprocess]][inactv]);
+		    for (var subprocess in itrecommends[process]) {
+			this.SUBPCO[process][itrecommends[process][subprocess]] = this.RED;
+			this.SUBPBY.push(this.SUBPPR[process][itrecommends[process][subprocess]]);
+			for (var prio_coloring_s in this.SUBPPR[process]) {
+			    if (! this.SUBPBY.includes(this.SUBPPR[process][prio_coloring_s])) {
+				if (this.SUBPPR[process][prio_coloring_s] < this.SUBPPR[process][itrecommends[process][subprocess]]) {
+				    this.SUBPCO[process][prio_coloring_s] = this.GREEN;
+				    for (var inactv_s_g in this.ACTVCO[process][prio_coloring_s]) {
+					this.ACTVCO[process][prio_coloring_s][inactv_s_g] = this.GREEN;
+				    }
+				} else {
+				    this.SUBPCO[process][prio_coloring_s] = this.YELLOW;
+				    for (var inactv_s_y in this.ACTVCO[process][prio_coloring_s]) {
+					this.ACTVCO[process][prio_coloring_s][inactv_s_y] = this.YELLOW;
+				    }
+				}
+			    }
+			}
+			console.log("[ Activities ]:");
+			for (var inactv in this.ACTVCO[process][itrecommends[process][subprocess]]) {
+			    console.log(" ", inactv);
+			    if (typeof itrecommends["Exclude Activities"] !== "undefined" &&
+				itrecommends["Exclude Activities"].includes(inactv)) {
+				this.ACTVCO[process][itrecommends[process][subprocess]][inactv] = this.GREEN;
+			    } else {
+				this.ACTVCO[process][itrecommends[process][subprocess]][inactv] = this.RED;
+				this.ACTVBY.push(this.ACTVPR[process][itrecommends[process][subprocess]][inactv]);
+			    }
+			}
 		    }
 		}
 	    }

@@ -19,25 +19,26 @@ import time
 res_threads = []
 
 
-def obtener_estacionaria_mv(X, significance_level = 0.05):
-    # NANS NOT ALLOWED
-    if "date" in X.columns:
-        X["date"] = pd.to_datetime(X["date"])
-        X = X.set_index("date")
-        #
-    sc = MaxAbsScaler()
-    df = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
-    stationary = True
-    for column in df.columns:
-        result = adfuller(df[column])
-        if result[1] >= significance_level:  # adf p-value >= 0.05
-            stationary = False
-            print("[", column, "is not stationary, ADF p-value:", result[1], "]")
-            break
-        #
-    print("[ Dickey-Fuller Stationarity Test:", stationary, "]")
-    res_threads.append({"message": "Dickey-Fuller Stationarity Test", "status": stationary})
-    return stationary
+# Stationarity does not guarantee normal distribution
+# def obtener_estacionaria_mv(X, significance_level = 0.05):
+#     # NANS NOT ALLOWED
+#     if "date" in X.columns:
+#         X["date"] = pd.to_datetime(X["date"])
+#         X = X.set_index("date")
+#         #
+#     sc = MaxAbsScaler()
+#     df = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
+#     stationary = True
+#     for column in df.columns:
+#         result = adfuller(df[column])
+#         if result[1] >= significance_level:  # adf p-value >= 0.05
+#             stationary = False
+#             print("[", column, "is not stationary, ADF p-value:", result[1], "]")
+#             break
+#         #
+#     print("[ Dickey-Fuller Stationarity Test:", stationary, "]")
+#     res_threads.append({"message": "Dickey-Fuller Stationarity Test", "status": stationary})
+#     return stationary
 
 
 def obtener_no_patrones_estacionalidad(X, periodo = 12):
@@ -48,18 +49,19 @@ def obtener_no_patrones_estacionalidad(X, periodo = 12):
         #
     sc = MaxAbsScaler()
     dataframe = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
-    noPatronesE = False
+    seasonal = False
     for feature in dataframe.columns:
         decomposition = seasonal_decompose(dataframe[feature], model="additive", period=periodo)
-        seasonality = decomposition.seasonal
+        seasonal_variance = decomposition.seasonal.var()
+        residual_variance = decomposition.resid.var()
         # verificar si hay patrones de estacionalidad
-        if seasonality.mean() == 0:
-            noPatronesE = True
+        if seasonal_variance > residual_variance:
+            seasonal = True
             break
         #
-    print("[ Decomposition Non-seasonality Test:", noPatronesE, "]")
-    res_threads.append({"message": "Decomposition Non-seasonality Test", "status": noPatronesE})
-    return noPatronesE
+    print("[ Seasonality affects distribution:", seasonal, "]")
+    res_threads.append({"message": "Seasonality affects distribution", "status": seasonal})
+    return seasonal
 
 
 def obtener_distribucion_conocida(X):
@@ -88,13 +90,15 @@ def obtener_distribucion_conocida(X):
             except:
                 distConocida = False
                 #
-    print("[ Data Normally Distributed:", distConocida, "]")
-    res_threads.append({"message": "Data Normally Distributed", "status": distConocida})
-    return distConocida
+    print("[ Data Not Normally Distributed:", not distConocida, "]")
+    res_threads.append({"message": "Data Not Normally Distributed", "status": not distConocida})
+    return not distConocida
 
 
 # Crear un array con las funciones
-array_funciones = [ obtener_estacionaria_mv, obtener_no_patrones_estacionalidad, obtener_distribucion_conocida ]
+array_funciones = [ # obtener_estacionaria_mv,
+                    obtener_no_patrones_estacionalidad,
+                    obtener_distribucion_conocida ]
 
 
 #CREACION DE FUNCIONES MULTIHILO
@@ -112,7 +116,7 @@ def comprobarNormalizacion(dataframe, par = True):
         ejecutarFuncionesMultihilo(dataframe, array_funciones)
         #
     else:
-        obtener_estacionaria_mv(dataframe)
+        # obtener_estacionaria_mv(dataframe)
         obtener_no_patrones_estacionalidad(dataframe)
         obtener_distribucion_conocida(dataframe)
         #

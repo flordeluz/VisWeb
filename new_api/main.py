@@ -323,9 +323,11 @@ def recommendation_by_station(dataset, station):
         # -- REVERT LINE ABOVE, -TAB, OUTSIDE IF
     station_df, full_station_df = loader.get_station_df(station)
     recommendations = {
-        "Data Reduction": [],
-        "Data Quality": [],
-        "Variables Behavior": [],
+        "Data Reduction": [], # Fill with Subprocesses
+        "Data Quality": [], # Fill with Subprocesses
+        "Variables Behavior": [], # Fill with Subprocesses
+        # -- Exclude activities of the current subprocess
+        "Exclude Activities": [] # Fill with Subprocess Activities
     }
     global full_station_ds
     global current_df
@@ -358,10 +360,17 @@ def recommendation_by_station(dataset, station):
         dic["Normalize"] = messages_norm
         dic["Transform"] = messages_transform
         if status_cleaning:
-            recommendations["Data Quality"].append("Clean")
-            recommendations["Data Quality"].append("Outliers")
-            gr.reset_iqr_treatment(loader.smo)
-            gr.reset_sdv_treatment(loader.smo)
+            if not gr.did_iqr_treatment(loader.smo) or not gr.did_sdv_treatment(loader.smo):
+                recommendations["Data Quality"].append("Clean")
+                recommendations["Data Quality"].append("Outliers")
+                # gr.reset_iqr_treatment(loader.smo)
+                # gr.reset_sdv_treatment(loader.smo)
+                if gr.did_iqr_treatment(loader.smo):
+                    recommendations["Exclude Activities"].append("Interquartile Range");
+                    #
+                if gr.did_sdv_treatment(loader.smo):
+                    recommendations["Exclude Activities"].append("Z-Score");
+                    #
         if status_norm:
             recommendations["Data Quality"].append("Normalize")
         if status_transform:
