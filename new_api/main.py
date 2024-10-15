@@ -375,7 +375,14 @@ def recommendation_by_station(dataset, station):
             recommendations["Data Quality"].append("Normalize")
         if status_transform:
             recommendations["Data Quality"].append("Transform")
-            #
+        if not status_cleaning and not status_norm and not status_transform:
+            status_reduccion, messages_reduccion = comprobarReduccion(current_df, par = False)
+            dic["DimRed"] = messages_reduccion
+            messages_reduccion = []
+            if status_reduccion:
+                # recommendations["Data Reduction"].append("Dim.Reduce")
+                recommendations["Data Reduction"].append("DimRed")
+                #
     env = []
     res = {k: v for k, v in recommendations.items() if len(v) > 0}
     env.append(res)
@@ -388,9 +395,11 @@ def recommendation_by_station(dataset, station):
 @enable_cors
 def recommendation_by_macrotask(dataset, station, macrotarea):
     recommendations = {
-        "Data Reduction": [],
-        "Data Quality": [],
-        "Variables Behavior": [],
+        "Data Reduction": [], # Fill with Subprocesses
+        "Data Quality": [], # Fill with Subprocesses
+        "Variables Behavior": [], # Fill with Subprocesses
+        # -- Exclude activities of the current subprocess
+        "Exclude Activities": [] # Fill with Subprocess Activities
     }
     global current_df
     global current_dataset
