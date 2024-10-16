@@ -262,6 +262,12 @@ export default {
 			if (! this.PROCBY.includes(this.PROCPR[prio_coloring_p])) {
 			    if (this.PROCPR[prio_coloring_p] < this.PROCPR[process]) {
 				this.PROCCO[prio_coloring_p] = this.GREEN;
+				for (var prio_coloring_a in this.SUBPCO[prio_coloring_p]) {
+				    this.SUBPCO[prio_coloring_p][prio_coloring_a] = this.GREEN;
+				    for (var prio_coloring_b in this.ACTVCO[prio_coloring_p][prio_coloring_a]) {
+					this.ACTVCO[prio_coloring_p][prio_coloring_a][prio_coloring_b] = this.GREEN;
+				    }
+				}
 			    }
 			}
 		    }

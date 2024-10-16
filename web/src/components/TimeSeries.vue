@@ -21,15 +21,17 @@
     <v-col v-if="!showSpiral">
       <v-row>
         <v-col :cols="seePresentChart ? 3 : ''">
-          <div id="graph1" class="firstRow" style="position:relative; border: 2px solid #73AD21; border-radius:8px"
+          <div id="graph1" class="firstRow" style="position:relative; border: 4px solid #73AD21; border-radius:8px"
 	       ref="timeChart" :diameter="200"></div>
+	  <!--
           <feature-viscovery ref="guide" :auto-aim-delay="500" :diameter="80" background-color="rgba(10,10,10, 0.719)">
             <h3>Guía</h3>
             <div v-html="guide[currentGuide] ? guide[currentGuide].text : ''"></div>
           </feature-viscovery>
+	  -->
         </v-col>
         <v-col v-if="seePresentChart">
-          <div id="graph2" class="firstRow" style="position:relative; border: 2px solid #73AD21;"></div>
+          <div id="graph2" class="firstRow" style="position:relative; border: 4px solid #73AD21;"></div>
         </v-col>
       </v-row>
     </v-col>
@@ -46,6 +48,8 @@
       </table>
     </v-col>
   </v-row>
+
+  <!-- /* Raw botton and action description */
   <v-row class="pb-xl-16" align="center">
     <div id="op-raw">
       <table>
@@ -63,6 +67,9 @@
       </div>
     </v-col>
   </v-row>
+  /* End raw botton and action description */ -->
+
+  <!-- /* Diagram */
   <v-row style="height:26vh" class="pt-10 pt-xl-16">
     <v-col class="fill-height">
       <operator-diagram v-on:operatorSelected="doTask" v-bind:newTask="newTask" v-on:rendered="redrawLines"
@@ -85,7 +92,6 @@
           <v-form ref="parameters_form">
             <v-row align="center" justify="center">
               <v-col>
-		<!-- v-if="main_operation === 'reduce'" :rules="[v => (!!v && v < 3) || 'A natural number less than 3']" -->
                 <v-text-field label="List of features (comma-separated)" v-model="n_comp" ref="n_comp"
 			      v-if="main_operation === 'reduce'" :rules="[v => !!v || 'At least one feature to drop']" />
                 <v-text-field label="Transform factor" v-model="factor" ref="factor"
@@ -111,6 +117,8 @@
       </v-card-text>
     </v-card>
   </v-dialog>
+  /* End diagram */ -->
+  
 </v-container>
 </template>
 
@@ -125,17 +133,17 @@ import Spiral from "@/views/point_spiral"
 
 let CanvasJS = window.CanvasJS
 
-import Diagram from "../components/Diagram.vue"
-import OperatorDiagram from "../components/OperatorDiagram.vue"
-import FeatureViscovery from "feature-viscovery"
+// // import Diagram from "../components/Diagram.vue"
+// // import OperatorDiagram from "../components/OperatorDiagram.vue"
+// import FeatureViscovery from "feature-viscovery"
 import LeaderLine from "leader-line-new"
-// import tippy from "tippy.js"
-// import "tippy.js/dist/tippy.css" // optional for styling
-import "feature-viscovery/dist/feature-viscovery.esm.css" // optional for styling
-// import Operations from "../components/Operations.vue"
+// // import tippy from "tippy.js"
+// // import "tippy.js/dist/tippy.css" // optional for styling
+// import "feature-viscovery/dist/feature-viscovery.esm.css" // optional for styling
+// // import Operations from "../components/Operations.vue"
 
 export default {
-    components: { Diagram, OperatorDiagram, FeatureViscovery },
+    components: { /* Diagram, OperatorDiagram, FeatureViscovery */ },
     data: () => ({
 	dataset: "",
 	station: null,
@@ -220,7 +228,7 @@ export default {
 	async getRecommendations(dataset, station) {
 	    let dataOb = await axios.get(`http://localhost:8080/recommendation/${dataset}/${this.titleCase(station)}`)
 	    console.log("dataOb", dataOb.data)
-	    let num = "0"
+	    // let num = "0"
 	    let recommends = dataOb.data[0]
 	    this.recommendations = recommends
 	    this.algorithms = dataOb.data[1]
@@ -228,9 +236,9 @@ export default {
 	    await this.$emit("update:algorithms", this.algorithms);
 	    console.log("[ Recommendations ]: ", this.recommendations)
 	    console.log("[ Recommended algorithms to fix ]:", this.algorithms.Clean)
-	    this.$refs.macroTaskDiagram.actualizarDiagrama(num);
-	    //this.recommendations = recommendations
-	    //console.log("Recomendatios:", recommendations)
+	    // this.$refs.macroTaskDiagram.actualizarDiagrama(num);
+	    // //this.recommendations = recommendations
+	    // //console.log("Recomendatios:", recommendations)
 	},
 	// newRecommendations(data) {
 	//     console.log("[ Additional recommendations ]:", data.recommends)
@@ -274,28 +282,28 @@ export default {
 	titleCase(str) {
 	    return str.toLowerCase().replace(/\b(\w)/g, s => s.toUpperCase())
 	},
-	async showGuide() {
-	    this.currentGuide = 0
-	    this.$refs.guide.open(this.$refs[this.guide[0].ref])
-	    console.log("Text: ", this.$refs[this.guide[0].ref])
+	// async showGuide() {
+	//     this.currentGuide = 0
+	//     this.$refs.guide.open(this.$refs[this.guide[0].ref])
+	//     console.log("Text: ", this.$refs[this.guide[0].ref])
 	    
-	    const interval = setInterval(async () => {
-		console.log(
-		    "Guide:",
-		    this.currentGuide,
-		    this.guide.length,
-		    this.$refs[this.guide[this.currentGuide]]
-		)
-		this.currentGuide += 1
-		if (this.currentGuide < this.guide.length) {
-		    this.$refs.guide.open(this.$refs[this.guide[this.currentGuide].ref])
-		} else {
-		    console.log("Finished Interval")
-		    clearInterval(interval)
-		    this.$refs.guide.close()
-		}
-	    }, 3000)
-	},
+	//     const interval = setInterval(async () => {
+	// 	console.log(
+	// 	    "Guide:",
+	// 	    this.currentGuide,
+	// 	    this.guide.length,
+	// 	    this.$refs[this.guide[this.currentGuide]]
+	// 	)
+	// 	this.currentGuide += 1
+	// 	if (this.currentGuide < this.guide.length) {
+	// 	    this.$refs.guide.open(this.$refs[this.guide[this.currentGuide].ref])
+	// 	} else {
+	// 	    console.log("Finished Interval")
+	// 	    clearInterval(interval)
+	// 	    this.$refs.guide.close()
+	// 	}
+	//     }, 3000)
+	// },
 	async expandPastChart() {
 	    this.seePresentChart = false
 	    await console.log("Past chart gonna maximize")
@@ -489,6 +497,8 @@ export default {
 		animationEnabled: true,
 		exportEnabled: true,
 		zoomEnabled: true,
+		// width: 1000,
+		height: 580,
 		axisX: {
 		    intervalType: "day"
 		},
@@ -511,7 +521,7 @@ export default {
 		    xValueType: "dateTime",
 		    name: feat_data.name,
 		    showInLegend: true,
-		    lineThickness: 1,
+		    lineThickness: 1.4,
 		    dataPoints: feat_data.datapoints
 		}))
 	    })
@@ -774,7 +784,7 @@ export default {
 	document.getElementById("dynVisualize").href=`/visualize/${this.dataset}/${this.station}`;
 	document.getElementById("dynStats").href=`/stats/${this.dataset}/${this.station}`;
 	document.getElementById("dynSpiral").href=`/spiral/${this.dataset}/${this.station}`;
-	this.getRecommendations(this.dataset, this.station)
+	// this.getRecommendations(this.dataset, this.station)
 	console.log("[ Time Series ]", this.dataset, this.station, this.recommendations)
 	axios
 	    .get(`http://localhost:8080/data/${this.dataset}/${this.station}`)
@@ -791,6 +801,8 @@ export default {
 		    animationEnabled: true,
 		    exportEnabled: true,
 		    zoomEnabled: true,
+		    // width: 1000,
+		    height: 580,
 		    axisX: {
 			intervalType: "day"
 		    },
@@ -813,7 +825,7 @@ export default {
 			xValueType: "dateTime",
 			name: feat_data.name,
 			showInLegend: true,
-			lineThickness: 1,
+			lineThickness: 1.4,
 			dataPoints: feat_data.datapoints
 		    }))
 		})
@@ -830,7 +842,7 @@ export default {
 	this.main_operation = "raw"
 	this.tareasHechas = []
 	console.log("Start:", this.$refs.timeChart)
-	this.showGuide()
+	// this.showGuide()
     }
 }
 </script>
@@ -845,7 +857,7 @@ table.blockTable {
     /* for firefox */
 }
 .firstRow {
-    height: 38vh;
+    height: 66vh;
 }
 table.pastTable {
     margin-left: auto;
