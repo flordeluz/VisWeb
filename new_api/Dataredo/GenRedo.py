@@ -570,6 +570,7 @@ class GenRedo(MainredoClass):
             smo[algorm] = ds.copy()
             # smo[algorm][cols_list] = smo[algorm][cols_list].apply(lambda x: np.diff(x.astype("float64")), axis=0)
             smo[algorm][cols_list] = smo[algorm][cols_list] - smo[algorm][cols_list].shift(periods = 1)
+            smo[algorm].iloc[0] = smo[algorm].iloc[1]
             
             # -------------------------------
             smo[self.name][method][algorm] = True
