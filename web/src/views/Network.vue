@@ -246,7 +246,6 @@ export default {
 	},
 	async showNetwork() {
 	    this.datasetSelected = true;
-	    
 	    let steprc = await axios.get(
 		"http://localhost:8080/recommendation/" + this.dataset + "/" + this.station,
 		{ crossdomain: true }
@@ -255,66 +254,64 @@ export default {
 	    let itextends = steprc.data[1];
 	    console.log("[ It Recommends ]");
 	    for (var process in itrecommends) {
-		if (process != "Exclude Activities") {
-		    console.log("[ Process ]:", process);
-		    console.log("[ Subprocesses ]:", itrecommends[process]);
-		    console.log("[ Subprocess Excluded Activities ]:", itrecommends["Exclude Activities"]);
-		    this.PROCCO[process] = this.RED;
-		    this.PROCBY.push(this.PROCPR[process]);
-		    for (var prio_coloring_p in this.PROCPR) {
-			if (! this.PROCBY.includes(this.PROCPR[prio_coloring_p])) {
-			    if (this.PROCPR[prio_coloring_p] < this.PROCPR[process]) {
-				this.PROCCO[prio_coloring_p] = this.GREEN;
-				for (var prio_coloring_a in this.SUBPCO[prio_coloring_p]) {
-				    this.SUBPCO[prio_coloring_p][prio_coloring_a] = this.GREEN;
-				    for (var prio_coloring_b in this.ACTVCO[prio_coloring_p][prio_coloring_a]) {
-					this.ACTVCO[prio_coloring_p][prio_coloring_a][prio_coloring_b] = this.GREEN;
-				    }
+		// if (process != "Excluded Activities") {
+		console.log("[ Process ]:", process);
+		console.log("[ Subprocesses ]:", itrecommends[process]);
+		console.log("[ Subprocess Excluded Activities ]:", itextends["Excluded Activities"]);
+		this.PROCCO[process] = this.RED;
+		this.PROCBY.push(this.PROCPR[process]);
+		for (var prio_coloring_p in this.PROCPR) {
+		    if (! this.PROCBY.includes(this.PROCPR[prio_coloring_p])) {
+			if (this.PROCPR[prio_coloring_p] < this.PROCPR[process]) {
+			    this.PROCCO[prio_coloring_p] = this.GREEN;
+			    for (var prio_coloring_a in this.SUBPCO[prio_coloring_p]) {
+				this.SUBPCO[prio_coloring_p][prio_coloring_a] = this.GREEN;
+				for (var prio_coloring_b in this.ACTVCO[prio_coloring_p][prio_coloring_a]) {
+				    this.ACTVCO[prio_coloring_p][prio_coloring_a][prio_coloring_b] = this.GREEN;
 				}
-			    }
-			}
-		    }
-		    for (var subprocess in itrecommends[process]) {
-			this.SUBPCO[process][itrecommends[process][subprocess]] = this.RED;
-			this.SUBPBY.push(this.SUBPPR[process][itrecommends[process][subprocess]]);
-			for (var prio_coloring_s in this.SUBPPR[process]) {
-			    if (! this.SUBPBY.includes(this.SUBPPR[process][prio_coloring_s])) {
-				if (this.SUBPPR[process][prio_coloring_s] < this.SUBPPR[process][itrecommends[process][subprocess]]) {
-				    this.SUBPCO[process][prio_coloring_s] = this.GREEN;
-				    for (var inactv_s_g in this.ACTVCO[process][prio_coloring_s]) {
-					this.ACTVCO[process][prio_coloring_s][inactv_s_g] = this.GREEN;
-				    }
-				} else {
-				    this.SUBPCO[process][prio_coloring_s] = this.YELLOW;
-				    for (var inactv_s_y in this.ACTVCO[process][prio_coloring_s]) {
-					this.ACTVCO[process][prio_coloring_s][inactv_s_y] = this.YELLOW;
-				    }
-				}
-			    }
-			}
-			console.log("[ Activities ]:");
-			for (var inactv in this.ACTVCO[process][itrecommends[process][subprocess]]) {
-			    console.log(" ", inactv);
-			    if (typeof itrecommends["Exclude Activities"] !== "undefined" &&
-				itrecommends["Exclude Activities"].includes(inactv)) {
-				this.ACTVCO[process][itrecommends[process][subprocess]][inactv] = this.GREEN;
-			    } else {
-				this.ACTVCO[process][itrecommends[process][subprocess]][inactv] = this.RED;
-				this.ACTVBY.push(this.ACTVPR[process][itrecommends[process][subprocess]][inactv]);
 			    }
 			}
 		    }
 		}
+		for (var subprocess in itrecommends[process]) {
+		    this.SUBPCO[process][itrecommends[process][subprocess]] = this.RED;
+		    this.SUBPBY.push(this.SUBPPR[process][itrecommends[process][subprocess]]);
+		    for (var prio_coloring_s in this.SUBPPR[process]) {
+			if (! this.SUBPBY.includes(this.SUBPPR[process][prio_coloring_s])) {
+			    if (this.SUBPPR[process][prio_coloring_s] < this.SUBPPR[process][itrecommends[process][subprocess]]) {
+				this.SUBPCO[process][prio_coloring_s] = this.GREEN;
+				for (var inactv_s_g in this.ACTVCO[process][prio_coloring_s]) {
+				    this.ACTVCO[process][prio_coloring_s][inactv_s_g] = this.GREEN;
+				}
+			    } else {
+				this.SUBPCO[process][prio_coloring_s] = this.YELLOW;
+				for (var inactv_s_y in this.ACTVCO[process][prio_coloring_s]) {
+				    this.ACTVCO[process][prio_coloring_s][inactv_s_y] = this.YELLOW;
+				}
+			    }
+			}
+		    }
+		    console.log("[ Activities ]:");
+		    for (var inactv in this.ACTVCO[process][itrecommends[process][subprocess]]) {
+			console.log(" ", inactv);
+			if (typeof itextends["Excluded Activities"] !== "undefined" &&
+			    itextends["Excluded Activities"].includes(inactv)) {
+			    this.ACTVCO[process][itrecommends[process][subprocess]][inactv] = this.GREEN;
+			} else {
+			    this.ACTVCO[process][itrecommends[process][subprocess]][inactv] = this.RED;
+			    this.ACTVBY.push(this.ACTVPR[process][itrecommends[process][subprocess]][inactv]);
+			}
+		    }
+		}
+		// }
 	    }
 	    if (typeof itextends["DimRed"] !== "undefined") {
-		const regex = /\[(.*?)\]/;
-		var foundFA = itextends["DimRed"].find(item => item.includes("FA Dim.Reduction"));
-		var matchFA = [];
-		var valuesFA = [];
+		const foundFA = itextends["DimRed"].find(item => item.includes("FA Dim.Reduction"));
 		if (foundFA) {
-		    matchFA = foundFA.match(regex);
+		    const regex = /\[(.*?)\]/;
+		    const matchFA = foundFA.match(regex);
 		    if (matchFA) {
-			valuesFA = matchFA[1].split(',').map(item => item.trim().replace(/'/g, ''));
+			const valuesFA = matchFA[1].split(',').map(item => item.trim().replace(/'/g, ''));
 			console.log(valuesFA);
 			this.n_comp = valuesFA.join(',');
 			console.log(this.n_comp);

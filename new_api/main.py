@@ -322,13 +322,6 @@ def recommendation_by_station(dataset, station):
         station_metadata = loader.get_station_metadata(station)
         # -- REVERT LINE ABOVE, -TAB, OUTSIDE IF
     station_df, full_station_df = loader.get_station_df(station)
-    recommendations = {
-        "Data Reduction": [], # Fill with Subprocesses
-        "Data Quality": [], # Fill with Subprocesses
-        "Variables Behavior": [], # Fill with Subprocesses
-        # -- Exclude activities of the current subprocess
-        "Exclude Activities": [] # Fill with Subprocess Activities
-    }
     global full_station_ds
     global current_df
     global aux_df
@@ -336,6 +329,14 @@ def recommendation_by_station(dataset, station):
     global current_station
     global resultados_threads
     global dic
+    recommendations = {
+        "Data Reduction": [], # Filled with Subprocesses
+        "Data Quality": [], # Filled with Subprocesses
+        "Variables Behavior": [], # Filled with Subprocesses
+        # # -- Excluded activities of the current subprocess
+        # "Excluded Activities": [] # Filled with Subprocess Activities
+    }
+    dic["Excluded Activities"] = [];
     current_df = None
     # if current_df is None:
     # null_values = station_df.isna().sum().sum()
@@ -366,10 +367,10 @@ def recommendation_by_station(dataset, station):
                 # gr.reset_iqr_treatment(loader.smo)
                 # gr.reset_sdv_treatment(loader.smo)
                 if gr.did_iqr_treatment(loader.smo):
-                    recommendations["Exclude Activities"].append("Interquartile Range");
+                    dic["Excluded Activities"].append("Interquartile Range");
                     #
                 if gr.did_sdv_treatment(loader.smo):
-                    recommendations["Exclude Activities"].append("Z-Score");
+                    dic["Excluded Activities"].append("Z-Score");
                     #
         if status_norm:
             recommendations["Data Quality"].append("Normalize")
@@ -394,18 +395,18 @@ def recommendation_by_station(dataset, station):
 @route("/recommendation/<dataset>/<station>/<macrotarea>")
 @enable_cors
 def recommendation_by_macrotask(dataset, station, macrotarea):
-    recommendations = {
-        "Data Reduction": [], # Fill with Subprocesses
-        "Data Quality": [], # Fill with Subprocesses
-        "Variables Behavior": [], # Fill with Subprocesses
-        # -- Exclude activities of the current subprocess
-        "Exclude Activities": [] # Fill with Subprocess Activities
-    }
     global current_df
     global current_dataset
     global current_station
     global resultados_threads
     global dic
+    recommendations = {
+        "Data Reduction": [], # Filled with Subprocesses
+        "Data Quality": [], # Filled with Subprocesses
+        "Variables Behavior": [], # Filled with Subprocesses
+        # # -- Excluded activities of the current subprocess
+        # "Excluded Activities": [] # Filled with Subprocess Activities
+    }
     if macrotarea == "0":
         status_cleaning, messages_cleaning = comprobarLimpieza(current_df, par = False)
         status_norm, messages_norm = comprobarNormalizacion(current_df, par = False)
