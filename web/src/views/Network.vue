@@ -18,6 +18,41 @@
       <div v-html="rawcontainer"></div>
     </v-col>
   </v-row>
+  <v-dialog v-model="dialog" width="500">
+    <v-card mt="4">
+      <v-card-title class="headline grey lighten-2">
+        Microtask Parameter
+      </v-card-title>
+      <v-card-text>
+        <v-container>
+          <v-form ref="parameters_form">
+            <v-row align="center" justify="center">
+              <v-col>
+                <v-text-field label="List of features (comma-separated)" v-model="n_comp" ref="n_comp"
+			      v-if="main_operation === 'reduce'" :rules="[v => !!v || 'At least one feature to drop']" />
+                <v-text-field label="Transform factor" v-model="factor" ref="factor"
+			      v-if="main_operation === 'transform'" :rules="[v => !!v || 'Required']" />
+                <v-select label="Feature" v-model="feature"
+			  :items="[
+				  { text: 'Precipitation', value: 0 },
+				  { text: 'Temp Max', value: 1 },
+				  { text: 'Temp Min', value: 2 }
+				  ]"
+			  ref="feature" v-if="main_operation === 'trend' ||
+					      main_operation === 'seasonality' ||
+					      main_operation === 'cyclicity'"
+			  :rules="[v => !!v || 'Required']" />
+              </v-col>
+              <v-col>
+                <v-btn @click="execActivityParams" large color="primary">
+                  Apply</v-btn>
+              </v-col>
+            </v-row>
+          </v-form>
+        </v-container>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
 </v-container>
 </template>
 
@@ -51,8 +86,11 @@ export default {
 	layout: null,
 	loading_data: true,
 	executing_task: false,
+	dialog: false,
 	n_comp: "",
 	factor: 1,
+	main_operation: "",
+	main_path: "",
 	RED: "#FA4F40", // Enabled ACTION
 	BLUE: "#727EE0",
 	LIGHTBLUE: "#3399f8",
@@ -217,7 +255,17 @@ export default {
 			color = this.graph.getNodeAttribute(item, "color");
 			size = this.graph.getNodeAttribute(item, "size");
 			path = this.graph.getNodeAttribute(item, "path");
-			if (color == this.RED && size == this.ACTVSZ) action = true;
+			if (label == "Linear" && color == this.RED && size == this.ACTVSZ) {
+			    this.main_operation = "transform";
+			    this.main_path = "transform/linear/";
+			    this.dialog = true;
+			} else if (label == "Manually Selected" && color == this.RED && size == this.ACTVSZ) {
+			    this.main_operation = "reduce";
+			    this.main_path = "reduce/manual/";
+			    this.dialog = true;
+			} else if (color == this.RED && size == this.ACTVSZ) {
+			    action = true;
+			}
 			console.log("[", event, "]:", itemType, label, "action:", action);
 		    } else if (itemType === "edge") {
 			label = this.graph.getEdgeAttribute(item, "label");
@@ -243,6 +291,29 @@ export default {
 	    } else {	
 		console.log("[", event, "]:", "unhandled");
 	    }
+	},
+	async execActivityParams() {
+	    console.log("[ Action with params ]");
+	    if (this.main_operation === "reduce" && this.n_comp === "") {
+		this.$refs["n_comp"].validate(true);
+		return;
+	    }
+	    if (this.main_operation === "transform" && this.factor === "") {
+		this.$refs["factor"].validate(true);
+		return;
+	    }
+	    if (this.main_operation === "reduce") this.main_path = this.main_path + this.n_comp;
+	    if (this.main_operation === "transform") this.main_path = this.main_path + this.factor;
+	    this.executing_task = true;
+	    let req_string;
+	    req_string = `http://localhost:8080/op/${this.dataset}/${this.main_path}`;
+	    console.log(req_string);
+	    let actionrc = await axios.get(req_string, { crossdomain: true });
+	    console.log(actionrc);
+	    this.executing_task = false;
+	    this.dialog = false;
+	    this.$refs["parameters_form"].reset();
+	    location.reload();
 	},
 	async showNetwork() {
 	    this.datasetSelected = true;
