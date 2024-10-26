@@ -1,4 +1,4 @@
-% Created 2024-07-17 Wed 01:41
+% Created 2024-10-25 Fri 18:39
 % Intended LaTeX compiler: pdflatex
 \documentclass[a4paper]{article}
 \usepackage[utf8]{inputenc}
@@ -23,7 +23,7 @@
  pdftitle={DATA ANALYSIS AND VISUALIZATION OF MULTIVARIATE TIME SERIES SOFTWARE},
  pdfkeywords={},
  pdfsubject={},
- pdfcreator={Emacs 29.4 (Org mode 9.6.15)}, 
+ pdfcreator={Emacs 29.3 (Org mode 9.6.15)}, 
  pdflang={English}}
 \begin{document}
 
@@ -32,12 +32,12 @@
 
 
 \section{Introduction}
-\label{sec:orgfb77c5f}
+\label{sec:org8632fca}
 
 The project explores, analyzes, and integrates Vue.JS and Python code with different models for clean and data completion.
 
 \section{Goals}
-\label{sec:orgf93fac0}
+\label{sec:orgd295d61}
 
 \begin{itemize}
 \item Complete the code by integrating different Python models into the software project.
@@ -48,7 +48,7 @@ The project explores, analyzes, and integrates Vue.JS and Python code with diffe
 \end{itemize}
 
 \section{State of the art}
-\label{sec:orgc74c792}
+\label{sec:org968c012}
 
 \begin{itemize}
 \item Source code of the project(1), with documentation to install and deploy the software. The software currently reads data and graphs time series. It has options for data completion through rolling mean and kNN and partially cleaning data alternatives. It tracks for changes while navigating through the Diagram Operator interface graphically. Integrates Radial Chart for time series cycles.
@@ -57,10 +57,10 @@ The project explores, analyzes, and integrates Vue.JS and Python code with diffe
 \end{itemize}
 
 \section{Pre-implementation analysis}
-\label{sec:orga29142e}
+\label{sec:org9b9843d}
 
 \subsection{Multilayer design}
-\label{sec:org81fcdd4}
+\label{sec:org2f83846}
 
 The critical aspects of the software are:
 
@@ -79,7 +79,7 @@ The critical aspects of the software are:
 \end{itemize}
 
 \subsection{Frontend specifics}
-\label{sec:orge2aa42c}
+\label{sec:org00a8154}
 
 \sffamily \footnotesize
 \begin{center}
@@ -88,7 +88,7 @@ The critical aspects of the software are:
 \rmfamily \normalsize
 
 \subsection{Backend specifics}
-\label{sec:orgfc9591c}
+\label{sec:orgfe7f394}
 
 \sffamily \footnotesize
 \begin{center}
@@ -97,7 +97,7 @@ The critical aspects of the software are:
 \rmfamily \normalsize
 
 \subsection{Detected issues}
-\label{sec:orga1e891e}
+\label{sec:orgfc84ea2}
 
 \begin{itemize}
 \item Data structures. It requires adapting the current data structures of the program to the new dictionary of the tested and trained models.
@@ -108,10 +108,10 @@ The critical aspects of the software are:
 \end{itemize}
 
 \section{{\bfseries\sffamily TODO} Implementation}
-\label{sec:org8d9431a}
+\label{sec:orgc900ccf}
 
 \subsection{Activities summary}
-\label{sec:orgda1e901}
+\label{sec:org9f4fdc2}
 
 \begin{itemize}
 \item Adapt the Backend Data Structure.
@@ -125,13 +125,16 @@ The critical aspects of the software are:
 \item Adapt the front end for new ML models.
 
 \item Frontend UI additional improvements.
+
+\item Format multivariate time series data.
 \end{itemize}
 
-\subsection{{\bfseries\sffamily TODO} Activities execution}
-\label{sec:org10996cf}
+
+\subsection{{\bfseries\sffamily DONE} Activities execution}
+\label{sec:orgaa05662}
 
 \subsubsection{Change log}
-\label{sec:org80a3616}
+\label{sec:org9abd103}
 
 Tracking changes on the program will be done by using diff to create a patch component that allows the creation of a checkpoint and registering the changes by the size of modify or created code\footnote{Tracking log in the appendix}. The folder structure is:
 
@@ -162,12 +165,12 @@ drwx & VisWeb-AlgoritmosLimpieza & Development Folder\\[0pt]
 \rmfamily
 
 \subsubsection{Backlog}
-\label{sec:org7175768}
+\label{sec:org9331829}
 
 The pending activities are in the appendix backlog section. These activities correspond to changes or reviews that depend on multiple program files around the software, and their resolutions will come on the project's timeline. Bugs will gradually fixed.
 
 \subsubsection{{\bfseries\sffamily DONE} Backend data structures}
-\label{sec:org449a143}
+\label{sec:org40f130d}
 
 Programs adaptation in the new\textunderscore api.
 
@@ -210,11 +213,11 @@ Programs adaptation in the new\textunderscore api.
 \rmfamily \normalsize
 
 \subsubsection{{\bfseries\sffamily DONE} Backend new specifications}
-\label{sec:org36036ef}
+\label{sec:org01db8bb}
 
 \begin{enumerate}
 \item {\bfseries\sffamily DONE} Classes and modules
-\label{sec:org48ae754}
+\label{sec:org9239d78}
 
 \sffamily \footnotesize
 \begin{center}
@@ -223,7 +226,7 @@ Programs adaptation in the new\textunderscore api.
 \rmfamily \normalsize
 
 \item {\bfseries\sffamily DONE} Sequence diagram
-\label{sec:org6cbe650}
+\label{sec:org30f5025}
 
 \sffamily \scriptsize
 \begin{center}
@@ -233,7 +236,7 @@ Programs adaptation in the new\textunderscore api.
 \end{enumerate}
 
 \subsubsection{{\bfseries\sffamily DONE} Backend new data structure and frontend integration}
-\label{sec:orgbbc0a3f}
+\label{sec:org56259a1}
 
 The initial state of the front end had two APIs. All the methods to grab data were migrated and transformed in the new API, leaving just one centralized processing Python API.
 
@@ -246,20 +249,20 @@ The main structure of the front end has not changed too much. The most relevant 
 \rmfamily \normalsize
 
 \subsubsection{Data repository and cache}
-\label{sec:orgadea001}
+\label{sec:org716afb7}
 
 The backend will support dataset uploading. The structure has been defined on folders as an ID inside a .data repository. It will allow us to keep the data treatment progress in folders with the same ID inside a .cache repository.
 
 \section{{\bfseries\sffamily DONE} Requirements}
-\label{sec:org7b7373f}
+\label{sec:org96af9e7}
 
 \subsection{{\bfseries\sffamily DONE} Software}
-\label{sec:org925e975}
+\label{sec:orge4c626a}
 
 \begin{itemize}
-\item Python 3.9.19
+\item Python 3.12.7
 
-\item NodeJS 18.20.2
+\item NodeJS 18.19.1
 
 \item GNU/Linux distribution with kernel 5.15.19 or superior
 
@@ -267,7 +270,7 @@ The backend will support dataset uploading. The structure has been defined on fo
 \end{itemize}
 
 \subsection{{\bfseries\sffamily DONE} Hardware}
-\label{sec:orgebddfdb}
+\label{sec:orgc696c49}
 
 \begin{itemize}
 \item Processor AMD64 or x86\textsubscript{64} architecture
@@ -282,10 +285,10 @@ The backend will support dataset uploading. The structure has been defined on fo
 \end{itemize}
 
 \section{{\bfseries\sffamily TODO} Visual Analytics Guidance Development}
-\label{sec:org7982db7}
+\label{sec:org303e1f4}
 
 \subsection{{\bfseries\sffamily TODO} Spiral diagram analysis improvement}
-\label{sec:org69869da}
+\label{sec:org0b7e9c2}
 
 \begin{itemize}
 \item Compute segments and timespan for the Spiral. \textbf{Done}.
@@ -295,11 +298,11 @@ The backend will support dataset uploading. The structure has been defined on fo
 \item Fix polygon coordinates when there are more than three dimensions. \textbf{In progress}.
 \end{itemize}
 
-\subsection{{\bfseries\sffamily TODO} Independent section for statistics}
-\label{sec:org85c0a43}
+\subsection{{\bfseries\sffamily DONE} Independent section for statistics}
+\label{sec:org5d524c3}
 
 \begin{itemize}
-\item Statistics of the time series (size, nulls, type of columns, or dimensions). \textbf{In progress}.
+\item Statistics of the time series (size, nulls, type of columns, or dimensions). \textbf{Done}.
 
 \item Distribution type of the time series (e.g., normal). \textbf{Done}.
 
@@ -308,32 +311,57 @@ The backend will support dataset uploading. The structure has been defined on fo
 \item Correlation matrix. \textbf{Done}.
 \end{itemize}
 
-\subsection{{\bfseries\sffamily TODO} Flow diagram improvement}
-\label{sec:org55aacb2}
+\subsection{{\bfseries\sffamily DONE} Flow diagram improvement}
+\label{sec:org9c35cec}
 
 \begin{itemize}
 \item Data cleaning, Normalization and transformation, and Time-series behavior. \textbf{Done}.
 
-\item Stoppers and prereqs control between stages of the Guidance flow. \textbf{In progress}.
+\item Stoppers and prereqs control between stages of the Guidance flow. \textbf{Done}.
+
+\item Network graph controller. \textbf{Done}.
 \end{itemize}
 
-\section{{\bfseries\sffamily TODO} Deployment}
-\label{sec:org12cf92a}
+\section{{\bfseries\sffamily DONE} Format Multivariate Time Series Data}
+\label{sec:org19201fd}
+
+The program makes data preprocessing by inspecting data and giving recommendations through a hierarchical network graph navigation (3). The steps (5) related to this are:
+
+\begin{itemize}
+\item Load data. Data from multiple sources can include data synchronization techniques like aggregation, disgregation, or data alignment in terms of date, creating additional missing values.
+
+\item Define appropriate data types and structures for time series.
+
+\item Inspect data for missing values, addressing them through interpolation or imputation methods (4).
+
+\item Stationarity testing with Augmented Dickey-Fuller test.
+
+\item Look for characteristics that change the model assumptions, like exponential growth, periodicities, or ciclity patterns.
+
+\item Transformation like a logarithmic or square root to stabilize variance and reduce skewness.
+
+\item Data normalization by scaling data to enhance comparability.
+
+\item Decomposition into a trend, seasonality, and residuals to isolate cyclic behavior.
+\end{itemize}
 
 \section{References}
-\label{sec:orgc2caa80}
+\label{sec:orgac38a31}
 
 \begin{enumerate}
 \item \url{https://github.com/flordeluz/VisWeb}
 \item Mahmood Al-khassaweneh, Mark Bronakowski, Esraa Al-Sharoa (2023). Multivariate and Dimensionality-Reduction-Based Machine Learning Techniques for Tumor Classification of RNA-Seq Data. Engineering, Computing and Mathematical Sciences, Lewis University, Romeoville, USA. Computer Engineering Department, Yarmouk University, Jordan. Electrical Engineering Department, Jordan University of Science and Technology, Jordan.
+\item Stefan Gladisch, Heidrun Schumann, Christian Tominski. Navigation Recommendations for Exploring Hierarchical Graphs. Institute for Computer Science, University of Rostock, Germany.
+\item \url{https://ch.mathworks.com/help/econ/multivariate-time-series-data-structures.html}
+\item Can Zhou, Masami Fujiwara, William E. Grant (2016). Finding regulation among seemingly unregulated populations: a practical framework for analyzing multivariate population time series for their interactions. Springer Science Business Media New York. \url{https://www.researchgate.net/figure/Steps-in-analyzing-multivariate-time-series-data-a-After-plotting-each-individual-time\_fig2\_288179902}
 \end{enumerate}
 
 \clearpage
 \section{Appendix}
-\label{sec:org6b6d1ed}
+\label{sec:org6a64641}
 
 \subsection{Time Estimation Plan}
-\label{sec:org88f5dfa}
+\label{sec:org25174d6}
 
 \begin{itemize}
 \item 2 months +4 backup weeks
@@ -367,7 +395,7 @@ The backend will support dataset uploading. The structure has been defined on fo
 \end{itemize}
 
 \subsection{Testing functions}
-\label{sec:orgd848a98}
+\label{sec:orgc8d9623}
 
 \sffamily
 \begin{longtable}{ll}
@@ -481,7 +509,7 @@ algoritmosCiclicidad2 & detecta\textunderscore ciclo(Series, float): bool\\[0pt]
 \rmfamily
 
 \subsection{Change Log}
-\label{sec:orgbd518e6}
+\label{sec:org7572ff1}
 
 \sffamily
 \begin{longtable}{lrlrrl}
@@ -530,7 +558,7 @@ algoritmosCiclicidad2 & detecta\textunderscore ciclo(Series, float): bool\\[0pt]
 \rmfamily
 
 \subsection{Backlog}
-\label{sec:orge98a776}
+\label{sec:orgf8fbf3a}
 
 \sffamily
 \begin{longtable}{ll}

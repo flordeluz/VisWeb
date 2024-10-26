@@ -78,7 +78,10 @@ The critical aspects of the software are:
 
 - Frontend UI additional improvements.
 
-** TODO Activities execution
+- Format multivariate time series data.
+  
+
+** DONE Activities execution
 
 *** Change log
 
@@ -164,9 +167,9 @@ The backend will support dataset uploading. The structure has been defined on fo
 
 ** DONE Software
 
-- Python 3.9.19
+- Python 3.12.7
   
-- NodeJS 18.20.2
+- NodeJS 18.19.1
 
 - GNU/Linux distribution with kernel 5.15.19 or superior
 
@@ -194,9 +197,9 @@ The backend will support dataset uploading. The structure has been defined on fo
 
 - Fix polygon coordinates when there are more than three dimensions. *In progress*.
 
-** TODO Independent section for statistics
+** DONE Independent section for statistics
 
-- Statistics of the time series (size, nulls, type of columns, or dimensions). *In progress*.
+- Statistics of the time series (size, nulls, type of columns, or dimensions). *Done*.
 
 - Distribution type of the time series (e.g., normal). *Done*.
 
@@ -204,18 +207,41 @@ The backend will support dataset uploading. The structure has been defined on fo
 
 - Correlation matrix. *Done*.
 
-** TODO Flow diagram improvement
+** DONE Flow diagram improvement
 
 - Data cleaning, Normalization and transformation, and Time-series behavior. *Done*.
 
-- Stoppers and prereqs control between stages of the Guidance flow. *In progress*.
+- Stoppers and prereqs control between stages of the Guidance flow. *Done*.
 
-* TODO Deployment
+- Network graph controller. *Done*.
+
+* DONE Format Multivariate Time Series Data
+
+The program makes data preprocessing by inspecting data and giving recommendations through a hierarchical network graph navigation (3). The steps (5) related to this are:
+
+- Load data. Data from multiple sources can include data synchronization techniques like aggregation, disgregation, or data alignment in terms of date, creating additional missing values.
+  
+- Define appropriate data types and structures for time series.
+
+- Inspect data for missing values, addressing them through interpolation or imputation methods (4).
+
+- Stationarity testing with Augmented Dickey-Fuller test.
+
+- Look for characteristics that change the model assumptions, like exponential growth, periodicities, or ciclity patterns.
+
+- Transformation like a logarithmic or square root to stabilize variance and reduce skewness.
+
+- Data normalization by scaling data to enhance comparability.
+
+- Decomposition into a trend, seasonality, and residuals to isolate cyclic behavior.
 
 * References
 
 1. https://github.com/flordeluz/VisWeb
 2. Mahmood Al-khassaweneh, Mark Bronakowski, Esraa Al-Sharoa (2023). Multivariate and Dimensionality-Reduction-Based Machine Learning Techniques for Tumor Classification of RNA-Seq Data. Engineering, Computing and Mathematical Sciences, Lewis University, Romeoville, USA. Computer Engineering Department, Yarmouk University, Jordan. Electrical Engineering Department, Jordan University of Science and Technology, Jordan.
+3. Stefan Gladisch, Heidrun Schumann, Christian Tominski. Navigation Recommendations for Exploring Hierarchical Graphs. Institute for Computer Science, University of Rostock, Germany.
+4. https://ch.mathworks.com/help/econ/multivariate-time-series-data-structures.html
+5. Can Zhou, Masami Fujiwara, William E. Grant (2016). Finding regulation among seemingly unregulated populations: a practical framework for analyzing multivariate population time series for their interactions. Springer Science Business Media New York. https://www.researchgate.net/figure/Steps-in-analyzing-multivariate-time-series-data-a-After-plotting-each-individual-time_fig2_288179902
    
 #+latex: \clearpage
 * Appendix
