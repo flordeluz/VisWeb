@@ -7,14 +7,21 @@ import numpy as np
 import pandas as pd
 from scipy.stats import t
 import scipy.stats as stats
+# from sklearn.preprocessing import MinMaxScaler
 
 #Librería para la ejecución paralela
 import concurrent.futures
 from functools import partial
 import time
+import sys
 
 # Definir un diccionario compartido para almacenar los resultados
 res_threads = []
+
+
+# Definir MinMax fraction scale
+# mmx_fs = 1 / 1000
+# mmx_fs = sys.float_info.epsilon
 
 
 def obtener_ruido_de(X, umbral = 5):
@@ -47,13 +54,21 @@ def obtener_ruido_cv(X, threshold = 2):
         X["date"] = pd.to_datetime(X["date"])
         X = X.set_index("date")
         #
+    # sc = MinMaxScaler(feature_range=(0 + mmx_fs, 1 + mmx_fs))
     dataframe = X
+    # dataframe = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
     ruido = False
+    print("[ DATA FRAME ]\n", dataframe)
     for feature in dataframe.columns:
         serie = list(dataframe[feature])
         media = np.mean(serie)
         desviacion_estandar = np.std(serie)
-        coeficiente_de_variacion = desviacion_estandar / media
+        try:
+            coeficiente_de_variacion = desviacion_estandar / media
+        except FloatingPointError as e:
+            print("[ WEIRD MEAN ]:", feature, media)
+            print("[ ERR ]:", e)
+            continue
         if coeficiente_de_variacion > threshold:
             ruido = True
             break
@@ -158,8 +173,13 @@ def obtener_outlier_grubbs(X, alpha = 0.01):
         serie = dataframe[feature]
         # Identificar los outliers
         outlier_detected = True
-        max_test_result = grubbs_max_test(serie, alpha)
-        min_test_result = grubbs_min_test(serie, alpha)
+        try:
+            max_test_result = grubbs_max_test(serie, alpha)
+            min_test_result = grubbs_min_test(serie, alpha)
+        except FloatingPointError as e:
+            print("[ WEIRD STDV ]:", feature)
+            print("[ ERR ]:", e)
+            continue
         if (max_test_result or min_test_result):
             outlier = True
             break

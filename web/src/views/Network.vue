@@ -32,16 +32,16 @@
 			      v-if="main_operation === 'reduce'" :rules="[v => !!v || 'At least one feature to drop']" />
                 <v-text-field label="Transform factor" v-model="factor" ref="factor"
 			      v-if="main_operation === 'transform'" :rules="[v => !!v || 'Required']" />
-                <v-select label="Feature" v-model="feature"
-			  :items="[
-				  { text: 'Precipitation', value: 0 },
-				  { text: 'Temp Max', value: 1 },
-				  { text: 'Temp Min', value: 2 }
-				  ]"
-			  ref="feature" v-if="main_operation === 'trend' ||
-					      main_operation === 'seasonality' ||
-					      main_operation === 'cyclicity'"
-			  :rules="[v => !!v || 'Required']" />
+                <!-- <v-select label="Feature" v-model="feature" -->
+		<!-- 	  :items="[ -->
+		<!-- 		  { text: 'Precipitation', value: 0 }, -->
+		<!-- 		  { text: 'Temp Max', value: 1 }, -->
+		<!-- 		  { text: 'Temp Min', value: 2 } -->
+		<!-- 		  ]" -->
+		<!-- 	  ref="feature" v-if="main_operation === 'trend' || -->
+		<!-- 			      main_operation === 'seasonality' || -->
+		<!-- 			      main_operation === 'cyclicity'" -->
+		<!-- 	  :rules="[v => !!v || 'Required']" /> -->
               </v-col>
               <v-col>
                 <v-btn @click="execActivityParams" large color="primary">

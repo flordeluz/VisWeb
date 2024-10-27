@@ -367,13 +367,22 @@ def recommendation_by_station(dataset, station):
                 # gr.reset_iqr_treatment(loader.smo)
                 # gr.reset_sdv_treatment(loader.smo)
                 if gr.did_iqr_treatment(loader.smo):
-                    dic["Excluded Activities"].append("Interquartile Range");
+                    dic["Excluded Activities"].append("Interquartile Range")
                     #
                 if gr.did_sdv_treatment(loader.smo):
-                    dic["Excluded Activities"].append("Z-Score");
+                    dic["Excluded Activities"].append("Z-Score")
                     #
         if status_norm:
             recommendations["Data Quality"].append("Normalize")
+        else:
+            # print("[ NOT RECOMMENDATIONS ]", not recommendations["Data Quality"])
+            # print("[ NEGATIVES ]", np.any(current_df.values < 0))
+            if not recommendations["Data Quality"] and np.any(current_df.values < 0):
+                recommendations["Data Quality"].append("Normalize")
+                dic["Excluded Activities"].append("Standard")
+                dic["Excluded Activities"].append("MaxAbs")
+                dic["Excluded Activities"].append("Robust")
+                #
         if status_transform:
             recommendations["Data Quality"].append("Transform")
         if not status_cleaning and not status_norm and not status_transform:

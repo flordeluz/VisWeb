@@ -9,15 +9,21 @@ from statsmodels.tsa.stattools import adfuller
 from statsmodels.tsa.stattools import kpss
 import matplotlib.pyplot as plt
 from hurst import compute_Hc
-from sklearn.preprocessing import MaxAbsScaler
+from sklearn.preprocessing import MaxAbsScaler, MinMaxScaler
 
 #Librería para la ejecución paralela
 import concurrent.futures
 from functools import partial
 import time
+import sys
 
 # Definir un diccionario compartido para almacenar los resultados
 res_threads = []
+
+
+# Definir MinMax fraction scale
+# mmx_fs = 1 / 1000
+mmx_fs = sys.float_info.epsilon
 
 
 def obtener_no_estacionariedad_adf(X, significance_level = 0.05):
@@ -30,7 +36,12 @@ def obtener_no_estacionariedad_adf(X, significance_level = 0.05):
     df = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
     stationary = True
     for column in df.columns:
-        result = adfuller(df[column])
+        try:
+            result = adfuller(df[column])
+        except ValueError as e:
+            print("[ FEATURE DATA POINT ]:", column)
+            print("[ ERR ]:", e)
+            continue
         if result[1] >= significance_level:  # adf p-value >= 0.05
             stationary = False
             print("[", column, "is not stationary, ADF p-value:", result[1], "]")
@@ -50,7 +61,12 @@ def obtener_no_estacionariedad_kpss(X, significance_level = 0.05):
     df = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
     stationary = True
     for column in df.columns:
-        statistic, p_value, n_lags, critical_values = kpss(df[column])
+        try:
+            statistic, p_value, n_lags, critical_values = kpss(df[column])
+        except FloatingPointError as e:
+            print("[ FEATURE DATA POINT IN SCALAR DIV ]:", column)
+            print("[ ERR ]:", e)
+            continue
         if p_value < significance_level:  # kpss p-value < 0.05
             stationary = False
             print("[", column, "is not stationary, KPSS p-value:", p_value, "]")
@@ -66,13 +82,20 @@ def obtener_comportamiento_persistente_hurst(X):
         X["date"] = pd.to_datetime(X["date"])
         X = X.set_index("date")
         #
-    sc = MaxAbsScaler()
+    sc = MinMaxScaler(feature_range=(0 + mmx_fs, 1 + mmx_fs))
+    # sc = MaxAbsScaler()
     dataframe = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
     persistent = False
+    print("[ DATA FRAME ]\n", dataframe)
     for feature in dataframe.columns:
         data = dataframe[feature]
         # Calcular la dimensión fractal de Hurst
-        H, c, data = compute_Hc(data, simplified=True)
+        try:
+            H, c, data = compute_Hc(data, simplified=True)
+        except FloatingPointError as e:
+            print("[ FEATURE INVALID VALUE IN SCALAR DIV ]:", feature)
+            print("[ ERR ]:", e)
+            continue
         # Determinar si la serie temporal es lineal o no lineal
         if H > 0.5:
             persistent = True

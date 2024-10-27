@@ -5,18 +5,25 @@ warnings.simplefilter("ignore", InterpolationWarning)
 
 import pandas as pd
 import numpy as np
+from numpy.linalg import LinAlgError
 from statsmodels.tsa.seasonal import seasonal_decompose
 from statsmodels.tsa.stattools import adfuller
 from scipy.stats import gaussian_kde, norm, lognorm
-from sklearn.preprocessing import MaxAbsScaler
+from sklearn.preprocessing import MaxAbsScaler, MinMaxScaler
 
 #Librería para la ejecución paralela
 import concurrent.futures
 from functools import partial
 import time
+import sys
 
 # Definir un diccionario compartido para almacenar los resultados
 res_threads = []
+
+
+# Definir MinMax fraction scale
+# mmx_fs = 1 / 1000
+mmx_fs = sys.float_info.epsilon
 
 
 # Stationarity does not guarantee normal distribution
@@ -69,12 +76,19 @@ def obtener_distribucion_conocida(X):
         X["date"] = pd.to_datetime(X["date"])
         X = X.set_index("date")
         #
-    sc = MaxAbsScaler()
+    sc = MinMaxScaler(feature_range=(0 + mmx_fs, 1 + mmx_fs))
+    # sc = MaxAbsScaler()
     dataframe = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
     distConocida = False
+    print("[ DATA FRAME ]\n", dataframe)
     for feature in dataframe.columns:
         series = dataframe[feature]
-        pdf = gaussian_kde(series)
+        try:
+            pdf = gaussian_kde(series)
+        except LinAlgError as e:
+            print("[ FEATURE DATA POINTS TOO SIMILAR/COLLINEAR ]:", feature)
+            print("[ ERR ]:", e)
+            continue
         std = np.std(series)
         # Comparar la desviación estándar con la desviación estándar esperada para la distribución normal
         expected_std = norm.std(loc=0, scale=1)
