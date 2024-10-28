@@ -9,21 +9,21 @@ from statsmodels.tsa.stattools import adfuller
 from statsmodels.tsa.stattools import kpss
 import matplotlib.pyplot as plt
 from hurst import compute_Hc
-from sklearn.preprocessing import MaxAbsScaler, MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler #, MaxAbsScaler
 
 #Librería para la ejecución paralela
 import concurrent.futures
 from functools import partial
 import time
-import sys
+# import sys
 
 # Definir un diccionario compartido para almacenar los resultados
 res_threads = []
 
 
 # Definir MinMax fraction scale
-# mmx_fs = 1 / 1000
-mmx_fs = sys.float_info.epsilon
+mmx_fs = 1 / 1000
+# mmx_fs = sys.float_info.epsilon
 
 
 def obtener_no_estacionariedad_adf(X, significance_level = 0.05):
@@ -32,7 +32,8 @@ def obtener_no_estacionariedad_adf(X, significance_level = 0.05):
         X["date"] = pd.to_datetime(X["date"])
         X = X.set_index("date")
         #
-    sc = MaxAbsScaler()
+    sc = MinMaxScaler(feature_range=(0 + mmx_fs, 1 + mmx_fs))
+    # sc = MaxAbsScaler()
     df = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
     stationary = True
     for column in df.columns:
@@ -57,7 +58,8 @@ def obtener_no_estacionariedad_kpss(X, significance_level = 0.05):
         X["date"] = pd.to_datetime(X["date"])
         X = X.set_index("date")
         #
-    sc = MaxAbsScaler()
+    sc = MinMaxScaler(feature_range=(0 + mmx_fs, 1 + mmx_fs))
+    # sc = MaxAbsScaler()
     df = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
     stationary = True
     for column in df.columns:

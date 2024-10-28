@@ -20,15 +20,21 @@ from sklearn.decomposition import FactorAnalysis
 from sklearn.feature_selection import SelectFromModel
 from sklearn.feature_selection import RFE
 from sklearn.feature_selection import SelectKBest, f_classif
-from sklearn.preprocessing import MaxAbsScaler
+from sklearn.preprocessing import MinMaxScaler #, MaxAbsScaler
 
 # Librería para la ejecución paralela
 import concurrent.futures
 from functools import partial
 import time
+# import sys
 
 # Definir un diccionario compartido para almacenar los resultados
 res_threads = []
+
+
+# Definir MinMax fraction scale
+mmx_fs = 1 / 1000
+# mmx_fs = sys.float_info.epsilon
 
 # CORRELACION ENTRE VARIABLES
 
@@ -37,7 +43,8 @@ def verificar_correlacion_pearson(X, threshold = 0.8):
         X["date"] = pd.to_datetime(X["date"])
         X = X.set_index("date")
         #
-    sc = MaxAbsScaler()
+    sc = MinMaxScaler(feature_range=(0 + mmx_fs, 1 + mmx_fs))
+    # sc = MaxAbsScaler()
     df = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
     correlacion = False
     corr_matrix = df.corr().abs()
@@ -57,7 +64,8 @@ def verificar_correlacion_spearman(X, threshold = 0.8):
         X["date"] = pd.to_datetime(X["date"])
         X = X.set_index("date")
         #
-    sc = MaxAbsScaler()
+    sc = MinMaxScaler(feature_range=(0 + mmx_fs, 1 + mmx_fs))
+    # sc = MaxAbsScaler()
     df = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
     correlacion = False
     corr_matrix = df.corr(method="spearman").abs()
@@ -77,7 +85,8 @@ def verificar_correlacion_kendall(X, threshold = 0.8):
         X["date"] = pd.to_datetime(X["date"])
         X = X.set_index("date")
         #
-    sc = MaxAbsScaler()
+    sc = MinMaxScaler(feature_range=(0 + mmx_fs, 1 + mmx_fs))
+    # sc = MaxAbsScaler()
     df = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
     correlacion = False
     corr_matrix = df.corr(method="kendall").abs()
@@ -98,7 +107,8 @@ def verificar_linealidad(X, threshold = 0.8):
         X["date"] = pd.to_datetime(X["date"])
         X = X.set_index("date")
         #
-    sc = MaxAbsScaler()
+    sc = MinMaxScaler(feature_range=(0 + mmx_fs, 1 + mmx_fs))
+    # sc = MaxAbsScaler()
     df = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
     corr_matrix = df.corr().abs()
     upper = corr_matrix.where(np.triu(np.ones(corr_matrix.shape), k=1).astype(np.bool_))
@@ -114,7 +124,8 @@ def verificar_linealidad_regression(X, threshold = 0.8):
         X["date"] = pd.to_datetime(X["date"])
         X = X.set_index("date")
         #
-    sc = MaxAbsScaler()
+    sc = MinMaxScaler(feature_range=(0 + mmx_fs, 1 + mmx_fs))
+    # sc = MaxAbsScaler()
     df = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
     cantidad_true = 0
     es_lineal = False
@@ -143,7 +154,8 @@ def verificar_linealidad_pca(X, threshold = 0.8):
         X["date"] = pd.to_datetime(X["date"])
         X = X.set_index("date")
         #
-    sc = MaxAbsScaler()
+    sc = MinMaxScaler(feature_range=(0 + mmx_fs, 1 + mmx_fs))
+    # sc = MaxAbsScaler()
     X_scaled = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
     pca = PCA(n_components = X_scaled.shape[1], random_state = 13)
     pca.fit(X_scaled)
@@ -159,7 +171,8 @@ def verificar_linealidad_acf(X, threshold = 0.2):
         X["date"] = pd.to_datetime(X["date"])
         X = X.set_index("date")
         #
-    sc = MaxAbsScaler()
+    sc = MinMaxScaler(feature_range=(0 + mmx_fs, 1 + mmx_fs))
+    # sc = MaxAbsScaler()
     df = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
     cantidad_true = 0
     es_lineal = False
@@ -183,7 +196,8 @@ def verificar_linealidad_pacf(X, threshold = 0.2):
         X["date"] = pd.to_datetime(X["date"])
         X = X.set_index("date")
         #
-    sc = MaxAbsScaler()
+    sc = MinMaxScaler(feature_range=(0 + mmx_fs, 1 + mmx_fs))
+    # sc = MaxAbsScaler()
     df = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
     cantidad_true = 0
     es_lineal = False
@@ -209,11 +223,17 @@ def verificar_estacionariedad_adf(X, significance_level = 0.05):
         X["date"] = pd.to_datetime(X["date"])
         X = X.set_index("date")
         #
-    sc = MaxAbsScaler()
+    sc = MinMaxScaler(feature_range=(0 + mmx_fs, 1 + mmx_fs))
+    # sc = MaxAbsScaler()
     df = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
     stationary = True
     for column in df.columns:
-        result = adfuller(df[column])
+        try:
+            result = adfuller(df[column])
+        except ValueError as e:
+            print("[ FEATURE DATA POINT ]:", column)
+            print("[ ERR ]:", e)
+            continue
         if result[1] >= significance_level:  # adf p-value >= 0.05
             stationary = False
             print("[", column, "is not stationary, ADF p-value:", result[1], "]")
@@ -229,7 +249,8 @@ def verificar_estacionariedad_kpss(X, significance_level = 0.05):
         X["date"] = pd.to_datetime(X["date"])
         X = X.set_index("date")
         #
-    sc = MaxAbsScaler()
+    sc = MinMaxScaler(feature_range=(0 + mmx_fs, 1 + mmx_fs))
+    # sc = MaxAbsScaler()
     df = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
     stationary = True
     for column in df.columns:
@@ -250,7 +271,8 @@ def verificar_estabilidad_descomposicion(X, threshold = 0.1):
         X["date"] = pd.to_datetime(X["date"])
         X = X.set_index("date")
         #
-    sc = MaxAbsScaler()
+    sc = MinMaxScaler(feature_range=(0 + mmx_fs, 1 + mmx_fs))
+    # sc = MaxAbsScaler()
     data = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
     es_estable = False
     cantidad_true = 0
@@ -275,7 +297,8 @@ def verificar_estabilidad_lsvr(X, window_size = 3/4):
         X["date"] = pd.to_datetime(X["date"])
         X = X.set_index("date")
         #
-    sc = MaxAbsScaler()
+    sc = MinMaxScaler(feature_range=(0 + mmx_fs, 1 + mmx_fs))
+    # sc = MaxAbsScaler()
     data = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
     is_stable = False
     cantidad_true = 0
@@ -311,7 +334,8 @@ def verificar_dimensionality_reduction_pca(X, threshold = 0.9):
         X = X.set_index("date")
         #
     X_scaled = X
-    # sc = MaxAbsScaler()
+    # sc = MinMaxScaler(feature_range=(0 + mmx_fs, 1 + mmx_fs))
+    # # sc = MaxAbsScaler()
     # X_scaled = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
     pca = PCA(n_components = X_scaled.shape[1], random_state = 13)
     pca.fit(X_scaled)
@@ -332,7 +356,8 @@ def verificar_dimensionality_reduction_fa(X, factor_count = 1, threshold = 0.4):
         X = X.set_index("date")
         #
     data = X
-    # sc = MaxAbsScaler()
+    # sc = MinMaxScaler(feature_range=(0 + mmx_fs, 1 + mmx_fs))
+    # # sc = MaxAbsScaler()
     # data = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
     model = FactorAnalysis(n_components=factor_count)
     model.fit(data)

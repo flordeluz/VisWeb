@@ -7,20 +7,20 @@ import numpy as np
 import pandas as pd
 from scipy.stats import t
 import scipy.stats as stats
-# from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler
 
 #Librería para la ejecución paralela
 import concurrent.futures
 from functools import partial
 import time
-import sys
+# import sys
 
 # Definir un diccionario compartido para almacenar los resultados
 res_threads = []
 
 
 # Definir MinMax fraction scale
-# mmx_fs = 1 / 1000
+mmx_fs = 1 / 1000
 # mmx_fs = sys.float_info.epsilon
 
 
@@ -54,9 +54,9 @@ def obtener_ruido_cv(X, threshold = 2):
         X["date"] = pd.to_datetime(X["date"])
         X = X.set_index("date")
         #
-    # sc = MinMaxScaler(feature_range=(0 + mmx_fs, 1 + mmx_fs))
-    dataframe = X
-    # dataframe = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
+    sc = MinMaxScaler(feature_range=(0 + mmx_fs, 1 + mmx_fs))
+    # dataframe = X
+    dataframe = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
     ruido = False
     print("[ DATA FRAME ]\n", dataframe)
     for feature in dataframe.columns:

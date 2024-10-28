@@ -9,21 +9,21 @@ from numpy.linalg import LinAlgError
 from statsmodels.tsa.seasonal import seasonal_decompose
 from statsmodels.tsa.stattools import adfuller
 from scipy.stats import gaussian_kde, norm, lognorm
-from sklearn.preprocessing import MaxAbsScaler, MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler #, MaxAbsScaler
 
 #Librería para la ejecución paralela
 import concurrent.futures
 from functools import partial
 import time
-import sys
+# import sys
 
 # Definir un diccionario compartido para almacenar los resultados
 res_threads = []
 
 
 # Definir MinMax fraction scale
-# mmx_fs = 1 / 1000
-mmx_fs = sys.float_info.epsilon
+mmx_fs = 1 / 1000
+# mmx_fs = sys.float_info.epsilon
 
 
 # Stationarity does not guarantee normal distribution
@@ -33,7 +33,8 @@ mmx_fs = sys.float_info.epsilon
 #         X["date"] = pd.to_datetime(X["date"])
 #         X = X.set_index("date")
 #         #
-#     sc = MaxAbsScaler()
+#     sc = MinMaxScaler(feature_range=(0 + mmx_fs, 1 + mmx_fs))
+#     # sc = MaxAbsScaler()
 #     df = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
 #     stationary = True
 #     for column in df.columns:
@@ -54,7 +55,8 @@ def obtener_no_patrones_estacionalidad(X, periodo = 12):
         X["date"] = pd.to_datetime(X["date"])
         X = X.set_index("date")
         #
-    sc = MaxAbsScaler()
+    sc = MinMaxScaler(feature_range=(0 + mmx_fs, 1 + mmx_fs))
+    # sc = MaxAbsScaler()
     dataframe = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
     seasonal = False
     for feature in dataframe.columns:
