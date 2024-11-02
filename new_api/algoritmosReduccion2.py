@@ -7,6 +7,7 @@ import pandas as pd
 import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.linear_model import LinearRegression
+from statsmodels.stats.outliers_influence import variance_inflation_factor
 from sklearn.metrics import r2_score
 from statsmodels.tsa.stattools import acf, pacf
 from statsmodels.tsa.seasonal import seasonal_decompose
@@ -102,7 +103,7 @@ def verificar_correlacion_kendall(X, threshold = 0.8):
 
 # LINEALIDAD
 
-def verificar_linealidad(X, threshold = 0.8):
+def check_multicollinearity(X, threshold=10):
     if "date" in X.columns:
         X["date"] = pd.to_datetime(X["date"])
         X = X.set_index("date")
@@ -110,43 +111,68 @@ def verificar_linealidad(X, threshold = 0.8):
     sc = MinMaxScaler(feature_range=(0 + mmx_fs, 1 + mmx_fs))
     # sc = MaxAbsScaler()
     df = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
-    corr_matrix = df.corr().abs()
-    upper = corr_matrix.where(np.triu(np.ones(corr_matrix.shape), k=1).astype(np.bool_))
-    # Verifica si todas las correlaciones están por encima del umbral
-    is_linear = all(upper[upper.notnull()] > threshold)
-    print("[ Linearity Correlation Detected:", is_linear, "]")
-    res_threads.append({"message": "Linearity Correlation Detected", "status": is_linear})
-    return is_linear
+    multicollinearity = False
+    # Create a DataFrame to hold VIF values
+    vif_data = pd.DataFrame()
+    vif_data["Feature"] = df.columns
+    vif_data["VIF"] = [variance_inflation_factor(df.values, i) for i in range(df.shape[1])]
+    # Print features with high VIF
+    high_vif = vif_data[vif_data["VIF"] > threshold]
+    if len(high_vif) > 0:
+        multicollinearity = True
+        #
+    print("[ Multicollinearity Variance Factor Inflation:", high_vif["VIF"].to_numpy(), "]")
+    print("[ Multicollinearity Features:", high_vif["Feature"].to_numpy(), "]")
+    print("[ Multicollinearity Detected:", multicollinearity, "]")
+    res_threads.append({"message": "Multicollinearity Detected", "status": multicollinearity})
+    return multicollinearity, high_vif["Feature"].to_numpy()
 
 
-def verificar_linealidad_regression(X, threshold = 0.8):
-    if "date" in X.columns:
-        X["date"] = pd.to_datetime(X["date"])
-        X = X.set_index("date")
-        #
-    sc = MinMaxScaler(feature_range=(0 + mmx_fs, 1 + mmx_fs))
-    # sc = MaxAbsScaler()
-    df = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
-    cantidad_true = 0
-    es_lineal = False
-    for i in range(len(df.columns)):
-        for j in range(i+1, len(df.columns)):
-            model = LinearRegression()
-            X = df.iloc[:, i].values.reshape(-1, 1)
-            y = df.iloc[:, j].values.reshape(-1, 1)
-            model.fit(X, y)
-            y_pred = model.predict(X)
-            r2 = r2_score(y, y_pred)
-            if r2 > threshold:
-                cantidad_true += 1
-                #
-    if cantidad_true >= len(df.columns)-1:
-        # Si todos los modelos tienen un R-score > umbral, True
-        es_lineal = True
-        #
-    print("[ Linear Regression Detected:", es_lineal, "]")
-    res_threads.append({"message": "Linear Regression Detected", "status": es_lineal})
-    return es_lineal
+# def verificar_linealidad(X, threshold = 0.8):
+#     if "date" in X.columns:
+#         X["date"] = pd.to_datetime(X["date"])
+#         X = X.set_index("date")
+#         #
+#     sc = MinMaxScaler(feature_range=(0 + mmx_fs, 1 + mmx_fs))
+#     # sc = MaxAbsScaler()
+#     df = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
+#     corr_matrix = df.corr().abs()
+#     upper = corr_matrix.where(np.triu(np.ones(corr_matrix.shape), k=1).astype(np.bool_))
+#     # Verifica si todas las correlaciones están por encima del umbral
+#     is_linear = all(upper[upper.notnull()] > threshold)
+#     print("[ Linearity Correlation Detected:", is_linear, "]")
+#     res_threads.append({"message": "Linearity Correlation Detected", "status": is_linear})
+#     return is_linear
+
+
+# def verificar_linealidad_regression(X, threshold = 0.8):
+#     if "date" in X.columns:
+#         X["date"] = pd.to_datetime(X["date"])
+#         X = X.set_index("date")
+#         #
+#     sc = MinMaxScaler(feature_range=(0 + mmx_fs, 1 + mmx_fs))
+#     # sc = MaxAbsScaler()
+#     df = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
+#     cantidad_true = 0
+#     es_lineal = False
+#     for i in range(len(df.columns)):
+#         for j in range(i+1, len(df.columns)):
+#             model = LinearRegression()
+#             X = df.iloc[:, i].values.reshape(-1, 1)
+#             y = df.iloc[:, j].values.reshape(-1, 1)
+#             model.fit(X, y)
+#             y_pred = model.predict(X)
+#             r2 = r2_score(y, y_pred)
+#             if r2 > threshold:
+#                 cantidad_true += 1
+#                 #
+#     if cantidad_true >= len(df.columns)-1:
+#         # Si todos los modelos tienen un R-score > umbral, True
+#         es_lineal = True
+#         #
+#     print("[ Linear Regression Detected:", es_lineal, "]")
+#     res_threads.append({"message": "Linear Regression Detected", "status": es_lineal})
+#     return es_lineal
 
 
 def verificar_linealidad_pca(X, threshold = 0.8):
@@ -365,15 +391,17 @@ def verificar_dimensionality_reduction_fa(X, factor_count = 1, threshold = 0.4):
     print("[ FA Dim.Reduction Loadings:", factor_loadings, "]")
     features_to_drop = [data.columns[i] for i, value in enumerate(factor_loadings) if abs(value) < threshold]
     result = len(features_to_drop) > 0
-    print(f"[ FA Dim.Reduction={features_to_drop}", result, "]")
+    print("[ FA Dim.Reduction Features: ", features_to_drop, "]")
+    print("[ FA Dim.Reduction Detected: ", result, "]")
+    # print(f"[ FA Dim.Reduction={features_to_drop}", result, "]")
     res_threads.append({"message": f"FA Dim.Reduction={features_to_drop}", "status": result})
     return result, features_to_drop
 
 # Crear un array con las funciones
 array_funciones = [ verificar_correlacion_pearson, verificar_correlacion_spearman,
-                    verificar_correlacion_kendall, verificar_linealidad, verificar_linealidad_regression,
-                    verificar_linealidad_pca, verificar_linealidad_acf, verificar_linealidad_pacf,
-                    verificar_estacionariedad_adf, verificar_estacionariedad_kpss,
+                    verificar_correlacion_kendall, # verificar_linealidad, verificar_linealidad_regression,
+                    check_multicollinearity, verificar_linealidad_pca, verificar_linealidad_acf,
+                    verificar_linealidad_pacf, verificar_estacionariedad_adf, verificar_estacionariedad_kpss,
                     verificar_estabilidad_descomposicion, verificar_estabilidad_lsvr,
                     verificar_dimensionality_reduction_pca, verificar_dimensionality_reduction_fa ]
 
@@ -396,8 +424,9 @@ def comprobarReduccion(dataframe, par = True):
         verificar_correlacion_pearson(dataframe)
         verificar_correlacion_spearman(dataframe)
         verificar_correlacion_kendall(dataframe)
-        verificar_linealidad(dataframe)
-        verificar_linealidad_regression(dataframe)
+        # verificar_linealidad(dataframe)
+        # verificar_linealidad_regression(dataframe)
+        check_multicollinearity(dataframe)
         verificar_linealidad_pca(dataframe)
         verificar_linealidad_acf(dataframe)
         verificar_linealidad_pacf(dataframe)
