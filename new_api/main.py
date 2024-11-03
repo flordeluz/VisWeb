@@ -33,7 +33,7 @@ from helpers import get_period_days
 from AlgoritmosLimpieza import comprobarLimpieza
 from algoritmosNormalizacion import comprobarNormalizacion
 from algoritmosTransformacion import comprobarTransformacion
-from algoritmosReduccion2 import comprobarReduccion, verificar_dimensionality_reduction_fa
+from algoritmosReduccion2 import comprobarReduccion, check_dimensionality_reduction_fa
 from algoritmosEstacionalidad import comprobarEstacionalidad
 from algoritmosCiclicidad2 import comprobarCiclicidad, verificar_ciclo_fft
 from algoritmosEstadisticas import describe_data, null_values_data, addinfo_data, corrmat_data, bivaran_data, boxplot_data
@@ -698,7 +698,7 @@ def reduce_dataset(dataset, method, n_comp):
     res = True
     if method == "factor":
         # status_reduccion, messages_reduccion = comprobarReduccion(current_df, par = False)
-        res, n_comp = verificar_dimensionality_reduction_fa(current_df)
+        res, n_comp = check_dimensionality_reduction_fa(current_df)
         #
     elif method == "manual":
         n_comp = re.sub(", +", ",", n_comp).split(",")
