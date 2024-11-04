@@ -91,7 +91,8 @@ export default {
 	factor: 1,
 	main_operation: "",
 	main_path: "",
-	RED: "#FA4F40", // Enabled ACTION
+	RED: "#FA4F40", // ACTION Enabler
+	ORANGE: "#FF6600", // ACTION Enabler
 	BLUE: "#727EE0",
 	LIGHTBLUE: "#3399f8",
 	GREEN: "#5DB346",
@@ -100,7 +101,7 @@ export default {
 	BLACK: "#000000",
 	PROCSZ: 24, // Process
 	SUBPSZ: 18, // Subprocess
-	ACTVSZ: 12, // Activity ACTION
+	ACTVSZ: 12, // Activity in ACTION
 	PROCCO: { // Default color GRAY
             "Data Quality": "#767686",
 	    "Data Reduction": "#767686",
@@ -123,10 +124,13 @@ export default {
 	    "Data Reduction": {
 		"DimRed": "#767686"
 	    },
+	    // "Variables Behavior": {
+	    // 	"Trend": "#767686",
+	    // 	"Seasonality": "#767686",
+	    // 	"Cyclicity": "#767686"
+	    // }
 	    "Variables Behavior": {
-		"Trend": "#767686",
-		"Seasonality": "#767686",
-		"Cyclicity": "#767686"
+		"Analysis": "#767686"
 	    }
 	},
 	SUBPPR: { // prio
@@ -140,10 +144,13 @@ export default {
 	    "Data Reduction": {
 		"DimRed": 21
 	    },
+	    // "Variables Behavior": {
+	    // 	"Trend": 31,
+	    // 	"Seasonality": 32,
+	    // 	"Cyclicity": 33
+	    // }
 	    "Variables Behavior": {
-		"Trend": 31,
-		"Seasonality": 32,
-		"Cyclicity": 33
+		"Analysis": 31
 	    }
 	},
 	SUBPBY: [], // bypass
@@ -184,12 +191,19 @@ export default {
 		    "Manually Selected": "#767686"
 		}
 	    },
+	    // "Variables Behavior": {
+	    // 	"Trend": {
+	    // 	},
+	    // 	"Seasonality": {
+	    // 	},
+	    // 	"Cyclicity": {
+	    // 	}
+	    // }
 	    "Variables Behavior": {
-		"Trend": {
-		},
-		"Seasonality": {
-		},
-		"Cyclicity": {
+		"Analysis": {
+		    "Trend": "#767686",
+		    "Seasonality": "#767686",
+		    "Cyclicity": "#767686"
 		}
 	    }
 	},
@@ -230,12 +244,19 @@ export default {
 		    "Manually Selected": 212
 		}
 	    },
+	    // "Variables Behavior": {
+	    // 	"Trend": {
+	    // 	},
+	    // 	"Seasonality": {
+	    // 	},
+	    // 	"Cyclicity": {
+	    // 	}
+	    // }
 	    "Variables Behavior": {
-		"Trend": {
-		},
-		"Seasonality": {
-		},
-		"Cyclicity": {
+		"Analysis": {
+		    "Trend": 311,
+		    "Seasonality": 312,
+		    "Cyclicity": 313
 		}
 	    }
 	},
@@ -255,15 +276,15 @@ export default {
 			color = this.graph.getNodeAttribute(item, "color");
 			size = this.graph.getNodeAttribute(item, "size");
 			path = this.graph.getNodeAttribute(item, "path");
-			if (label == "Linear" && color == this.RED && size == this.ACTVSZ) {
+			if (label == "Linear" && (color == this.RED || color == this.ORANGE || color == this.BLUE) && size == this.ACTVSZ) {
 			    this.main_operation = "transform";
 			    this.main_path = "transform/linear/";
 			    this.dialog = true;
-			} else if (label == "Manually Selected" && color == this.RED && size == this.ACTVSZ) {
+			} else if (label == "Manually Selected" && (color == this.RED || color == this.ORANGE || color == this.BLUE) && size == this.ACTVSZ) {
 			    this.main_operation = "reduce";
 			    this.main_path = "reduce/manual/";
 			    this.dialog = true;
-			} else if (color == this.RED && size == this.ACTVSZ) {
+			} else if ((color == this.RED || color == this.ORANGE || color == this.BLUE) && size == this.ACTVSZ) {
 			    action = true;
 			}
 			console.log("[", event, "]:", itemType, label, "action:", action);
@@ -275,18 +296,22 @@ export default {
 		    }
 		}
 		if (action) {
-		    this.executing_task = true;
-		    let req_string;
-		    req_string = `http://localhost:8080/op/${this.dataset}/${path}`;
-		    // this.history.push({
-		    // 	name: `${this.operation.method}-clean`,
-		    // 	aux: req_string
-		    // })
-		    console.log(req_string);
-		    let actionrc = await axios.get(req_string, { crossdomain: true });
-		    console.log(actionrc);
-		    this.executing_task = false;
-		    location.reload();
+		    if (path.startsWith("/")) {
+			location.href = `${path}/${this.dataset}/${this.station}`;
+		    } else {
+			this.executing_task = true;
+			let req_string;
+			req_string = `http://localhost:8080/op/${this.dataset}/${path}`;
+			// this.history.push({
+			// 	name: `${this.operation.method}-clean`,
+			// 	aux: req_string
+			// })
+			console.log(req_string);
+			let actionrc = await axios.get(req_string, { crossdomain: true });
+			console.log(actionrc);
+			this.executing_task = false;
+			location.reload();
+		    }
 		}
 	    } else {	
 		console.log("[", event, "]:", "unhandled");
@@ -329,7 +354,7 @@ export default {
 		console.log("[ Process ]:", process);
 		console.log("[ Subprocesses ]:", itrecommends[process]);
 		console.log("[ Subprocess Excluded Activities ]:", itextends["Excluded Activities"]);
-		this.PROCCO[process] = this.RED;
+		this.PROCCO[process] = this.PROCPR[process] == 3 ? this.BLUE : this.RED;
 		this.PROCBY.push(this.PROCPR[process]);
 		for (var prio_coloring_p in this.PROCPR) {
 		    if (! this.PROCBY.includes(this.PROCPR[prio_coloring_p])) {
@@ -345,7 +370,7 @@ export default {
 		    }
 		}
 		for (var subprocess in itrecommends[process]) {
-		    this.SUBPCO[process][itrecommends[process][subprocess]] = this.RED;
+		    this.SUBPCO[process][itrecommends[process][subprocess]] = this.SUBPPR[process][itrecommends[process][subprocess]] > 30 ? this.BLUE : this.RED;
 		    this.SUBPBY.push(this.SUBPPR[process][itrecommends[process][subprocess]]);
 		    for (var prio_coloring_s in this.SUBPPR[process]) {
 			if (! this.SUBPBY.includes(this.SUBPPR[process][prio_coloring_s])) {
@@ -365,11 +390,22 @@ export default {
 		    console.log("[ Activities ]:");
 		    for (var inactv in this.ACTVCO[process][itrecommends[process][subprocess]]) {
 			console.log(" ", inactv);
-			if (typeof itextends["Excluded Activities"] !== "undefined" &&
-			    itextends["Excluded Activities"].includes(inactv)) {
-			    this.ACTVCO[process][itrecommends[process][subprocess]][inactv] = this.GREEN;
+			// if (typeof itextends["Excluded Activities"] !== "undefined" &&
+			//     itextends["Excluded Activities"].includes(inactv)) {
+			//     this.ACTVCO[process][itrecommends[process][subprocess]][inactv] = this.GREEN;
+			// } else {
+			//     this.ACTVCO[process][itrecommends[process][subprocess]][inactv] = this.RED;
+			//     this.ACTVBY.push(this.ACTVPR[process][itrecommends[process][subprocess]][inactv]);
+			// }
+			if (typeof itextends["Excluded Activities"] !== "undefined" && itextends["Excluded Activities"].length > 0) {
+			    if (itextends["Excluded Activities"].includes(inactv)) {
+				this.ACTVCO[process][itrecommends[process][subprocess]][inactv] = this.GREEN;
+			    } else {
+				this.ACTVCO[process][itrecommends[process][subprocess]][inactv] = this.ACTVPR[process][itrecommends[process][subprocess]][inactv] > 300 ? this.BLUE : this.ORANGE;
+				this.ACTVBY.push(this.ACTVPR[process][itrecommends[process][subprocess]][inactv]);
+			    }
 			} else {
-			    this.ACTVCO[process][itrecommends[process][subprocess]][inactv] = this.RED;
+			    this.ACTVCO[process][itrecommends[process][subprocess]][inactv] = this.ACTVPR[process][itrecommends[process][subprocess]][inactv] > 300 ? this.BLUE : this.RED;
 			    this.ACTVBY.push(this.ACTVPR[process][itrecommends[process][subprocess]][inactv]);
 			}
 		    }
@@ -432,11 +468,16 @@ export default {
 	    this.graph.addNode("Factor Analysis", { size: this.ACTVSZ, label: "Factor Analysis", path: "reduce/factor/" + this.n_comp, type: "gradient", color: this.ACTVCO["Data Reduction"]["DimRed"]["Factor Analysis"] });
 	    this.graph.addNode("Manually Selected", { size: this.ACTVSZ, label: "Manually Selected", path: "reduce/manual/" + this.n_comp, type: "gradient", color: this.ACTVCO["Data Reduction"]["DimRed"]["Manually Selected"] });
 	    
-	    this.graph.addNode("Trend", { size: this.SUBPSZ, label: "Trend", type: "gradient", color: this.SUBPCO["Variables Behavior"]["Trend"] });
+	    // this.graph.addNode("Trend", { size: this.SUBPSZ, label: "Trend", type: "gradient", color: this.SUBPCO["Variables Behavior"]["Trend"] });
 	    
-	    this.graph.addNode("Cyclicity", { size: this.SUBPSZ, label: "Cyclicity", type: "gradient", color: this.SUBPCO["Variables Behavior"]["Cyclicity"] });
+	    // this.graph.addNode("Cyclicity", { size: this.SUBPSZ, label: "Cyclicity", type: "gradient", color: this.SUBPCO["Variables Behavior"]["Cyclicity"] });
 	    
-	    this.graph.addNode("Seasonality", { size: this.SUBPSZ, label: "Seasonality", type: "gradient", color: this.SUBPCO["Variables Behavior"]["Seasonality"] });
+	    // this.graph.addNode("Seasonality", { size: this.SUBPSZ, label: "Seasonality", type: "gradient", color: this.SUBPCO["Variables Behavior"]["Seasonality"] });
+
+	    this.graph.addNode("Analysis", { size: this.SUBPSZ, label: "Analysis", type: "gradient", color: this.SUBPCO["Variables Behavior"]["Analysis"] });
+	    this.graph.addNode("Trend", { size: this.ACTVSZ, label: "Trend", path: "", type: "gradient", color: this.ACTVCO["Variables Behavior"]["Analysis"]["Trend"] });
+	    this.graph.addNode("Cyclicity", { size: this.ACTVSZ, label: "Cyclicity", path: "/spiral", type: "gradient", color: this.ACTVCO["Variables Behavior"]["Analysis"]["Cyclicity"] });
+	    this.graph.addNode("Seasonality", { size: this.ACTVSZ, label: "Seasonality", path: "", type: "gradient", color: this.ACTVCO["Variables Behavior"]["Analysis"]["Seasonality"] });
 	    
 	    // Edge processes
 	    this.graph.addEdge("Data Quality", "Data Reduction", { type: "arrow", label: "macrotarea", size: 7, color: this.GREEN });
@@ -476,11 +517,16 @@ export default {
 	    this.graph.addEdge("DimRed", "Factor Analysis", { type: "arrow", label: "microtarea", size: 3, color: this.ACTVCO["Data Reduction"]["DimRed"]["Factor Analysis"] });
 	    this.graph.addEdge("DimRed", "Manually Selected", { type: "arrow", label: "microtarea", size: 3, color: this.ACTVCO["Data Reduction"]["DimRed"]["Manually Selected"] });
 	    
-	    this.graph.addEdge("Variables Behavior", "Trend", { type: "arrow", label: "tarea", size: 5, color: this.SUBPCO["Variables Behavior"]["Trend"] });
+	    // this.graph.addEdge("Variables Behavior", "Trend", { type: "arrow", label: "tarea", size: 5, color: this.SUBPCO["Variables Behavior"]["Trend"] });
 	    
-	    this.graph.addEdge("Variables Behavior", "Cyclicity", { type: "arrow", label: "tarea", size: 5, color: this.SUBPCO["Variables Behavior"]["Cyclicity"] });
+	    // this.graph.addEdge("Variables Behavior", "Cyclicity", { type: "arrow", label: "tarea", size: 5, color: this.SUBPCO["Variables Behavior"]["Cyclicity"] });
 	    
-	    this.graph.addEdge("Variables Behavior", "Seasonality", { type: "arrow", label: "tarea", size: 5, color: this.SUBPCO["Variables Behavior"]["Seasonality"] });
+	    // this.graph.addEdge("Variables Behavior", "Seasonality", { type: "arrow", label: "tarea", size: 5, color: this.SUBPCO["Variables Behavior"]["Seasonality"] });
+
+	    this.graph.addEdge("Variables Behavior", "Analysis", { type: "arrow", label: "tarea", size: 5, color: this.SUBPCO["Variables Behavior"]["Analysis"] });
+	    this.graph.addEdge("Analysis", "Trend", { type: "arrow", label: "microtarea", size: 3, color: this.ACTVCO["Variables Behavior"]["Analysis"]["Trend"] });
+	    this.graph.addEdge("Analysis", "Cyclicity", { type: "arrow", label: "microtarea", size: 3, color: this.ACTVCO["Variables Behavior"]["Analysis"]["Cyclicity"] });
+	    this.graph.addEdge("Analysis", "Seasonality", { type: "arrow", label: "microtarea", size: 3, color: this.ACTVCO["Variables Behavior"]["Analysis"]["Seasonality"] });
 	    
 	    // Edge sequences
 	    // this.graph.addEdge("Clean", "Normalize", { type: "arrow", label: "sequence", size: 3, color: this.LIGHTBLUE });

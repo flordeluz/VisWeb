@@ -393,6 +393,9 @@ def recommendation_by_station(dataset, station):
                 # recommendations["Data Reduction"].append("Dim.Reduce")
                 recommendations["Data Reduction"].append("DimRed")
                 #
+            else:
+                recommendations["Variables Behavior"].append("Analysis")
+                #
     env = []
     res = {k: v for k, v in recommendations.items() if len(v) > 0}
     env.append(res)
@@ -401,96 +404,96 @@ def recommendation_by_station(dataset, station):
     return json.dumps(env)
 
 
-@route("/recommendation/<dataset>/<station>/<macrotarea>")
-@enable_cors
-def recommendation_by_macrotask(dataset, station, macrotarea):
-    global current_df
-    global current_dataset
-    global current_station
-    global resultados_threads
-    global dic
-    recommendations = {
-        "Data Reduction": [], # Filled with Subprocesses
-        "Data Quality": [], # Filled with Subprocesses
-        "Variables Behavior": [], # Filled with Subprocesses
-        # # -- Excluded activities of the current subprocess
-        # "Excluded Activities": [] # Filled with Subprocess Activities
-    }
-    if macrotarea == "0":
-        status_cleaning, messages_cleaning = comprobarLimpieza(current_df, par = False)
-        status_norm, messages_norm = comprobarNormalizacion(current_df, par = False)
-        status_transform, messages_transform = comprobarTransformacion(current_df, par = False)
-        dic["Clean"] = messages_cleaning
-        dic["Normalize"] = messages_norm
-        dic["Transform"] = messages_transform
-        if status_cleaning:
-            recommendations["Data Quality"].append("Clean")
-        if status_norm:
-            recommendations["Data Quality"].append("Normalize")
-        if status_transform:
-            recommendations["Data Quality"].append("Transform")
-            #
-    elif macrotarea == "1":
-        status_reduccion, messages_reduccion = comprobarReduccion(current_df, par = False)
-        dic["DimRed"] = messages_reduccion
-        messages_reduccion = []
-        if status_reduccion:
-            # recommendations["Data Reduction"].append("Dim.Reduce")
-            recommendations["Data Reduction"].append("DimRed")
-            #
-    elif macrotarea == "1aux":
-        global aux_df
-        data = aux_df.values
-        data[data < 0] = 0
-        data = simple_imp.fit_transform(data)
-        df = pd.DataFrame(data, columns=aux_df.columns, index=aux_df.index)
-        aux_df = df
-        status_reduccion, messages_reduccion = comprobarReduccion(aux_df, par = False)
-        dic["DimRed"] = messages_reduccion
-        messages_reduccion = []
-        if status_reduccion:
-            # recommendations["Data Reduction"].append("Dim.Reduce")
-            recommendations["Data Reduction"].append("DimRed")
-            #
-    elif macrotarea == "2":
-        status_estacionalidad, messages_estacionalidad = comprobarEstacionalidad(current_df, par = False)
-        status_ciclicidad, messages_ciclicidad = comprobarCiclicidad(current_df, par = False)
-        dic["Seasonality"] = messages_estacionalidad
-        dic["Cyclicity"] = messages_ciclicidad
-        messages_estacionalidad = []
-        messages_ciclicidad = []
-        # max_period_days = get_period_days(current_df)
-        # if max_period_days > 365:
-        #     recommendations["Variables Behavior"].append("Cyclicity")
-        # if max_period_days <= 365 and max_period_days > 0:
-        #     recommendations["Variables Behavior"].append("Seasonality")
-        if status_estacionalidad:
-            recommendations["Variables Behavior"].append("Seasonality")
-        if status_ciclicidad:
-            recommendations["Variables Behavior"].append("Cyclicity")
-            #
-    elif macrotarea == "2aux":
-        status_estacionalidad, messages_estacionalidad = comprobarEstacionalidad(aux_df, par = False)
-        status_ciclicidad, messages_ciclicidad = comprobarCiclicidad(aux_df, par = False)
-        dic["Seasonality"] = messages_estacionalidad
-        dic["Cyclicity"] = messages_ciclicidad
-        messages_estacionalidad = []
-        messages_ciclicidad = []
-        if status_estacionalidad:
-            recommendations["Variables Behavior"].append("Seasonality")
-        if status_ciclicidad:
-            recommendations["Variables Behavior"].append("Cyclicity")
-            #
-    else:
-        print("Macrotarea no encontrada")
-        # recommendations["Data Quality"].append("No encontrado")
-        #
-    env = []
-    res = {k: v for k, v in recommendations.items() if len(v) > 0}
-    env.append(res)
-    env.append(dic)
-    dic = {}
-    return json.dumps(env)
+# @route("/recommendation/<dataset>/<station>/<macrotarea>")
+# @enable_cors
+# def recommendation_by_macrotask(dataset, station, macrotarea):
+#     global current_df
+#     global current_dataset
+#     global current_station
+#     global resultados_threads
+#     global dic
+#     recommendations = {
+#         "Data Reduction": [], # Filled with Subprocesses
+#         "Data Quality": [], # Filled with Subprocesses
+#         "Variables Behavior": [], # Filled with Subprocesses
+#         # # -- Excluded activities of the current subprocess
+#         # "Excluded Activities": [] # Filled with Subprocess Activities
+#     }
+#     if macrotarea == "0":
+#         status_cleaning, messages_cleaning = comprobarLimpieza(current_df, par = False)
+#         status_norm, messages_norm = comprobarNormalizacion(current_df, par = False)
+#         status_transform, messages_transform = comprobarTransformacion(current_df, par = False)
+#         dic["Clean"] = messages_cleaning
+#         dic["Normalize"] = messages_norm
+#         dic["Transform"] = messages_transform
+#         if status_cleaning:
+#             recommendations["Data Quality"].append("Clean")
+#         if status_norm:
+#             recommendations["Data Quality"].append("Normalize")
+#         if status_transform:
+#             recommendations["Data Quality"].append("Transform")
+#             #
+#     elif macrotarea == "1":
+#         status_reduccion, messages_reduccion = comprobarReduccion(current_df, par = False)
+#         dic["DimRed"] = messages_reduccion
+#         messages_reduccion = []
+#         if status_reduccion:
+#             # recommendations["Data Reduction"].append("Dim.Reduce")
+#             recommendations["Data Reduction"].append("DimRed")
+#             #
+#     elif macrotarea == "1aux":
+#         global aux_df
+#         data = aux_df.values
+#         data[data < 0] = 0
+#         data = simple_imp.fit_transform(data)
+#         df = pd.DataFrame(data, columns=aux_df.columns, index=aux_df.index)
+#         aux_df = df
+#         status_reduccion, messages_reduccion = comprobarReduccion(aux_df, par = False)
+#         dic["DimRed"] = messages_reduccion
+#         messages_reduccion = []
+#         if status_reduccion:
+#             # recommendations["Data Reduction"].append("Dim.Reduce")
+#             recommendations["Data Reduction"].append("DimRed")
+#             #
+#     elif macrotarea == "2":
+#         status_estacionalidad, messages_estacionalidad = comprobarEstacionalidad(current_df, par = False)
+#         status_ciclicidad, messages_ciclicidad = comprobarCiclicidad(current_df, par = False)
+#         dic["Seasonality"] = messages_estacionalidad
+#         dic["Cyclicity"] = messages_ciclicidad
+#         messages_estacionalidad = []
+#         messages_ciclicidad = []
+#         # max_period_days = get_period_days(current_df)
+#         # if max_period_days > 365:
+#         #     recommendations["Variables Behavior"].append("Cyclicity")
+#         # if max_period_days <= 365 and max_period_days > 0:
+#         #     recommendations["Variables Behavior"].append("Seasonality")
+#         if status_estacionalidad:
+#             recommendations["Variables Behavior"].append("Seasonality")
+#         if status_ciclicidad:
+#             recommendations["Variables Behavior"].append("Cyclicity")
+#             #
+#     elif macrotarea == "2aux":
+#         status_estacionalidad, messages_estacionalidad = comprobarEstacionalidad(aux_df, par = False)
+#         status_ciclicidad, messages_ciclicidad = comprobarCiclicidad(aux_df, par = False)
+#         dic["Seasonality"] = messages_estacionalidad
+#         dic["Cyclicity"] = messages_ciclicidad
+#         messages_estacionalidad = []
+#         messages_ciclicidad = []
+#         if status_estacionalidad:
+#             recommendations["Variables Behavior"].append("Seasonality")
+#         if status_ciclicidad:
+#             recommendations["Variables Behavior"].append("Cyclicity")
+#             #
+#     else:
+#         print("Macrotarea no encontrada")
+#         # recommendations["Data Quality"].append("No encontrado")
+#         #
+#     env = []
+#     res = {k: v for k, v in recommendations.items() if len(v) > 0}
+#     env.append(res)
+#     env.append(dic)
+#     dic = {}
+#     return json.dumps(env)
 
 
 @route("/op/<dataset>/normalize/<method>")
