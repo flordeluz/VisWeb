@@ -93,7 +93,7 @@ export default {
 	main_path: "",
 	RED: "#FA4F40", // ACTION Enabler
 	ORANGE: "#FF6600", // ACTION Enabler
-	BLUE: "#727EE0",
+	BLUE: "#727EE0", // ACTION Enabler
 	LIGHTBLUE: "#3399f8",
 	GREEN: "#5DB346",
 	YELLOW: "#F6F606",
@@ -370,7 +370,17 @@ export default {
 		    }
 		}
 		for (var subprocess in itrecommends[process]) {
-		    this.SUBPCO[process][itrecommends[process][subprocess]] = this.SUBPPR[process][itrecommends[process][subprocess]] > 30 ? this.BLUE : this.RED;
+		    // this.SUBPCO[process][itrecommends[process][subprocess]] = this.SUBPPR[process][itrecommends[process][subprocess]] > 30 ? this.BLUE : this.RED;
+		    if ( this.SUBPPR[process][itrecommends[process][subprocess]] > 30 ) {
+			this.SUBPCO[process][itrecommends[process][subprocess]] = this.BLUE;
+		    } else if ( this.SUBPPR[process][itrecommends[process][subprocess]] == 15 ) {
+			this.SUBPCO[process][itrecommends[process][subprocess]] = this.ORANGE;
+			if ( itrecommends[process].length == 1 ) {
+			    this.PROCCO[process] = this.ORANGE;
+			}
+		    } else {
+			this.SUBPCO[process][itrecommends[process][subprocess]] = this.RED;
+		    }
 		    this.SUBPBY.push(this.SUBPPR[process][itrecommends[process][subprocess]]);
 		    for (var prio_coloring_s in this.SUBPPR[process]) {
 			if (! this.SUBPBY.includes(this.SUBPPR[process][prio_coloring_s])) {
@@ -405,7 +415,14 @@ export default {
 				this.ACTVBY.push(this.ACTVPR[process][itrecommends[process][subprocess]][inactv]);
 			    }
 			} else {
-			    this.ACTVCO[process][itrecommends[process][subprocess]][inactv] = this.ACTVPR[process][itrecommends[process][subprocess]][inactv] > 300 ? this.BLUE : this.RED;
+			    // this.ACTVCO[process][itrecommends[process][subprocess]][inactv] = this.ACTVPR[process][itrecommends[process][subprocess]][inactv] > 300 ? this.BLUE : this.RED;
+			    if ( this.ACTVPR[process][itrecommends[process][subprocess]][inactv] > 300 ) {
+				this.ACTVCO[process][itrecommends[process][subprocess]][inactv] = this.BLUE;
+			    } else if ( this.ACTVPR[process][itrecommends[process][subprocess]][inactv] % 150 < 10 ) {
+				this.ACTVCO[process][itrecommends[process][subprocess]][inactv] = this.ORANGE;
+			    } else {
+				this.ACTVCO[process][itrecommends[process][subprocess]][inactv] = this.RED;
+			    }
 			    this.ACTVBY.push(this.ACTVPR[process][itrecommends[process][subprocess]][inactv]);
 			}
 		    }
@@ -413,6 +430,7 @@ export default {
 		// }
 	    }
 	    if (typeof itextends["DimRed"] !== "undefined") {
+		console.log(itextends["DimRed"]);
 		const foundFA = itextends["DimRed"].find(item => item.includes("FA Dim.Reduction"));
 		if (foundFA) {
 		    const regex = /\[(.*?)\]/;
@@ -422,6 +440,58 @@ export default {
 			console.log(valuesFA);
 			this.n_comp = valuesFA.join(',');
 			console.log(this.n_comp);
+		    }
+		}
+		if (this.n_comp == "") {
+		    const foundMC = itextends["DimRed"].find(item => item.includes("Multicollinearity Dim.Reduction"));
+		    if (foundMC) {
+			const regex = /\[(.*?)\]/;
+			const matchMC = foundMC.match(regex);
+			if (matchMC) {
+			    const valuesMC = matchMC[1].split(',').map(item => item.trim().replace(/'/g, ''));
+			    console.log(valuesMC);
+			    this.n_comp = valuesMC.join(',');
+			    console.log(this.n_comp);
+			}
+		    }
+		}
+		if (this.n_comp == "") {
+		    const foundPR = itextends["DimRed"].find(item => item.includes("Pearson Dim.Reduction"));
+		    if (foundPR) {
+			const regex = /\[(.*?)\]/;
+			const matchPR = foundPR.match(regex);
+			if (matchPR) {
+			    const valuesPR = matchPR[1].split(',').map(item => item.trim().replace(/'/g, ''));
+			    console.log(valuesPR);
+			    this.n_comp = valuesPR.join(',');
+			    console.log(this.n_comp);
+			}
+		    }
+		}
+		if (this.n_comp == "") {
+		    const foundSP = itextends["DimRed"].find(item => item.includes("Spearman Dim.Reduction"));
+		    if (foundSP) {
+			const regex = /\[(.*?)\]/;
+			const matchSP = foundSP.match(regex);
+			if (matchSP) {
+			    const valuesSP = matchSP[1].split(',').map(item => item.trim().replace(/'/g, ''));
+			    console.log(valuesSP);
+			    this.n_comp = valuesSP.join(',');
+			    console.log(this.n_comp);
+			}
+		    }
+		}
+		if (this.n_comp == "") {
+		    const foundKN = itextends["DimRed"].find(item => item.includes("Kendall Dim.Reduction"));
+		    if (foundKN) {
+			const regex = /\[(.*?)\]/;
+			const matchKN = foundKN.match(regex);
+			if (matchKN) {
+			    const valuesKN = matchKN[1].split(',').map(item => item.trim().replace(/'/g, ''));
+			    console.log(valuesKN);
+			    this.n_comp = valuesKN.join(',');
+			    console.log(this.n_comp);
+			}
 		    }
 		}
 	    }

@@ -385,7 +385,8 @@ def recommendation_by_station(dataset, station):
                 #
         if status_transform:
             recommendations["Data Quality"].append("Transform")
-        if not status_cleaning and not status_norm and not status_transform:
+        # if not status_cleaning and not status_norm and not status_transform:
+        if not status_cleaning and not status_norm:
             status_reduccion, messages_reduccion = comprobarReduccion(current_df, par = False)
             dic["DimRed"] = messages_reduccion
             messages_reduccion = []

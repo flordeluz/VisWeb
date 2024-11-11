@@ -55,8 +55,8 @@ def verificar_correlacion_pearson(X, threshold = 0.8):
         #
     print("[ Pearson Highly Correlated Columns:", to_drop, "]")
     print("[ Pearson Correlation Detected:", correlacion, "]")
-    res_threads.append({"message": "Pearson Correlation Detected", "status": correlacion})
-    return correlacion
+    res_threads.append({"message": f"Pearson Dim.Reduction={to_drop}", "status": correlacion})
+    return correlacion, to_drop
 
 
 def verificar_correlacion_spearman(X, threshold = 0.8):
@@ -76,8 +76,8 @@ def verificar_correlacion_spearman(X, threshold = 0.8):
         #
     print("[ Spearman Highly Correlated Columns:", to_drop, "]")
     print("[ Spearman Correlation Detected:", correlacion, "]")
-    res_threads.append({"message": "Spearman Correlation Detected", "status": correlacion})
-    return correlacion
+    res_threads.append({"message": f"Spearman Dim.Reduction={to_drop}", "status": correlacion})
+    return correlacion, to_drop
 
 
 def verificar_correlacion_kendall(X, threshold = 0.8):
@@ -97,8 +97,8 @@ def verificar_correlacion_kendall(X, threshold = 0.8):
         #
     print("[ Kendall Highly Correlated Columns:", to_drop, "]")
     print("[ Kendall Correlation Detected:", correlacion, "]")
-    res_threads.append({"message": "Kendall Correlation Detected", "status": correlacion})
-    return correlacion
+    res_threads.append({"message": f"Kendall Dim.Reduction={to_drop}", "status": correlacion})
+    return correlacion, to_drop
 
 # LINEALIDAD
 
@@ -120,14 +120,15 @@ def check_multicollinearity(X, threshold=10):
         vif_data["VIF"] = [threshold for i in range(df.shape[1])]
         #
     high_vif = vif_data[vif_data["VIF"] > threshold]
+    features_to_drop = high_vif["Feature"].to_list()
     if len(high_vif) > 0:
         multicollinearity = True
         #
     print("[ Multicollinearity Variance Factor Inflation:", high_vif["VIF"].to_numpy(), "]")
-    print("[ Multicollinearity Features:", high_vif["Feature"].to_numpy(), "]")
+    print("[ Multicollinearity Features:", features_to_drop, "]")
     print("[ Multicollinearity Detected:", multicollinearity, "]")
-    res_threads.append({"message": "Multicollinearity Detected", "status": multicollinearity})
-    return multicollinearity, high_vif["Feature"].to_numpy()
+    res_threads.append({"message": f"Multicollinearity Dim.Reduction={features_to_drop}", "status": multicollinearity})
+    return multicollinearity, features_to_drop
 
 
 # def verificar_linealidad(X, threshold = 0.8):
