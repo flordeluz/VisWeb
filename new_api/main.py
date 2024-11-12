@@ -34,7 +34,7 @@ from AlgoritmosLimpieza import comprobarLimpieza
 from algoritmosNormalizacion import comprobarNormalizacion
 from algoritmosTransformacion import comprobarTransformacion
 from algoritmosReduccion2 import comprobarReduccion, check_dimensionality_reduction_fa
-from algoritmosEstacionalidad import comprobarEstacionalidad
+from algoritmosEstacionalidad import comprobarEstacionalidad, seasonality_detection, trend_detection
 from algoritmosCiclicidad2 import comprobarCiclicidad, verificar_ciclo_fft
 from algoritmosEstadisticas import describe_data, null_values_data, addinfo_data, corrmat_data, bivaran_data, boxplot_data
 # -------------------------------

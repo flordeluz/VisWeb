@@ -22,6 +22,49 @@ import time
 # Definir un diccionario compartido para almacenar los resultados
 res_threads = []
 
+
+def seasonality_detection(ds, cols_list):
+    reshtml = '<p style="text-align:center"><h5><b>Estacionalidad</b></h5></p>'
+    pltid = 411
+    plt.figure(figsize = (9, 6), dpi = dpi)
+    for coln in cols_list:
+        decomp = seasonal_decompose(ds[coln].dfSerie, period=1, model="additive", extrapolate_trend="freq")
+        seasonal = decomp.seasonal
+        plt.subplot(pltid)
+        plt.plot(seasonal, label=coln, marker='.', markersize=1)
+        plt.legend(loc='upper left')
+        pltid += 1
+        #
+    plt.tight_layout()
+    s = io.BytesIO()
+    plt.savefig(s, format="png", bbox_inches="tight")
+    plt.close()
+    s = base64.b64encode(s.getvalue()).decode("utf-8").replace("\n", "")
+    reshtml += '<img src="data:image/png;base64,%s">' % s
+    return reshtml
+
+
+def trend_detection(ds, cols_list):
+    reshtml = '<p style="text-align:center"><h5><b>Tendencia</b></h5></p>'
+    pltid = 411
+    plt.figure(figsize = (9, 6), dpi = dpi)
+    for coln in cols_list:
+        decomp = seasonal_decompose(ds[coln].dfSerie, period=1, model="additive", extrapolate_trend="freq")
+        trend = decomp.trend
+        plt.subplot(pltid)
+        plt.plot(trend, label=coln, marker='.', markersize=1)
+        plt.legend(loc='upper left')
+        pltid += 1
+        #
+    plt.tight_layout()
+    s = io.BytesIO()
+    plt.savefig(s, format="png", bbox_inches="tight")
+    plt.close()
+    s = base64.b64encode(s.getvalue()).decode("utf-8").replace("\n", "")
+    reshtml += '<img src="data:image/png;base64,%s">' % s
+    return reshtml
+
+
 # PERIODICIDAD
 
 # def check_box_pierce(data, alpha = 0.05):
