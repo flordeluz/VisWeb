@@ -3,8 +3,12 @@ import warnings
 from statsmodels.tools.sm_exceptions import InterpolationWarning
 warnings.simplefilter("ignore", InterpolationWarning)
 
+import io
+import base64
 import pandas as pd
 import numpy as np
+import matplotlib
+import matplotlib.pyplot as plt
 import statsmodels.api as sm
 from pywt import cwt
 from statsmodels.tsa.stattools import acf, pacf, q_stat
@@ -24,15 +28,18 @@ res_threads = []
 
 
 def seasonality_detection(ds, cols_list):
-    reshtml = '<p style="text-align:center"><h5><b>Estacionalidad</b></h5></p>'
-    pltid = 411
-    plt.figure(figsize = (9, 6), dpi = dpi)
+    # reshtml = '<p style="text-align:center"><h5><b>Estacionalidad</b></h5></p>'
+    reshtml = ''
+    pltid = 1
+    rows = len(cols_list)
+    plt.figure(figsize = (9, 6), dpi = 100)
+    _, ax = plt.subplots(rows, 1)
     for coln in cols_list:
-        decomp = seasonal_decompose(ds[coln].dfSerie, period=1, model="additive", extrapolate_trend="freq")
+        decomp = seasonal_decompose(ds[coln], period=1, model="additive", extrapolate_trend="freq")
         seasonal = decomp.seasonal
-        plt.subplot(pltid)
-        plt.plot(seasonal, label=coln, marker='.', markersize=1)
-        plt.legend(loc='upper left')
+        ax = plt.subplot(rows, 1, pltid)
+        ax.plot(seasonal, label=coln, marker='.', markersize=1)
+        ax.legend(loc='upper left')
         pltid += 1
         #
     plt.tight_layout()
@@ -45,15 +52,18 @@ def seasonality_detection(ds, cols_list):
 
 
 def trend_detection(ds, cols_list):
-    reshtml = '<p style="text-align:center"><h5><b>Tendencia</b></h5></p>'
-    pltid = 411
-    plt.figure(figsize = (9, 6), dpi = dpi)
+    # reshtml = '<p style="text-align:center"><h5><b>Tendencia</b></h5></p>'
+    reshtml = '';
+    pltid = 1
+    rows = len(cols_list)
+    plt.figure(figsize = (9, 6), dpi = 100)
+    _, ax = plt.subplots(rows, 1)
     for coln in cols_list:
-        decomp = seasonal_decompose(ds[coln].dfSerie, period=1, model="additive", extrapolate_trend="freq")
+        decomp = seasonal_decompose(ds[coln], period=1, model="additive", extrapolate_trend="freq")
         trend = decomp.trend
-        plt.subplot(pltid)
-        plt.plot(trend, label=coln, marker='.', markersize=1)
-        plt.legend(loc='upper left')
+        ax = plt.subplot(rows, 1, pltid)
+        ax.plot(trend, label=coln, marker='.', markersize=1)
+        ax.legend(loc='upper left')
         pltid += 1
         #
     plt.tight_layout()

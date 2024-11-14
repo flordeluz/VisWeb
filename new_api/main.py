@@ -298,6 +298,30 @@ def get_boxplot(dataset, station):
     return { "boxplot": str(reshtml) }
 
 
+@route("/behavior/seasonality/<dataset>/<station>")
+@enable_cors
+def get_seasonality(dataset, station):
+    response.headers["Content-Type"] = "application/json"
+    global full_station_ds
+    global current_df
+    loader = loaders[dataset]
+    reshtml = seasonality_detection(full_station_ds, loader.cols_list)
+    # print("[ HTML ]:", reshtml)
+    return { "seasonality": str(reshtml) }
+
+
+@route("/behavior/trend/<dataset>/<station>")
+@enable_cors
+def get_trend(dataset, station):
+    response.headers["Content-Type"] = "application/json"
+    global full_station_ds
+    global current_df
+    loader = loaders[dataset]
+    reshtml = trend_detection(full_station_ds, loader.cols_list)
+    # print("[ HTML ]:", reshtml)
+    return { "trend": str(reshtml) }
+
+
 @route("/recommendation/<dataset>/<station>")
 @enable_cors
 def recommendation_by_station(dataset, station):
