@@ -381,8 +381,13 @@ export default {
 	    if (this.timeSpan > this.periodsBase) {
 		this.periodsMax = Math.ceil(this.timeSpan / 12) * 12
 	    }
-	    console.log("[ Periods for Guide Cycle ]:", this.guide_cycle)
+	    if (this.params.points_per_period > this.raw_data.length) {
+		this.params.points_per_period = this.raw_data.length
+	    }
+	    console.log("[ Guiding Cycle Periods ]:", this.guide_cycle)
 	    console.log("[ Current Time span ]:", this.timeSpan)
+	    console.log("[ Points Per Period ]:", this.params.points_per_period)
+	    console.log("[ Raw Data Length ]:", this.raw_data.length)
 	},
 	async showDatasetSpiral() {
 	    this.datasetSelected = true
