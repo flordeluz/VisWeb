@@ -229,7 +229,8 @@ export default {
 	    { text: "Temp Max", value: "tempMax" },
 	    { text: "Temp Min", value: "tempMin" }
 	],
-	features: [ "precipitation", "tempMax", "tempMin" ],
+	// features: [ "precipitation", "tempMax", "tempMin" ],
+	features: [],
 	ftcolors: [
 	    "blue darken-2 text-center rounded",
 	    "green darken-2 text-center rounded",
@@ -296,7 +297,11 @@ export default {
 	    let month = (idx + this.firstMonth) % 12
 	    let year_idx
 	    this.hoveredMonth = month
-	    let promValues = [0, 0, 0]
+	    // let promValues = [0, 0, 0]
+	    let promValues = []
+	    for (let fidx = 0; fidx < this.features.length; fidx++) {
+		promValues[fidx] = 0
+	    }
 	    let feat_values = [[], [], []]
 	    for (let j = 0; j < this.rangeYear; j++) {
 		year_idx = j * this.params.points_per_period + (idx % this.params.points_per_period)
@@ -315,7 +320,7 @@ export default {
 		    this.year_cycle_data[j][i - 1].y = rad * Math.sin((i * 4 * degrees_per_iter * Math.PI) / 180)
 		}
 	    }
-	    console.log(feat_values, promValues)
+	    console.log("[ Variation Info ]:", feat_values, promValues, this.variation_info)
 	    for (let j = 0; j < promValues.length; j++) {
 		let variation_prom = 0
 		for (let i = 0; i < this.rangeYear; i++) {
@@ -378,11 +383,17 @@ export default {
 		this.params.points_per_period = this.timeSpan
 		this.initialState = false
 	    }
+	    // if (this.guide_cycle > this.raw_data.length) {
+	    // 	this.guide_cycle = this.raw_data.length
+	    // }
+	    // if (this.timeSpan > this.raw_data.length) {
+	    // 	this.timeSpan = this.raw_data.length
+	    // }
+	    // if (this.params.points_per_period > this.raw_data.length) {
+	    // 	this.params.points_per_period = this.raw_data.length
+	    // }
 	    if (this.timeSpan > this.periodsBase) {
 		this.periodsMax = Math.ceil(this.timeSpan / 12) * 12
-	    }
-	    if (this.params.points_per_period > this.raw_data.length) {
-		this.params.points_per_period = this.raw_data.length
 	    }
 	    console.log("[ Guiding Cycle Periods ]:", this.guide_cycle)
 	    console.log("[ Current Time span ]:", this.timeSpan)
@@ -399,7 +410,10 @@ export default {
 		])
 		this.year_info.push(this.start_year + index)
 	    }
-	    this.variation_info = [0, 0, 0]
+	    // for (let fidx = 0; fidx < this.features.length; fidx++) {
+	    // 	// this.variation_info = [0, 0, 0]
+	    // 	this.variation_info[fidx] = 0
+	    // }
 	    console.log("[ Loading... ]", this.year_cycle_data)
 	    let data = await axios.get(
 		"http://localhost:8080/data/" + this.dataset + "/" + this.station + "/MS",
@@ -422,6 +436,10 @@ export default {
 		}
 	    }
 	    this.feature = this.features[0]
+	    for (let fidx = 0; fidx < this.features.length; fidx++) {
+		// this.variation_info = [0, 0, 0]
+		this.variation_info[fidx] = 0
+	    }
 	    console.log("[ Feature Items ]:", this.featureitems);
 	    console.log("[ Features ]:", this.features);
 	    console.log("[ Default Feature ]:", this.feature);
@@ -524,7 +542,10 @@ export default {
 		]);
 		this.year_info.push(this.start_year + index);
 	    }
-	    this.variation_info = [0, 0, 0];
+	    for (let fidx = 0; fidx < this.features.length; fidx++) {
+		// this.variation_info = [0, 0, 0]
+		this.variation_info[fidx] = 0
+	    }
 	}
     }
 }
