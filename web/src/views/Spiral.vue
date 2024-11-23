@@ -293,7 +293,7 @@ export default {
 	computeCoords(rad, idx) {
 	    const divisions = 12
 	    const degrees_per_iter = 360 / divisions
-	    console.log("Radius and idx", this.raw_data[idx])
+	    console.log("[ RADIUS AND IDX ]", this.raw_data[idx])
 	    let month = (idx + this.firstMonth) % 12
 	    let year_idx
 	    this.hoveredMonth = month
@@ -313,7 +313,8 @@ export default {
 		    promValues[fidx] += values[this.features[fidx]] / this.rangeYear
 		    feat_values[fidx].push(values[this.features[fidx]])
 		}
-		for (let i = 1; i < 4; i++) {
+		// for (let i = 1; i < 4; i++) {
+		for (let i = 1; i < this.features.length + 1; i++) {
 		    rad = values[this.features[i - 1]].map(0, this.max_values[i - 1], 1, this.viewBoxSize * 0.1 * this.rangeYear * 0.5)
 		    if (rad == 0) rad = 1
 		    this.year_cycle_data[j][i - 1].x = rad * Math.cos((i * 4 * degrees_per_iter * Math.PI) / 180)
