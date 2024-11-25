@@ -34,7 +34,9 @@ def detecta_ciclo(serie_temporal, frecuencia_muestral):
     duracion_ciclo = 1 / frecuencia_ciclo
     print("[ FFT Cycle, freq:", frecuencia_ciclo, "time span:", duracion_ciclo, "]")
     # Devuelve True si la duración del ciclo es mayor o igual a 1
-    return duracion_ciclo >= 1.0, duracion_ciclo
+    # return duracion_ciclo >= 1.0, duracion_ciclo
+    return duracion_ciclo > 1.0, duracion_ciclo
+    # return frecuencia_ciclo > 1.0, duracion_ciclo
 
 
 def verificar_ciclo_fft(X):
@@ -44,11 +46,12 @@ def verificar_ciclo_fft(X):
         #
     sc = MaxAbsScaler()
     dataframe = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
-    duracion_ciclo_umbral = 1.0  # Define el umbral de duración del ciclo
-    frecuencia_muestral = 1.0  # Define la frecuencia de muestreo
+    # duracion_ciclo_umbral = 1.0  # Define el umbral de duración del ciclo
+    # frecuencia_muestral = 1.0  # Define la frecuencia de muestreo
     ciclo = False
     for feature in dataframe.columns:
         serie_temporal = dataframe[feature].values
+        frecuencia_muestral = len(serie_temporal)
         ciclo_detectado, ventana_ciclo = detecta_ciclo(serie_temporal, frecuencia_muestral)
         if ciclo_detectado: 
             ciclo = True

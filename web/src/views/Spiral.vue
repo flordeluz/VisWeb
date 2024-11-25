@@ -270,7 +270,7 @@ export default {
 	viewBoxSize: 40,
 	feature: "tempMin",
 	start_year: 1984,
-	rangeYear: 5,
+	rangeYear: 5, // 1,
 	labelsPos: [{}, {}, {}],
 	selectedDate: "Not selected",
 	selectedValue: "Not selected",
@@ -346,8 +346,11 @@ export default {
 	    let size
 	    console.log("[ Sampled data ]:", raw_data)
 	    for (let index = 0; index < this.params.points_per_period * cycles; index++) {
-		size = raw_data[index][this.feature]
-		points.push([index, size])
+		if (index < raw_data.length) {
+		    // console.log("DEBUG: ", index, this.params.points_per_period, cycles, raw_data[index][this.feature], this.feature);
+		    size = raw_data[index][this.feature]
+		    points.push([index, size])
+		}
 	    }
 	    var spiral1 = new Spiral("points")
 	    spiral1.setParam("numberOfPoints", this.params.points_per_period * cycles)
@@ -378,6 +381,9 @@ export default {
 		"http://localhost:8080/timespan/" + this.dataset + "/" + this.station + "/MS",
 		{ crossdomain: true }
 	    )
+	    console.log("[ Cyclity detected ]: ", segment_recommendation.data.status);
+	    // if (segment_recommendation.data.status == "True") {
+	    // }
 	    this.guide_cycle = segment_recommendation.data.periods
 	    if (this.initialState) {
 		this.timeSpan = parseInt(segment_recommendation.data.timespan)

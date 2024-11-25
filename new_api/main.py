@@ -224,7 +224,8 @@ def get_time_span(dataset, station, resample):
         #
     timespan = int(timespan)
     return { "periods": np.unique(timespan).tolist(),
-             "timespan": str(timespan) }
+             "timespan": str(timespan),
+             "status": str(timespan_status) }
 
 
 @route("/stats/describe/<dataset>/<station>")
