@@ -9,7 +9,7 @@
     <v-col class="text-center text-h4 text-capitalize">Dataset: {{ this.dataset }} - {{ this.station }}</v-col>
   </v-row>
   <v-row>
-    <v-col cols="2">
+    <v-col cols="1.5">
       <table class="blockTable pastTable firstRow text-center">
         <tr v-for="operation in pastTable" :key="operation.method">
           <td class="border slideOp" @click="changeVis(operation)" :id="`tab-${operation.method}`">
@@ -20,8 +20,11 @@
     </v-col>
     <v-col v-if="!showSpiral">
       <v-row>
-        <v-col :cols="seePresentChart ? 3 : ''">
-          <div id="graph1" class="firstRow" style="position:relative; border: 4px solid #73AD21; border-radius:8px"
+        <!-- <v-col :cols="seePresentChart ? 3 : ''"> -->
+        <v-col cols="10">
+          <!-- <div id="graph1" class="firstRow" style="height: 588px; width: 1008px; position:relative; border: 4px solid #73AD21; border-radius:8px" -->
+	  <!--      ref="timeChart" :diameter="200"></div> -->
+          <div id="graph1" class="firstRow" style="height: 80vh; width: 1080px; position:relative; border: 4px solid #73AD21; border-radius:8px"
 	       ref="timeChart" :diameter="200"></div>
 	  <!--
           <feature-viscovery ref="guide" :auto-aim-delay="500" :diameter="80" background-color="rgba(10,10,10, 0.719)">
@@ -38,7 +41,7 @@
     <v-col v-else>
       <div id="chart"></div>
     </v-col>
-    <v-col cols="2">
+    <v-col cols="1.5">
       <table class="blockTable firstRow">
         <tr v-for="operation in futureTable" :key="operation.method">
           <td class="border slideOp" @click="changeVisFromFuture(operation)" :id="`tab-${operation.method}`">
@@ -306,7 +309,7 @@ export default {
 	// },
 	async expandPastChart() {
 	    this.seePresentChart = false
-	    await console.log("Past chart gonna maximize")
+	    await console.log("The last chart is gonna maximize")
 	    this.chart.render()
 	},
 	viewPorts(e) {
@@ -497,8 +500,8 @@ export default {
 		animationEnabled: true,
 		exportEnabled: true,
 		zoomEnabled: true,
-		// width: 1000,
-		height: 580,
+		width: 1072, // commented
+		// height: 580,
 		axisX: {
 		    intervalType: "day"
 		},
@@ -801,8 +804,8 @@ export default {
 		    animationEnabled: true,
 		    exportEnabled: true,
 		    zoomEnabled: true,
-		    // width: 1000,
-		    height: 580,
+		    width: 1072, // commented
+		    // height: 580,
 		    axisX: {
 			intervalType: "day"
 		    },

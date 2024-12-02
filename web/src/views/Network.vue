@@ -14,8 +14,14 @@
     <h2>Dataset: {{ dataset.toUpperCase() }}, Station: {{ station.toUpperCase() }}</h2>
   </v-row>
   <v-row dense align="center" justify="center" v-if="datasetSelected">
-    <v-col cols="10">
+    <v-col cols="1">
+      <!-- noop -->
+    </v-col>
+    <v-col cols="12">
       <div v-html="rawcontainer"></div>
+    </v-col>
+    <v-col cols="1">
+      <!-- noop -->
     </v-col>
   </v-row>
   <v-dialog v-model="dialog" width="500">
@@ -98,7 +104,8 @@ export default {
 	dataset: "",
 	station: null,
 	datasetSelected: false,
-	rawcontainer: '<div id="container" style="width: 100vh; height: 80vh; background: #fff;"></div>',
+	// rawcontainer: '<div id="container" style="width: 100vh; height: 80vh; background: #fff;"></div>',
+	rawcontainer: '<div id="container" style="height: 80vh; width: 1080px; background: #fff;"></div>',
 	container: null,
 	graph: null,
 	renderer: null,
@@ -128,9 +135,9 @@ export default {
 	YELLOW: "#F6F606",
 	GRAY: "#767686",
 	BLACK: "#000000",
-	PROCSZ: 24, // Process
-	SUBPSZ: 18, // Subprocess
-	ACTVSZ: 12, // Activity in ACTION
+	PROCSZ: 32, // Process
+	SUBPSZ: 16, // Subprocess
+	ACTVSZ: 8, // Activity in ACTION
 	PROCCO: { // Default color GRAY
             "Data Quality": "#767686",
 	    "Data Reduction": "#767686",
@@ -548,53 +555,47 @@ export default {
 	    this.graph = new Graph();
 	    
 	    // Node processes
-	    this.graph.addNode("Data Quality", { x: -90, y: 0, size: this.PROCSZ, label: "Data Quality", type: "gradient", color: this.PROCCO["Data Quality"] });
-	    this.graph.addNode("Data Reduction", { x: 0, y: 0, size: this.PROCSZ, label: "Data Reduction", type: "gradient", color: this.PROCCO["Data Reduction"] });
-	    this.graph.addNode("Variables Behavior", { x: 90, y: 0, size: this.PROCSZ, label: "Variables Behavior", type: "gradient", color: this.PROCCO["Variables Behavior"] });
+	    this.graph.addNode("Data Quality", { x: -90, y: 0, size: this.PROCSZ, label: "Data Quality", forceLabel: true, type: "gradient", color: this.PROCCO["Data Quality"] });
+	    this.graph.addNode("Data Reduction", { x: 0, y: 0, size: this.PROCSZ, label: "Data Reduction", forceLabel: true, type: "gradient", color: this.PROCCO["Data Reduction"] });
+	    this.graph.addNode("Variables Behavior", { x: 90, y: 0, size: this.PROCSZ, label: "Variables Behavior", forceLabel: true, type: "gradient", color: this.PROCCO["Variables Behavior"] });
 	    
 	    // Node subprocesses
-	    this.graph.addNode("Clean", { x: -90, y: 60, size: this.SUBPSZ, label: "Cleanning", type: "gradient", color: this.SUBPCO["Data Quality"]["Clean"] });
+	    this.graph.addNode("Clean", { x: -90, y: 60, size: this.SUBPSZ, label: "Cleanning", forceLabel: true, type: "gradient", color: this.SUBPCO["Data Quality"]["Clean"] });
 	    
-	    this.graph.addNode("Nulls", { x: -60, y: 90, size: this.SUBPSZ, label: "Nulls", type: "gradient", color: this.SUBPCO["Data Quality"]["Nulls"] });
-	    this.graph.addNode("Rolling Mean", { x: -90, y: 130, size: this.ACTVSZ, label: "Rolling Mean", path: "clean/rm", type: "gradient", color: this.ACTVCO["Data Quality"]["Nulls"]["Rolling Mean"] });
-	    this.graph.addNode("Decision Tree", { x: -50, y: 136, size: this.ACTVSZ, label: "Decision Tree", path: "clean/dtr", type: "gradient", color: this.ACTVCO["Data Quality"]["Nulls"]["Decision Tree"] });
-	    this.graph.addNode("Stochastic Gradient", { x: -28, y: 124, size: this.ACTVSZ, label: "Stochastic Gradient", path: "clean/sgb", type: "gradient", color: this.ACTVCO["Data Quality"]["Nulls"]["Stochastic Gradient"] });
-	    this.graph.addNode("Locally Weighted", { x: -12, y: 106, size: this.ACTVSZ, label: "Locally Weighted", path: "clean/lwr", type: "gradient", color: this.ACTVCO["Data Quality"]["Nulls"]["Locally Weighted"] });
-	    this.graph.addNode("Random Forest", { x: -10, y: 84, size: this.ACTVSZ, label: "Random Forest", path: "clean/rfr", type: "gradient", color: this.ACTVCO["Data Quality"]["Nulls"]["Random Forest"] });
-	    this.graph.addNode("Legendre", { x: -20, y: 64, size: this.ACTVSZ, label: "Legendre", path: "clean/lgd", type: "gradient", color: this.ACTVCO["Data Quality"]["Nulls"]["Legendre"] });
-	    this.graph.addNode("KNN", { x: -50, y: 50, size: this.ACTVSZ, label: "KNN", path: "clean/knn", type: "gradient", color: this.ACTVCO["Data Quality"]["Nulls"]["KNN"] });
+	    this.graph.addNode("Nulls", { x: -60, y: 90, size: this.SUBPSZ, label: "Nulls", forceLabel: true, type: "gradient", color: this.SUBPCO["Data Quality"]["Nulls"] });
+	    this.graph.addNode("Rolling Mean", { x: -90, y: 130, size: this.ACTVSZ, label: "Rolling Mean", forceLabel: true, path: "clean/rm", type: "gradient", color: this.ACTVCO["Data Quality"]["Nulls"]["Rolling Mean"] });
+	    this.graph.addNode("Decision Tree", { x: -50, y: 136, size: this.ACTVSZ, label: "Decision Tree", forceLabel: true, path: "clean/dtr", type: "gradient", color: this.ACTVCO["Data Quality"]["Nulls"]["Decision Tree"] });
+	    this.graph.addNode("Stochastic Gradient", { x: -28, y: 124, size: this.ACTVSZ, label: "Stochastic Gradient", forceLabel: true, path: "clean/sgb", type: "gradient", color: this.ACTVCO["Data Quality"]["Nulls"]["Stochastic Gradient"] });
+	    this.graph.addNode("Locally Weighted", { x: -12, y: 106, size: this.ACTVSZ, label: "Locally Weighted", forceLabel: true, path: "clean/lwr", type: "gradient", color: this.ACTVCO["Data Quality"]["Nulls"]["Locally Weighted"] });
+	    this.graph.addNode("Random Forest", { x: -8, y: 86, size: this.ACTVSZ, label: "Random Forest", forceLabel: true, path: "clean/rfr", type: "gradient", color: this.ACTVCO["Data Quality"]["Nulls"]["Random Forest"] });
+	    this.graph.addNode("Legendre", { x: -20, y: 64, size: this.ACTVSZ, label: "Legendre", forceLabel: true, path: "clean/lgd", type: "gradient", color: this.ACTVCO["Data Quality"]["Nulls"]["Legendre"] });
+	    this.graph.addNode("KNN", { x: -50, y: 50, size: this.ACTVSZ, label: "KNN", forceLabel: true, path: "clean/knn", type: "gradient", color: this.ACTVCO["Data Quality"]["Nulls"]["KNN"] });
 	    
-	    this.graph.addNode("Outliers", { x: -120, y: 90, size: this.SUBPSZ, label: "Outliers", type: "gradient", color: this.SUBPCO["Data Quality"]["Outliers"] });
-	    this.graph.addNode("Interquartile Range", { x: -150, y: 110, size: this.ACTVSZ, label: "Interquartile Range", path: "outliers/iqr", type: "gradient", color: this.ACTVCO["Data Quality"]["Outliers"]["Interquartile Range"] });
-	    this.graph.addNode("Z-Score", { x: -150, y: 70, size: this.ACTVSZ, label: "Z-Score", path: "outliers/sdv", type: "gradient", color: this.ACTVCO["Data Quality"]["Outliers"]["Z-Score"] });
+	    this.graph.addNode("Outliers", { x: -120, y: 90, size: this.SUBPSZ, label: "Outliers", forceLabel: true, type: "gradient", color: this.SUBPCO["Data Quality"]["Outliers"] });
+	    this.graph.addNode("Interquartile Range", { x: -150, y: 110, size: this.ACTVSZ, label: "Interquartile Range", forceLabel: true, path: "outliers/iqr", type: "gradient", color: this.ACTVCO["Data Quality"]["Outliers"]["Interquartile Range"] });
+	    this.graph.addNode("Z-Score", { x: -150, y: 70, size: this.ACTVSZ, label: "Z-Score", forceLabel: true, path: "outliers/sdv", type: "gradient", color: this.ACTVCO["Data Quality"]["Outliers"]["Z-Score"] });
 	    
-	    this.graph.addNode("Normalize", { x: -150, y: 0, size: this.SUBPSZ, label: "Normalization", type: "gradient", color: this.SUBPCO["Data Quality"]["Normalize"] });
-	    this.graph.addNode("MinMax", { x: -140, y: 30, size: this.ACTVSZ, label: "MinMax", path: "normalize/minmax", type: "gradient", color: this.ACTVCO["Data Quality"]["Normalize"]["MinMax"] });
-	    this.graph.addNode("Standard", { x: -180, y: 16, size: this.ACTVSZ, label: "Standard", path: "normalize/standard", type: "gradient", color: this.ACTVCO["Data Quality"]["Normalize"]["Standard"] });
-	    this.graph.addNode("MaxAbs", { x: -180, y: -16, size: this.ACTVSZ, label: "MaxAbs", path: "normalize/maxabs", type: "gradient", color: this.ACTVCO["Data Quality"]["Normalize"]["MaxAbs"] });
-	    this.graph.addNode("Robust", { x: -140, y: -36, size: this.ACTVSZ, label: "Robust", path: "normalize/robust", type: "gradient", color: this.ACTVCO["Data Quality"]["Normalize"]["Robust"] });
+	    this.graph.addNode("Normalize", { x: -150, y: 0, size: this.SUBPSZ, label: "Normalization", forceLabel: true, type: "gradient", color: this.SUBPCO["Data Quality"]["Normalize"] });
+	    this.graph.addNode("MinMax", { x: -140, y: 30, size: this.ACTVSZ, label: "MinMax", forceLabel: true, path: "normalize/minmax", type: "gradient", color: this.ACTVCO["Data Quality"]["Normalize"]["MinMax"] });
+	    this.graph.addNode("Standard", { x: -180, y: 16, size: this.ACTVSZ, label: "Standard", forceLabel: true, path: "normalize/standard", type: "gradient", color: this.ACTVCO["Data Quality"]["Normalize"]["Standard"] });
+	    this.graph.addNode("MaxAbs", { x: -180, y: -20, size: this.ACTVSZ, label: "MaxAbs", forceLabel: true, path: "normalize/maxabs", type: "gradient", color: this.ACTVCO["Data Quality"]["Normalize"]["MaxAbs"] });
+	    this.graph.addNode("Robust", { x: -140, y: -36, size: this.ACTVSZ, label: "Robust", forceLabel: true, path: "normalize/robust", type: "gradient", color: this.ACTVCO["Data Quality"]["Normalize"]["Robust"] });
 	    
-	    this.graph.addNode("Transform", { x: -92, y: -58, size: this.SUBPSZ, label: "Transformation", type: "gradient", color: this.SUBPCO["Data Quality"]["Transform"] });
-	    this.graph.addNode("Linear", { x: -130, y: -70, size: this.ACTVSZ, label: "Linear", path: "transform/linear/" + this.factor, type: "gradient", color: this.ACTVCO["Data Quality"]["Transform"]["Linear"] });
-	    this.graph.addNode("Square Root", { x: -110, y: -90, size: this.ACTVSZ, label: "Square Root", path: "transform/sqrt/" + this.factor, type: "gradient", color: this.ACTVCO["Data Quality"]["Transform"]["Square Root"] });
-	    this.graph.addNode("Quadratic", { x: -66, y: -90, size: this.ACTVSZ, label: "Quadratic", path: "transform/quadratic/" + this.factor, type: "gradient", color: this.ACTVCO["Data Quality"]["Transform"]["Quadratic"] });
-	    this.graph.addNode("Logarithm", { x: -56, y: -70, size: this.ACTVSZ, label: "Logarithm", path: "transform/log/" + this.factor, type: "gradient", color: this.ACTVCO["Data Quality"]["Transform"]["Logarithm"] });
-	    this.graph.addNode("Differencing", { x: -60, y: -40, size: this.ACTVSZ, label: "Differencing", path: "transform/diff/" + this.factor, type: "gradient", color: this.ACTVCO["Data Quality"]["Transform"]["Differencing"] });
+	    this.graph.addNode("Transform", { x: -92, y: -58, size: this.SUBPSZ, label: "Transformation", forceLabel: true, type: "gradient", color: this.SUBPCO["Data Quality"]["Transform"] });
+	    this.graph.addNode("Linear", { x: -130, y: -70, size: this.ACTVSZ, label: "Linear", forceLabel: true, path: "transform/linear/" + this.factor, type: "gradient", color: this.ACTVCO["Data Quality"]["Transform"]["Linear"] });
+	    this.graph.addNode("Square Root", { x: -110, y: -90, size: this.ACTVSZ, label: "Square Root", forceLabel: true, path: "transform/sqrt/" + this.factor, type: "gradient", color: this.ACTVCO["Data Quality"]["Transform"]["Square Root"] });
+	    this.graph.addNode("Quadratic", { x: -66, y: -86, size: this.ACTVSZ, label: "Quadratic", forceLabel: true, path: "transform/quadratic/" + this.factor, type: "gradient", color: this.ACTVCO["Data Quality"]["Transform"]["Quadratic"] });
+	    this.graph.addNode("Logarithm", { x: -56, y: -66, size: this.ACTVSZ, label: "Logarithm", forceLabel: true, path: "transform/log/" + this.factor, type: "gradient", color: this.ACTVCO["Data Quality"]["Transform"]["Logarithm"] });
+	    this.graph.addNode("Differencing", { x: -60, y: -40, size: this.ACTVSZ, label: "Differencing", forceLabel: true, path: "transform/diff/" + this.factor, type: "gradient", color: this.ACTVCO["Data Quality"]["Transform"]["Differencing"] });
 	    
-	    this.graph.addNode("DimRed", { x: 20, y: -60, size: this.SUBPSZ, label: "Dim. Reduction", type: "gradient", color: this.SUBPCO["Data Reduction"]["DimRed"] });
-	    this.graph.addNode("Factor Analysis", { x: -10, y: -90, size: this.ACTVSZ, label: "Factor Analysis", path: "reduce/factor/" + this.n_comp, type: "gradient", color: this.ACTVCO["Data Reduction"]["DimRed"]["Factor Analysis"] });
-	    this.graph.addNode("Manually Selected", { x: 50, y: -90, size: this.ACTVSZ, label: "Manually Selected", path: "reduce/manual/" + this.n_comp, type: "gradient", color: this.ACTVCO["Data Reduction"]["DimRed"]["Manually Selected"] });
-	    
-	    // this.graph.addNode("Trend", { size: this.SUBPSZ, label: "Trend", type: "gradient", color: this.SUBPCO["Variables Behavior"]["Trend"] });
-	    
-	    // this.graph.addNode("Cyclicity", { size: this.SUBPSZ, label: "Cyclicity", type: "gradient", color: this.SUBPCO["Variables Behavior"]["Cyclicity"] });
-	    
-	    // this.graph.addNode("Seasonality", { size: this.SUBPSZ, label: "Seasonality", type: "gradient", color: this.SUBPCO["Variables Behavior"]["Seasonality"] });
-	    
-	    this.graph.addNode("Analysis", { x: 90, y: 60, size: this.SUBPSZ, label: "Analysis", type: "gradient", color: this.SUBPCO["Variables Behavior"]["Analysis"] });
-	    this.graph.addNode("Trend", { x: 60, y: 80, size: this.ACTVSZ, label: "Trend", path: "", type: "gradient", color: this.ACTVCO["Variables Behavior"]["Analysis"]["Trend"] });
-	    this.graph.addNode("Cyclicity", { x: 90, y: 90, size: this.ACTVSZ, label: "Cyclicity", path: "/spiral", type: "gradient", color: this.ACTVCO["Variables Behavior"]["Analysis"]["Cyclicity"] });
-	    this.graph.addNode("Seasonality", { x: 120, y: 80, size: this.ACTVSZ, label: "Seasonality", path: "", type: "gradient", color: this.ACTVCO["Variables Behavior"]["Analysis"]["Seasonality"] });
+	    this.graph.addNode("DimRed", { x: 20, y: -60, size: this.SUBPSZ, label: "Dim. Reduction", forceLabel: true, type: "gradient", color: this.SUBPCO["Data Reduction"]["DimRed"] });
+	    this.graph.addNode("Factor Analysis", { x: -10, y: -90, size: this.ACTVSZ, label: "Factor Analysis", forceLabel: true, path: "reduce/factor/" + this.n_comp, type: "gradient", color: this.ACTVCO["Data Reduction"]["DimRed"]["Factor Analysis"] });
+	    this.graph.addNode("Manually Selected", { x: 50, y: -90, size: this.ACTVSZ, label: "Manually Selected", forceLabel: true, path: "reduce/manual/" + this.n_comp, type: "gradient", color: this.ACTVCO["Data Reduction"]["DimRed"]["Manually Selected"] });
+	    	    
+	    this.graph.addNode("Analysis", { x: 90, y: 60, size: this.SUBPSZ, label: "Analysis", forceLabel: true, type: "gradient", color: this.SUBPCO["Variables Behavior"]["Analysis"] });
+	    this.graph.addNode("Trend", { x: 60, y: 80, size: this.ACTVSZ, label: "Trend", forceLabel: true, path: "", type: "gradient", color: this.ACTVCO["Variables Behavior"]["Analysis"]["Trend"] });
+	    this.graph.addNode("Cyclicity", { x: 90, y: 90, size: this.ACTVSZ, label: "Cyclicity", forceLabel: true, path: "/spiral", type: "gradient", color: this.ACTVCO["Variables Behavior"]["Analysis"]["Cyclicity"] });
+	    this.graph.addNode("Seasonality", { x: 120, y: 70, size: this.ACTVSZ, label: "Seasonality", forceLabel: true, path: "", type: "gradient", color: this.ACTVCO["Variables Behavior"]["Analysis"]["Seasonality"] });
 	    
 	    // Edge processes
 	    this.graph.addEdge("Data Quality", "Data Reduction", { type: "curve", curvature: 0.4, label: "macrotarea", size: 7, color: this.GREEN });
@@ -672,7 +673,7 @@ export default {
 		// defaultEdgeType: "curve",
 		edgeProgramClasses: {
 		    curve: EdgeCurveProgram,
-		},
+		}
 	    });
 	    
 	    // Create the spring layout and start it
