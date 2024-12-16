@@ -224,7 +224,7 @@ export default {
 	    "Data Reduction": {
 		"DimRed": {
 		    "Factor Analysis": "#767686",
-		    "Manually Selected": "#767686"
+		    "PCA Alternatives": "#767686"
 		}
 	    },
 	    // "Variables Behavior": {
@@ -277,7 +277,7 @@ export default {
 	    "Data Reduction": {
 		"DimRed": {
 		    "Factor Analysis": 211,
-		    "Manually Selected": 212
+		    "PCA Alternatives": 212
 		}
 	    },
 	    // "Variables Behavior": {
@@ -332,11 +332,11 @@ export default {
 			    this.trendl = true;
 			} else if (label == "Linear" && (color == this.RED || color == this.ORANGE || color == this.BLUE) && size == this.ACTVSZ) {
 			    this.main_operation = "transform";
-			    this.main_path = "transform/linear/";
+			    this.main_path = path; // "transform/linear/";
 			    this.dialog = true;
-			} else if (label == "Manually Selected" && (color == this.RED || color == this.ORANGE || color == this.BLUE) && size == this.ACTVSZ) {
+			} else if (label == "PCA Alternatives" && (color == this.RED || color == this.ORANGE || color == this.BLUE) && size == this.ACTVSZ) {
 			    this.main_operation = "reduce";
-			    this.main_path = "reduce/manual/";
+			    this.main_path = path; // "reduce/manual/";
 			    this.dialog = true;
 			} else if ((color == this.RED || color == this.ORANGE || color == this.BLUE) && size == this.ACTVSZ) {
 			    action = true;
@@ -402,7 +402,9 @@ export default {
 	    );
 	    let itrecommends = steprc.data[0];
 	    let itextends = steprc.data[1];
+	    let itpath = steprc.data[2];
 	    console.log("[ It Recommends ]");
+	    console.log("[ Made Path ]: ", itpath);
 	    for (var process in itrecommends) {
 		// if (process != "Excluded Activities") {
 		console.log("[ Process ]:", process);
@@ -444,9 +446,9 @@ export default {
 				    this.ACTVCO[process][prio_coloring_s][inactv_s_g] = this.GREEN;
 				}
 			    } else {
-				this.SUBPCO[process][prio_coloring_s] = this.YELLOW;
+				this.SUBPCO[process][prio_coloring_s] = this.GRAY; // this.YELLOW;
 				for (var inactv_s_y in this.ACTVCO[process][prio_coloring_s]) {
-				    this.ACTVCO[process][prio_coloring_s][inactv_s_y] = this.YELLOW;
+				    this.ACTVCO[process][prio_coloring_s][inactv_s_y] = this.GRAY; // this.YELLOW;
 				}
 			    }
 			}
@@ -582,7 +584,7 @@ export default {
 	    this.graph.addNode("Robust", { x: -60, y: 0, size: this.ACTVSZ, label: "Robust", forceLabel: true, path: "normalize/robust", type: "gradient", color: this.ACTVCO["Data Quality"]["Normalize"]["Robust"] });
 	    
 	    this.graph.addNode("Transform", { x: -100, y: -58, size: this.SUBPSZ, label: "Transformation", forceLabel: true, type: "gradient", color: this.SUBPCO["Data Quality"]["Transform"] });
-	    this.graph.addNode("Linear", { x: -64, y: -90, size: this.ACTVSZ, label: "Linear", forceLabel: true, path: "transform/linear/" + this.factor, type: "gradient", color: this.ACTVCO["Data Quality"]["Transform"]["Linear"] });
+	    this.graph.addNode("Linear", { x: -64, y: -90, size: this.ACTVSZ, label: "Linear", forceLabel: true, path: "transform/linear/" /* + this.factor */, type: "gradient", color: this.ACTVCO["Data Quality"]["Transform"]["Linear"] });
 	    this.graph.addNode("Square Root", { x: -60, y: -76, size: this.ACTVSZ, label: "Square Root", forceLabel: true, path: "transform/sqrt/" + this.factor, type: "gradient", color: this.ACTVCO["Data Quality"]["Transform"]["Square Root"] });
 	    this.graph.addNode("Quadratic", { x: -58, y: -64, size: this.ACTVSZ, label: "Quadratic", forceLabel: true, path: "transform/quadratic/" + this.factor, type: "gradient", color: this.ACTVCO["Data Quality"]["Transform"]["Quadratic"] });
 	    this.graph.addNode("Logarithm", { x: -60, y: -50, size: this.ACTVSZ, label: "Logarithm", forceLabel: true, path: "transform/log/" + this.factor, type: "gradient", color: this.ACTVCO["Data Quality"]["Transform"]["Logarithm"] });
@@ -590,7 +592,7 @@ export default {
 	    
 	    this.graph.addNode("DimRed", { x: 20, y: -30, size: this.SUBPSZ, label: "Dim. Reduction", forceLabel: true, type: "gradient", color: this.SUBPCO["Data Reduction"]["DimRed"] });
 	    this.graph.addNode("Factor Analysis", { x: 50, y: -40, size: this.ACTVSZ, label: "Factor Analysis", forceLabel: true, path: "reduce/factor/" + this.n_comp, type: "gradient", color: this.ACTVCO["Data Reduction"]["DimRed"]["Factor Analysis"] });
-	    this.graph.addNode("Manually Selected", { x: 40, y: -10, size: this.ACTVSZ, label: "Manually Selected", forceLabel: true, path: "reduce/manual/" + this.n_comp, type: "gradient", color: this.ACTVCO["Data Reduction"]["DimRed"]["Manually Selected"] });
+	    this.graph.addNode("PCA Alternatives", { x: 40, y: -10, size: this.ACTVSZ, label: "PCA Alternatives", forceLabel: true, path: "reduce/manual/" /* + this.n_comp */, type: "gradient", color: this.ACTVCO["Data Reduction"]["DimRed"]["PCA Alternatives"] });
 	    	    
 	    this.graph.addNode("Analysis", { x: 90, y: 36, size: this.SUBPSZ, label: "Analysis", forceLabel: true, type: "gradient", color: this.SUBPCO["Variables Behavior"]["Analysis"] });
 	    this.graph.addNode("Trend", { x: 110, y: 70, size: this.ACTVSZ, label: "Trend", forceLabel: true, path: "", type: "gradient", color: this.ACTVCO["Variables Behavior"]["Analysis"]["Trend"] });
@@ -654,10 +656,10 @@ export default {
 
 	    this.graph.addEdge("Data Reduction", "DimRed", { type: "curve", curvature: -0.2, label: "tarea", size: 5, color: this.SUBPCO["Data Reduction"]["DimRed"] });
 	    this.graph.addEdge("DimRed", "Factor Analysis", { type: "curve", curvature: -0.1, label: "microtarea", size: 3, color: this.ACTVCO["Data Reduction"]["DimRed"]["Factor Analysis"] });
-	    this.graph.addEdge("DimRed", "Manually Selected", { type: "curve", curvature: 0.1, label: "microtarea", size: 3, color: this.ACTVCO["Data Reduction"]["DimRed"]["Manually Selected"] });
+	    this.graph.addEdge("DimRed", "PCA Alternatives", { type: "curve", curvature: 0.1, label: "microtarea", size: 3, color: this.ACTVCO["Data Reduction"]["DimRed"]["PCA Alternatives"] });
 	    
 	    this.graph.addEdge("Factor Analysis", "Variables Behavior", { type: "curve", curvature: -0.4, label: "macrotarea", size: 3, color: this.GREEN });
-	    this.graph.addEdge("Manually Selected", "Variables Behavior", { type: "curve", curvature: 0.2, label: "macrotarea", size: 3, color: this.GREEN });
+	    this.graph.addEdge("PCA Alternatives", "Variables Behavior", { type: "curve", curvature: 0.2, label: "macrotarea", size: 3, color: this.GREEN });
 	    
 	    this.graph.addEdge("Variables Behavior", "Analysis", { type: "curve", curvature: 0.2, label: "tarea", size: 5, color: this.SUBPCO["Variables Behavior"]["Analysis"] });
 	    this.graph.addEdge("Analysis", "Trend", { type: "curve", curvature: 0.2, label: "microtarea", size: 3, color: this.ACTVCO["Variables Behavior"]["Analysis"]["Trend"] });
@@ -686,6 +688,12 @@ export default {
 	    //*     this.graph.setNodeAttribute(node, "x", 100 * Math.cos(angle));
 	    //*     this.graph.setNodeAttribute(node, "y", 100 * Math.sin(angle));
 	    //* });
+
+	    for (var madepath in itpath) {
+		if (this.graph.getNodeAttribute(itpath[madepath], 'color') == this.GREEN) {
+		    this.graph.setNodeAttribute(itpath[madepath], 'color', this.LIGHTBLUE);
+		}
+	    }
 	    
 	    this.renderer = new Sigma(this.graph, this.container, {
 		nodeProgramClasses: {

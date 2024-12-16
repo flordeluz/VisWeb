@@ -358,7 +358,7 @@ class GenRedo(MainredoClass):
             # Algo's code goes here
             # -------------------------------
             
-            num = int(num)
+            num = float(num) # int(num)
             smo[algorm] = ds.copy()
             smo[algorm][cols_list] = smo[algorm][cols_list].apply(lambda x: x.astype("float64") * num, axis=0)
             

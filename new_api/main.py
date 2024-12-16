@@ -116,7 +116,8 @@ current_station = ""
 last_station = ""
 init_state = False
 dic = {}
-historial_df = {}
+# historial_df = {}
+made_path = []
 
 
 # Routers
@@ -125,9 +126,11 @@ historial_df = {}
 @enable_cors
 def meta_data(dataset):
     global init_state
+    global made_path
     loader = loaders[dataset]
     loader.ds = loader.smo["raw"].copy()
     init_state = True
+    made_path = []
     print(loader.ds.info())
     print(loader.ds)
     return json.dumps(loader.get_metadata())
@@ -156,7 +159,7 @@ def meta_data(dataset):
 @route("/data/<dataset>/<station>")
 @enable_cors
 def data(dataset, station):
-    global historial_df
+    # global historial_df
     global full_station_ds
     global current_df
     global aux_df
@@ -179,11 +182,11 @@ def data(dataset, station):
         init_state = False
         #
     json_data, df, full_station_ds = loader.get_data(station, resample="D")
-    historial_df = {}
+    # historial_df = {}
     current_df = df
     aux_df = df
-    # # historial_df["raw"] = df
-    # historial_df["raw"] = loader.smo["raw"].copy()
+    # # # historial_df["raw"] = df
+    # # historial_df["raw"] = loader.smo["raw"].copy()
     current_df.fillna(-1, inplace=True)
     print(current_df)
     print(full_station_ds)
@@ -193,7 +196,7 @@ def data(dataset, station):
 @route("/data/<dataset>/<station>/<resample>")
 @enable_cors
 def data(dataset, station, resample):
-    global historial_df
+    # global historial_df
     global full_station_ds
     global current_df
     global aux_df
@@ -354,6 +357,7 @@ def recommendation_by_station(dataset, station):
     global current_station
     global resultados_threads
     global dic
+    global made_path
     recommendations = {
         "Data Reduction": [], # Filled with Subprocesses
         "Data Quality": [], # Filled with Subprocesses
@@ -426,6 +430,7 @@ def recommendation_by_station(dataset, station):
     res = {k: v for k, v in recommendations.items() if len(v) > 0}
     env.append(res)
     env.append(dic)
+    env.append(made_path)
     dic = {}
     return json.dumps(env)
 
@@ -532,8 +537,11 @@ def normalize_dataset(dataset, method):
     global full_station_ds
     global current_df
     global aux_df
+    global made_path
+    made_path.append("Normalize")
     print("[ Old df:\n", current_df, "\n]")
     if method == "minmax":
+        made_path.append("MinMax")
         if gr.did_norm_w_minmax(loader.smo):
             loader.ds = loader.smo["minmax"].copy()
         else:
@@ -541,6 +549,7 @@ def normalize_dataset(dataset, method):
             loader.ds, loader.smo = gr.norm_w_minmax(loader.smo["full"], loader.smo, loader.cols_list)
             #
     elif method == "standard":
+        made_path.append("Standard")
         if gr.did_norm_w_standard(loader.smo):
             loader.ds = loader.smo["standard"].copy()
         else:
@@ -548,6 +557,7 @@ def normalize_dataset(dataset, method):
             loader.ds, loader.smo = gr.norm_w_standard(loader.smo["full"], loader.smo, loader.cols_list)
             #
     elif method == "maxabs":
+        made_path.append("MaxAbs")
         if gr.did_norm_w_maxabs(loader.smo):
             loader.ds = loader.smo["maxabs"].copy()
         else:
@@ -555,6 +565,7 @@ def normalize_dataset(dataset, method):
             loader.ds, loader.smo = gr.norm_w_maxabs(loader.smo["full"], loader.smo, loader.cols_list)
             #
     elif method == "robust":
+        made_path.append("Robust")
         if gr.did_norm_w_robust(loader.smo):
             loader.ds = loader.smo["robust"].copy()
         else:
@@ -564,8 +575,8 @@ def normalize_dataset(dataset, method):
     json_data, df, full_station_ds = loader.get_data(current_station, resample="D")
     current_df = df
     aux_df = df
-    # # historial_df["raw"] = df
-    # historial_df["raw"] = loader.smo["raw"].copy()
+    # # # historial_df["raw"] = df
+    # # historial_df["raw"] = loader.smo["raw"].copy()
     current_df.fillna(-1, inplace=True) # DELETE
     print("[ Current df:\n", current_df, "\n]")
     return json_data
@@ -580,37 +591,47 @@ def clean_dataset(dataset, method):
     global full_station_ds
     global current_df
     global aux_df
+    global made_path
+    made_path.append("Clean")
+    made_path.append("Nulls")
     if method == "rm":
+        made_path.append("Rolling Mean")
         if not gr.did_fill_w_meanmedian(loader.smo):
             # loader.smo = gr.fill_w_meanmedian(loader.smo["raw"], loader.smo, loader.minsample, loader.valdnsize, loader.x_flr, loader.cols_list, loader.time_list)
             loader.smo = gr.fill_w_meanmedian(full_station_ds, loader.smo, loader.minsample, loader.valdnsize, loader.x_flr, loader.cols_list, loader.time_list)
             #
     elif method == "dtr":
+        made_path.append("Decision Tree")
         if not gr.did_fill_w_decisiontree(loader.smo):
             # loader.smo = gr.fill_w_decisiontree(loader.smo["raw"], loader.smo, loader.minsample, loader.valdnsize, loader.x_flr, loader.cols_list, loader.time_list)
             loader.smo = gr.fill_w_decisiontree(full_station_ds, loader.smo, loader.minsample, loader.valdnsize, loader.x_flr, loader.cols_list, loader.time_list)
             #
     elif method == "sgb":
+        made_path.append("Stochastic Gradient")
         if not gr.did_fill_w_gradientboosting(loader.smo):
             # loader.smo = gr.fill_w_gradientboosting(loader.smo["raw"], loader.smo, loader.minsample, loader.valdnsize, loader.x_flr, loader.cols_list, loader.time_list)
             loader.smo = gr.fill_w_gradientboosting(full_station_ds, loader.smo, loader.minsample, loader.valdnsize, loader.x_flr, loader.cols_list, loader.time_list)
             #
     elif method == "lwr":
+        made_path.append("Locally Weighted")
         if not gr.did_fill_w_locallyweighted(loader.smo):
             # loader.smo = gr.fill_w_locallyweighted(loader.smo["raw"], loader.smo, loader.minsample, loader.valdnsize, loader.x_flr, loader.cols_list, loader.time_list)
             loader.smo = gr.fill_w_locallyweighted(full_station_ds, loader.smo, loader.minsample, loader.valdnsize, loader.x_flr, loader.cols_list, loader.time_list)
             #
     elif method == "lgd":
+        made_path.append("Legendre")
         if not gr.did_fill_w_legendre(loader.smo):
             # loader.smo = gr.fill_w_legendre(loader.smo["raw"], loader.smo, loader.minsample, loader.valdnsize, loader.x_flr, loader.cols_list, loader.time_list)
             loader.smo = gr.fill_w_legendre(full_station_ds, loader.smo, loader.minsample, loader.valdnsize, loader.x_flr, loader.cols_list, loader.time_list)
             #
     elif method == "rfr":
+        made_path.append("Random Forest")
         if not gr.did_fill_w_randomforest(loader.smo):
             # loader.smo = gr.fill_w_randomforest(loader.smo["raw"], loader.smo, loader.minsample, loader.valdnsize, loader.x_flr, loader.cols_list, loader.time_list)
             loader.smo = gr.fill_w_randomforest(full_station_ds, loader.smo, loader.minsample, loader.valdnsize, loader.x_flr, loader.cols_list, loader.time_list)
             #
     elif method == "knn":
+        made_path.append("KNN")
         if not gr.did_fill_w_kneighbors(loader.smo):
             # loader.smo = gr.fill_w_kneighbors(loader.smo["raw"], loader.smo, loader.minsample, loader.valdnsize, loader.x_flr, loader.cols_list, loader.time_list)
             loader.smo = gr.fill_w_kneighbors(full_station_ds, loader.smo, loader.minsample, loader.valdnsize, loader.x_flr, loader.cols_list, loader.time_list)
@@ -622,7 +643,7 @@ def clean_dataset(dataset, method):
     json_data, df, full_station_ds = loader.get_data(current_station, resample="D")
     current_df = df
     aux_df = df
-    # historial_df["clean"] = df
+    # # historial_df["clean"] = df
     print("[ Current df:\n", current_df, "\n]")
     print("[ Null Values:", current_df.isna().sum(), "]")
     if ( current_df.isna().sum().sum() > 0 ):
@@ -642,14 +663,19 @@ def outliers_treatment(dataset, method):
     global full_station_ds
     global current_df
     global aux_df
+    global made_path
+    made_path.append("Clean")
+    made_path.append("Outliers")
     print("[ Old df:\n", current_df, "\n]")
     if method == "iqr":
+        made_path.append("Interquartile Range")
         if gr.did_iqr_treatment(loader.smo):
             loader.ds = loader.smo["iqr"].copy()
         else:
             loader.ds, loader.smo = gr.iqr_treatment(loader.smo["full"], loader.smo, loader.cols_list)
             #
     elif method == "sdv":
+        made_path.append("Z-Score")
         if gr.did_sdv_treatment(loader.smo):
             loader.ds = loader.smo["sdv"].copy()
         else:
@@ -658,8 +684,8 @@ def outliers_treatment(dataset, method):
     json_data, df, full_station_ds = loader.get_data(current_station, resample="D")
     current_df = df
     aux_df = df
-    # # historial_df["raw"] = df
-    # historial_df["raw"] = loader.smo["raw"].copy()
+    # # # historial_df["raw"] = df
+    # # historial_df["raw"] = loader.smo["raw"].copy()
     # current_df.fillna(-1, inplace=True) # DELETE
     print("[ Current df:\n", current_df, "\n]")
     return json_data
@@ -674,32 +700,39 @@ def transform_dataset(dataset, method, number):
     global full_station_ds
     global current_df
     global aux_df
+    global made_path
+    made_path.append("Transform")
     print("[ Old df:\n", current_df, "\n]")
     if method == "linear":
+        made_path.append("Linear")
         if gr.did_linear_transform(loader.smo):
             loader.ds = loader.smo["linear"].copy()
         else:
             loader.ds, loader.smo = gr.linear_transform(number, loader.smo["full"], loader.smo, loader.cols_list)
             #
     elif method == "quadratic":
+        made_path.append("Quadratic")
         if gr.did_quadratic_transform(loader.smo):
             loader.ds = loader.smo["quadratic"].copy()
         else:
             loader.ds, loader.smo = gr.quadratic_transform(loader.smo["full"], loader.smo, loader.cols_list)
             #
     elif method == "log":
+        made_path.append("Logarithm")
         if gr.did_log_transform(loader.smo):
             loader.ds = loader.smo["log"].copy()
         else:
             loader.ds, loader.smo = gr.log_transform(loader.smo["full"], loader.smo, loader.cols_list)
             #
     elif method == "sqrt":
+        made_path.append("Square Root")
         if gr.did_sqrt_transform(loader.smo):
             loader.ds = loader.smo["sqrt"].copy()
         else:
             loader.ds, loader.smo = gr.sqrt_transform(loader.smo["full"], loader.smo, loader.cols_list)
             #
     elif method == "diff":
+        made_path.append("Differencing")
         if gr.did_diff_transform(loader.smo):
             loader.ds = loader.smo["diff"].copy()
         else:
@@ -708,8 +741,8 @@ def transform_dataset(dataset, method, number):
     json_data, df, full_station_ds = loader.get_data(current_station, resample="D")
     current_df = df
     aux_df = df
-    # # historial_df["raw"] = df
-    # historial_df["raw"] = loader.smo["raw"].copy()
+    # # # historial_df["raw"] = df
+    # # historial_df["raw"] = loader.smo["raw"].copy()
     current_df.fillna(-1, inplace=True) # DELETE
     print("[ Current df:\n", current_df, "\n]")
     return json_data
@@ -724,12 +757,16 @@ def reduce_dataset(dataset, method, n_comp):
     global full_station_ds
     global current_df
     global aux_df
+    global made_path
+    made_path.append("DimRed")
     res = True
     if method == "factor":
+        made_path.append("Factor Analysis")
         # status_reduccion, messages_reduccion = comprobarReduccion(current_df, par = False)
         res, n_comp = check_dimensionality_reduction_fa(current_df)
         #
     elif method == "manual":
+        made_path.append("PCA Alternatives")
         n_comp = re.sub(", +", ",", n_comp).split(",")
         #
     if res:
