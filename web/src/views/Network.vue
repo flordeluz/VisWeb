@@ -410,7 +410,7 @@ export default {
 		console.log("[ Process ]:", process);
 		console.log("[ Subprocesses ]:", itrecommends[process]);
 		console.log("[ Subprocess Excluded Activities ]:", itextends["Excluded Activities"]);
-		this.PROCCO[process] = this.PROCPR[process] == 3 ? this.BLUE : this.RED;
+		this.PROCCO[process] = this.PROCPR[process] == 3 ? /* this.BLUE */ this.LIGHTBLUE : this.RED;
 		this.PROCBY.push(this.PROCPR[process]);
 		for (var prio_coloring_p in this.PROCPR) {
 		    if (! this.PROCBY.includes(this.PROCPR[prio_coloring_p])) {
@@ -428,7 +428,7 @@ export default {
 		for (var subprocess in itrecommends[process]) {
 		    // this.SUBPCO[process][itrecommends[process][subprocess]] = this.SUBPPR[process][itrecommends[process][subprocess]] > 30 ? this.BLUE : this.RED;
 		    if ( this.SUBPPR[process][itrecommends[process][subprocess]] > 30 ) {
-			this.SUBPCO[process][itrecommends[process][subprocess]] = this.BLUE;
+			this.SUBPCO[process][itrecommends[process][subprocess]] = /* this.BLUE */ this.LIGHTBLUE;
 		    } else if ( this.SUBPPR[process][itrecommends[process][subprocess]] == 15 ) {
 			this.SUBPCO[process][itrecommends[process][subprocess]] = this.ORANGE;
 			if ( itrecommends[process].length == 1 ) {
@@ -593,7 +593,7 @@ export default {
 	    this.graph.addNode("DimRed", { x: 20, y: -30, size: this.SUBPSZ, label: "Dim. Reduction", forceLabel: true, type: "gradient", color: this.SUBPCO["Data Reduction"]["DimRed"] });
 	    this.graph.addNode("Factor Analysis", { x: 50, y: -40, size: this.ACTVSZ, label: "Factor Analysis", forceLabel: true, path: "reduce/factor/" + this.n_comp, type: "gradient", color: this.ACTVCO["Data Reduction"]["DimRed"]["Factor Analysis"] });
 	    this.graph.addNode("PCA Alternatives", { x: 40, y: -10, size: this.ACTVSZ, label: "PCA Alternatives", forceLabel: true, path: "reduce/manual/" /* + this.n_comp */, type: "gradient", color: this.ACTVCO["Data Reduction"]["DimRed"]["PCA Alternatives"] });
-	    	    
+	    
 	    this.graph.addNode("Analysis", { x: 90, y: 36, size: this.SUBPSZ, label: "Analysis", forceLabel: true, type: "gradient", color: this.SUBPCO["Variables Behavior"]["Analysis"] });
 	    this.graph.addNode("Trend", { x: 110, y: 70, size: this.ACTVSZ, label: "Trend", forceLabel: true, path: "", type: "gradient", color: this.ACTVCO["Variables Behavior"]["Analysis"]["Trend"] });
 	    this.graph.addNode("Cyclicity", { x: 120, y: 50, size: this.ACTVSZ, label: "Cyclicity", forceLabel: true, path: "/spiral", type: "gradient", color: this.ACTVCO["Variables Behavior"]["Analysis"]["Cyclicity"] });
@@ -614,7 +614,7 @@ export default {
 	    this.graph.addEdge("Nulls", "Legendre", { type: "curve", curvature: 0.2, label: "microtarea", size: 3, color: this.ACTVCO["Data Quality"]["Nulls"]["Legendre"] });
 	    this.graph.addEdge("Nulls", "Random Forest", { type: "curve", curvature: 0.2, label: "microtarea", size: 3, color: this.ACTVCO["Data Quality"]["Nulls"]["Random Forest"] });
 	    this.graph.addEdge("Nulls", "KNN", { type: "curve", curvature: 0.1, label: "microtarea", size: 3, color: this.ACTVCO["Data Quality"]["Nulls"]["KNN"] });
-
+	    
 	    this.graph.addEdge("Rolling Mean", "Data Reduction", { type: "curve", curvature: 0.5, label: "macrotarea", size: 3, color: this.GREEN });
 	    this.graph.addEdge("Decision Tree", "Data Reduction", { type: "curve", curvature: 0.4, label: "macrotarea", size: 3, color: this.GREEN });
 	    this.graph.addEdge("Stochastic Gradient", "Data Reduction", { type: "curve", curvature: 0.3, label: "macrotarea", size: 3, color: this.GREEN });
@@ -626,7 +626,7 @@ export default {
 	    this.graph.addEdge("Clean", "Outliers", { type: "curve", curvature: -0.2, label: "subtarea", size: 5, color: this.SUBPCO["Data Quality"]["Outliers"] });
 	    this.graph.addEdge("Outliers", "Interquartile Range", { type: "curve", curvature: 0.1, label: "microtarea", size: 3, color: this.ACTVCO["Data Quality"]["Outliers"]["Interquartile Range"] });
 	    this.graph.addEdge("Outliers", "Z-Score", { type: "curve", curvature: -0.1, label: "microtarea", size: 3, color: this.ACTVCO["Data Quality"]["Outliers"]["Z-Score"] });
-
+	    
 	    this.graph.addEdge("Interquartile Range", "Data Reduction", { type: "curve", curvature: 0.4, label: "macrotarea", size: 3, color: this.GREEN });
 	    this.graph.addEdge("Z-Score", "Data Reduction", { type: "curve", curvature: 0.4, label: "macrotarea", size: 3, color: this.GREEN });
 	    
@@ -635,12 +635,12 @@ export default {
 	    this.graph.addEdge("Normalize", "Standard", { type: "curve", curvature: 0.1, label: "microtarea", size: 3, color: this.ACTVCO["Data Quality"]["Normalize"]["Standard"] });
 	    this.graph.addEdge("Normalize", "MaxAbs", { type: "curve", curvature: -0.1, label: "microtarea", size: 3, color: this.ACTVCO["Data Quality"]["Normalize"]["MaxAbs"] });
 	    this.graph.addEdge("Normalize", "Robust", { type: "curve", curvature: -0.1, label: "microtarea", size: 3, color: this.ACTVCO["Data Quality"]["Normalize"]["Robust"] });
-
+	    
 	    this.graph.addEdge("MinMax", "Data Reduction", { type: "curve", curvature: 0.1, label: "macrotarea", size: 3, color: this.GREEN });
 	    this.graph.addEdge("Standard", "Data Reduction", { type: "curve", curvature: 0.3, label: "macrotarea", size: 3, color: this.GREEN });
 	    this.graph.addEdge("MaxAbs", "Data Reduction", { type: "curve", curvature: -0.2, label: "macrotarea", size: 3, color: this.GREEN });
 	    this.graph.addEdge("Robust", "Data Reduction", { type: "curve", curvature: -0.1, label: "macrotarea", size: 3, color: this.GREEN });
-
+	    
 	    this.graph.addEdge("Data Quality", "Transform", { type: "curve", curvature: -0.2, label: "tarea", size: 5, color: this.SUBPCO["Data Quality"]["Transform"] });
 	    this.graph.addEdge("Transform", "Linear", { type: "curve", curvature: -0.1, label: "microtarea", size: 3, color: this.ACTVCO["Data Quality"]["Transform"]["Linear"] });
 	    this.graph.addEdge("Transform", "Quadratic", { type: "curve", curvature: -0.1, label: "microtarea", size: 3, color: this.ACTVCO["Data Quality"]["Transform"]["Quadratic"] });
@@ -653,7 +653,7 @@ export default {
 	    this.graph.addEdge("Square Root", "Data Reduction", { type: "curve", curvature: -0.4, label: "macrotarea", size: 3, color: this.GREEN });
 	    this.graph.addEdge("Logarithm", "Data Reduction", { type: "curve", curvature: -0.4, label: "macrotarea", size: 3, color: this.GREEN });
 	    this.graph.addEdge("Differencing", "Data Reduction", { type: "curve", curvature: -0.4, label: "macrotarea", size: 3, color: this.GREEN });
-
+	    
 	    this.graph.addEdge("Data Reduction", "DimRed", { type: "curve", curvature: -0.2, label: "tarea", size: 5, color: this.SUBPCO["Data Reduction"]["DimRed"] });
 	    this.graph.addEdge("DimRed", "Factor Analysis", { type: "curve", curvature: -0.1, label: "microtarea", size: 3, color: this.ACTVCO["Data Reduction"]["DimRed"]["Factor Analysis"] });
 	    this.graph.addEdge("DimRed", "PCA Alternatives", { type: "curve", curvature: 0.1, label: "microtarea", size: 3, color: this.ACTVCO["Data Reduction"]["DimRed"]["PCA Alternatives"] });
@@ -673,7 +673,7 @@ export default {
 	    this.graph.addEdge("Trend", "End", { type: "curve", curvature: 0.4, label: "end", size: 2, color: this.LIGHTBLUE });
 	    this.graph.addEdge("Cyclicity", "End", { type: "curve", curvature: 0.1, label: "end", size: 2, color: this.LIGHTBLUE });
 	    this.graph.addEdge("Seasonality", "End", { type: "curve", curvature: -0.2, label: "end", size: 2, color: this.LIGHTBLUE });
-
+	    
 	    // Edge sequences
 	    // this.graph.addEdge("Clean", "Normalize", { type: "curve", label: "sequence", size: 3, color: this.LIGHTBLUE });
 	    // this.graph.addEdge("Normalize", "Transform", { type: "curve", label: "sequence", size: 3, color: this.LIGHTBLUE });
@@ -688,10 +688,41 @@ export default {
 	    //*     this.graph.setNodeAttribute(node, "x", 100 * Math.cos(angle));
 	    //*     this.graph.setNodeAttribute(node, "y", 100 * Math.sin(angle));
 	    //* });
-
+	    
+	    var last_madepath = "";
 	    for (var madepath in itpath) {
 		if (this.graph.getNodeAttribute(itpath[madepath], 'color') == this.GREEN) {
 		    this.graph.setNodeAttribute(itpath[madepath], 'color', this.LIGHTBLUE);
+		    if (this.graph.areNeighbors(itpath[madepath], "Data Quality") && this.graph.getNodeAttribute("Data Quality", 'color') == this.GREEN) {
+			this.graph.setNodeAttribute("Data Quality", 'color', this.LIGHTBLUE);
+		    }
+		    if (this.graph.areNeighbors(itpath[madepath], "Data Reduction") && this.graph.getNodeAttribute("Data Reduction", 'color') == this.GREEN) {
+			this.graph.setNodeAttribute("Data Reduction", 'color', this.LIGHTBLUE);
+		    }
+		    if (this.graph.areNeighbors(itpath[madepath], "Variables Behavior") && this.graph.getNodeAttribute("Variables Behavior", 'color') == this.GREEN) {
+			this.graph.setNodeAttribute("Variables Behavior", 'color', this.LIGHTBLUE);
+		    }
+		    if (last_madepath !== "") {
+			if (this.graph.hasEdge(last_madepath, itpath[madepath])) {
+			    this.graph.setEdgeAttribute(last_madepath, itpath[madepath], 'color', this.LIGHTBLUE);
+			}
+		    }
+		    if (this.graph.getNodeAttribute("Data Quality", 'color') == this.LIGHTBLUE) {
+			if (this.graph.hasEdge(itpath[madepath], "Data Quality")) {
+			    this.graph.setEdgeAttribute(itpath[madepath], "Data Quality", 'color', this.LIGHTBLUE);
+			}
+		    }
+		    if (this.graph.getNodeAttribute("Data Reduction", 'color') == this.LIGHTBLUE) {
+			if (this.graph.hasEdge(itpath[madepath], "Data Reduction")) {
+			    this.graph.setEdgeAttribute(itpath[madepath], "Data Reduction", 'color', this.LIGHTBLUE);
+			}
+		    }
+		    if (this.graph.getNodeAttribute("Variables Behavior", 'color') == this.LIGHTBLUE) {
+			if (this.graph.hasEdge(itpath[madepath], "Variables Behavior")) {
+			    this.graph.setEdgeAttribute(itpath[madepath], "Variables Behavior", 'color', this.LIGHTBLUE);
+			}
+		    }
+		    last_madepath = itpath[madepath];
 		}
 	    }
 	    
