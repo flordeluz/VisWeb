@@ -137,7 +137,7 @@ def smooth_legendre(y_dep, y_hat, y_src):
         sl_min = sl_min_hat if (sl_min_hat > sl_min_src) else sl_min_src
         sl_scaler = MinMaxScaler(feature_range=(sl_min, sl_max))
         y_hat = sl_scaler.fit_transform(y_hat.reshape(-1, 1))
-        # print("=== SCALED:", y_dep, "=== ")
+        print("[", y_dep, "SMOOTHED. Source min/max:", sl_min_src, sl_max_src, "Predicted min/max:", sl_min_hat, sl_max_hat, "Scale min/max:", sl_min, sl_max, "]")
     return y_hat.flatten()
 
 
