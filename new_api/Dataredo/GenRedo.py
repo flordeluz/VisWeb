@@ -127,6 +127,20 @@ def resetfillf(n, o, prognl):
     return o
 
 
+def smooth_legendre(y_dep, y_hat, y_src):
+    sl_max_hat = np.nanmax(y_hat)
+    sl_min_hat = np.nanmin(y_hat)
+    sl_max_src = np.nanmax(y_src)
+    sl_min_src = np.nanmin(y_src)
+    if (abs(sl_max_hat - sl_min_hat) > abs(sl_max_src - sl_min_src)):
+        sl_max = sl_max_hat if (sl_max_hat < sl_max_src) else sl_max_src
+        sl_min = sl_min_hat if (sl_min_hat > sl_min_src) else sl_min_src
+        sl_scaler = MinMaxScaler(feature_range=(sl_min, sl_max))
+        y_hat = sl_scaler.fit_transform(y_hat.reshape(-1, 1))
+        # print("=== SCALED:", y_dep, "=== ")
+    return y_hat.flatten()
+
+
 # CLASS DEFINITION
 
 class GenRedo(MainredoClass):
@@ -1322,6 +1336,7 @@ class GenRedo(MainredoClass):
                             else:
                                 regr_1.y_hat = X_ts
                                 #
+                            regr_1.y_hat = smooth_legendre(y_dep, regr_1.y_hat, dsta[y_dep])
                             regr_1.y_hat = pd.Series(regr_1.y_hat, index=dsta_nulls[x_fld].index).copy() if (len(regr_1.y_hat) > 0) else pd.Series().copy()
                             X_tr = pd.to_datetime(X_tr * dv10, unit="s")
                             X_ts = pd.to_datetime(X_ts * dv10, unit="s")
