@@ -1333,10 +1333,10 @@ class GenRedo(MainredoClass):
                             if (len(X_ts) > 0):
                                 regr_1.y_hat = np.zeros(X_ts.size)
                                 for w in range(degree): regr_1.y_hat += regr_1.theta[w]*eval_legendre(w, X_ts)
+                                regr_1.y_hat = smooth_legendre(y_dep, regr_1.y_hat, dsta[y_dep])
                             else:
                                 regr_1.y_hat = X_ts
                                 #
-                            regr_1.y_hat = smooth_legendre(y_dep, regr_1.y_hat, dsta[y_dep])
                             regr_1.y_hat = pd.Series(regr_1.y_hat, index=dsta_nulls[x_fld].index).copy() if (len(regr_1.y_hat) > 0) else pd.Series().copy()
                             X_tr = pd.to_datetime(X_tr * dv10, unit="s")
                             X_ts = pd.to_datetime(X_ts * dv10, unit="s")
