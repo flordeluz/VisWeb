@@ -691,15 +691,15 @@ export default {
 	    
 	    var last_madepath = "";
 	    for (var madepath in itpath) {
-		if (this.graph.getNodeAttribute(itpath[madepath], 'color') == this.GREEN) {
+		if (this.graph.getNodeAttribute(itpath[madepath], 'color') == this.GREEN || this.graph.getNodeAttribute(itpath[madepath], 'color') == this.LIGHTBLUE) {
 		    this.graph.setNodeAttribute(itpath[madepath], 'color', this.LIGHTBLUE);
-		    if (this.graph.areNeighbors(itpath[madepath], "Data Quality") && this.graph.getNodeAttribute("Data Quality", 'color') == this.GREEN) {
+		    if (this.graph.areNeighbors(itpath[madepath], "Data Quality") && (this.graph.getNodeAttribute("Data Quality", 'color') == this.GREEN || this.graph.getNodeAttribute("Data Quality", 'color') == this.ORANGE)) {
 			this.graph.setNodeAttribute("Data Quality", 'color', this.LIGHTBLUE);
 		    }
-		    if (this.graph.areNeighbors(itpath[madepath], "Data Reduction") && this.graph.getNodeAttribute("Data Reduction", 'color') == this.GREEN) {
+		    if (this.graph.areNeighbors(itpath[madepath], "Data Reduction") && (this.graph.getNodeAttribute("Data Reduction", 'color') == this.GREEN || this.graph.getNodeAttribute("Data Reduction", 'color') == this.ORANGE)) {
 			this.graph.setNodeAttribute("Data Reduction", 'color', this.LIGHTBLUE);
 		    }
-		    if (this.graph.areNeighbors(itpath[madepath], "Variables Behavior") && this.graph.getNodeAttribute("Variables Behavior", 'color') == this.GREEN) {
+		    if (this.graph.areNeighbors(itpath[madepath], "Variables Behavior") && (this.graph.getNodeAttribute("Variables Behavior", 'color') == this.GREEN || this.graph.getNodeAttribute("Variables Behavior", 'color') == this.ORANGE)) {
 			this.graph.setNodeAttribute("Variables Behavior", 'color', this.LIGHTBLUE);
 		    }
 		    if (last_madepath !== "") {
@@ -711,15 +711,24 @@ export default {
 			if (this.graph.hasEdge(itpath[madepath], "Data Quality")) {
 			    this.graph.setEdgeAttribute(itpath[madepath], "Data Quality", 'color', this.LIGHTBLUE);
 			}
+			if (this.graph.hasEdge("Data Quality", itpath[madepath])) {
+			    this.graph.setEdgeAttribute("Data Quality", itpath[madepath], 'color', this.LIGHTBLUE);
+			}
 		    }
 		    if (this.graph.getNodeAttribute("Data Reduction", 'color') == this.LIGHTBLUE) {
 			if (this.graph.hasEdge(itpath[madepath], "Data Reduction")) {
 			    this.graph.setEdgeAttribute(itpath[madepath], "Data Reduction", 'color', this.LIGHTBLUE);
 			}
+			if (this.graph.hasEdge("Data Reduction", itpath[madepath])) {
+			    this.graph.setEdgeAttribute("Data Reduction", itpath[madepath], 'color', this.LIGHTBLUE);
+			}
 		    }
 		    if (this.graph.getNodeAttribute("Variables Behavior", 'color') == this.LIGHTBLUE) {
 			if (this.graph.hasEdge(itpath[madepath], "Variables Behavior")) {
 			    this.graph.setEdgeAttribute(itpath[madepath], "Variables Behavior", 'color', this.LIGHTBLUE);
+			}
+			if (this.graph.hasEdge("Variables Behavior", itpath[madepath])) {
+			    this.graph.setEdgeAttribute("Variables Behavior", itpath[madepath], 'color', this.LIGHTBLUE);
 			}
 		    }
 		    last_madepath = itpath[madepath];
