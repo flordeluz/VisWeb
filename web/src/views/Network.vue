@@ -19,6 +19,9 @@
     </v-col>
     <v-col cols="12">
       <div v-html="rawcontainer"></div>
+      <div class="tooltip" v-if="tooltipVisible">
+	{{ tooltipText }}
+      </div>
     </v-col>
     <v-col cols="1">
       <!-- noop -->
@@ -296,7 +299,148 @@ export default {
 		}
 	    }
 	},
-	ACTVBY: []
+	ACTVBY: [],
+	guide: [
+	    {
+		ref: "Data Quality",
+		text: "Ensuring data is accurate, complete, and reliable for analysis and decision-making."
+	    },
+	    {
+		ref: "Cleaning",
+		text: "The process of removing or correcting inaccurate, corrupted, or incomplete data."
+	    },
+	    {
+		ref: "Nulls treatment",
+		text: "Handling missing values in a dataset using methods like imputation or deletion."
+	    },
+	    {
+		ref: "Rolling Mean",
+		text: "A technique to smooth out short-term fluctuations and highlight trends over time."
+	    },
+	    {
+		ref: "Decision Tree",
+		text: "A supervised learning model used for classification and regression tasks."
+	    },
+	    {
+		ref: "Stochastic Gradient",
+		text: "An optimization method that updates model parameters using a randomly selected subset of data."
+	    },
+	    {
+		ref: "Locally Weighted",
+		text: "A non-parametric regression method that uses nearby points for making predictions."
+	    },
+	    {
+		ref: "Random Forest",
+		text: "An ensemble learning method using multiple decision trees to improve accuracy."
+	    },
+	    {
+		ref: "Legendre",
+		text: "A type of polynomial used in approximation and solving differential equations."
+	    },
+	    {
+		ref: "kNN",
+		text: "A non-parametric algorithm that classifies data based on the closest training examples."
+	    },
+	    {
+		ref: "Outliers",
+		text: "Data points that significantly differ from the rest of the dataset."
+	    },
+	    {
+		ref: "Interquartile Range",
+		text: "A measure of statistical dispersion, calculated as the difference between the upper and lower quartiles."
+	    },
+	    {
+		ref: "Z-Score",
+		text: "A statistical measure that describes a value's relationship to the mean of a group of values."
+	    },
+	    {
+		ref: "Normalization",
+		text: "The process of scaling data to fit within a specific range, usually [0, 1]."
+	    },
+	    {
+		ref: "Standard",
+		text: "Scaling data to have a mean of 0 and a standard deviation of 1."
+	    },
+	    {
+		ref: "MinMax",
+		text: "A normalization technique that scales data to a fixed range, typically [0, 1]."
+	    },
+	    {
+		ref: "Robust",
+		text: "A scaling method that uses the median and the interquartile range to scale features."
+	    },
+	    {
+		ref: "MaxAbs",
+		text: "A scaling method that scales each feature by its maximum absolute value."
+	    },
+	    {
+		ref: "Transformations",
+		text: "Techniques to convert data into a suitable format or scale for analysis."
+	    },
+	    {
+		ref: "Differencing",
+		text: "A technique used to remove trends or seasonality in time series data."
+	    },
+	    {
+		ref: "Logarithm",
+		text: "A transformation that helps to reduce skewness in data."
+	    },
+	    {
+		ref: "Quadratic",
+		text: "A transformation involving squaring data values to capture non-linear relationships."
+	    },
+	    {
+		ref: "Square Root",
+		text: "A transformation that helps to reduce skewness and variance in data."
+	    },
+	    {
+		ref: "Linear",
+		text: "A basic transformation where data is scaled linearly without any change in shape."
+	    },
+	    {
+		ref: "Data Reduction",
+		text: "Techniques to reduce the amount of data while retaining its essential information."
+	    },
+	    {
+		ref: "Dimensionality Reduction",
+		text: "The process of reducing the number of random variables under consideration."
+	    },
+	    {
+		ref: "PCA Alternatives",
+		text: "Techniques like ICA or t-SNE used as alternatives to Principal Component Analysis."
+	    },
+	    {
+		ref: "Factor Analysis",
+		text: "A statistical method used to describe variability among observed variables in terms of fewer unobserved variables."
+	    },
+	    {
+		ref: "Variables Behavior",
+		text: "Analyzing how different variables interact and change in response to each other."
+	    },
+	    {
+		ref: "Decomposition Analysis",
+		text: "Breaking down time series data into trend, seasonality, and residual components."
+	    },
+	    {
+		ref: "Trend",
+		text: "The long-term movement or direction in time series data."
+	    },
+	    {
+		ref: "Seasonality",
+		text: "Recurring patterns or cycles in data at regular intervals over time."
+	    },
+	    {
+		ref: "Cyclicity",
+		text: "Fluctuations in data with a regular periodicity longer than a year."
+	    },
+	    {
+		ref: "Noise",
+		text: "Random variability in data that cannot be attributed to any known cause."
+	    }
+	],
+	currentGuide: -1,
+	tooltipVisible: false,
+	tooltipText: ''	
     }),
     methods: {
 	async execActivity(event, itemType, item) {
@@ -562,7 +706,7 @@ export default {
 	    this.graph.addNode("Variables Behavior", { x: 90, y: 0, size: this.PROCSZ, label: "Variables Behavior", forceLabel: true, type: "gradient", color: this.PROCCO["Variables Behavior"] });
 	    
 	    // Node subprocesses
-	    this.graph.addNode("Clean", { x: -110, y: 86, size: this.SUBPSZ, label: "Cleanning", forceLabel: true, type: "gradient", color: this.SUBPCO["Data Quality"]["Clean"] });
+	    this.graph.addNode("Clean", { x: -110, y: 86, size: this.SUBPSZ, label: "Cleaning", forceLabel: true, type: "gradient", color: this.SUBPCO["Data Quality"]["Clean"] });
 	    
 	    this.graph.addNode("Nulls", { x: -40, y: 130, size: this.SUBPSZ, label: "Nulls", forceLabel: true, type: "gradient", color: this.SUBPCO["Data Quality"]["Nulls"] });
 	    this.graph.addNode("Rolling Mean", { x: 40, y: 112, size: this.ACTVSZ, label: "Rolling Mean", forceLabel: true, path: "clean/rm", type: "gradient", color: this.ACTVCO["Data Quality"]["Nulls"]["Rolling Mean"] });
@@ -758,12 +902,76 @@ export default {
 	    //* setTimeout(() => {this.layout.stop();}, 4000);
 	    
 	    this.renderer.on("clickNode", ({ node }) => this.execActivity("clickNode", "node", node));
+	    this.renderer.on("enterNode", ({ node }) => this.showGuide("enterNode", "node", node));
+	    this.renderer.on("leaveNode", ({ node }) => this.hideGuide("leaveNode", "node", node));
 	    
 	    onStoryDown(() => {
 		//* this.layout.kill();
 		this.renderer.kill();
 	    });
-	}	    
+	},
+	async showGuide(event, itemType, item) {
+	    this.currentGuide = -1;
+	    if (event === "enterNode") {
+		let label;
+		if (item && itemType) {
+		    if (itemType === "node") {
+			label = this.graph.getNodeAttribute(item, "label");
+			switch(label) {
+			case "Data Quality": this.currentGuide = 0; break;
+			case "Cleaning": this.currentGuide = 1; break;
+			case "Nulls": this.currentGuide = 2; break;
+			case "Rolling Mean": this.currentGuide = 3; break;
+			case "Decision Tree": this.currentGuide = 4; break;
+			case "Stochastic Gradient": this.currentGuide = 5; break;
+			case "Locally Weighted": this.currentGuide = 6; break;
+			case "Random Forest": this.currentGuide = 7; break;
+			case "Legendre": this.currentGuide = 8; break;
+			case "KNN": this.currentGuide = 9; break;
+			case "Outliers": this.currentGuide = 10; break;
+			case "Interquartile Range": this.currentGuide = 11; break;
+			case "Z-Score": this.currentGuide = 12; break;
+			case "Normalization": this.currentGuide = 13; break;
+			case "Standard": this.currentGuide = 14; break;
+			case "MinMax": this.currentGuide = 15; break;
+			case "Robust": this.currentGuide = 16; break;
+			case "MaxAbs": this.currentGuide = 17; break;
+			case "Transformation": this.currentGuide = 18; break;
+			case "Differencing": this.currentGuide = 19; break;
+			case "Logarithm": this.currentGuide = 20; break;
+			case "Quadratic": this.currentGuide = 21; break;
+			case "Square Root": this.currentGuide = 22; break;
+			case "Linear": this.currentGuide = 23; break;
+			case "Data Reduction": this.currentGuide = 24; break;
+			case "Dim. Reduction": this.currentGuide = 25; break;
+			case "PCA Alternatives": this.currentGuide = 26; break;
+			case "Factor Analysis": this.currentGuide = 27; break;
+			case "Variables Behavior": this.currentGuide = 28; break;
+			case "Analysis": this.currentGuide = 29; break;
+			case "Trend": this.currentGuide = 30; break;
+			case "Seasonality": this.currentGuide = 31; break;
+			case "Cyclicity": this.currentGuide = 32; break;
+			case "Noise": this.currentGuide = 33; break;
+			default: this.currentGuide = -1;
+			}
+		    }
+		}
+	    }
+	    if (this.currentGuide >= 0) {
+		// this.$refs.guide.open(this.$refs[this.guide[this.currentGuide].ref]);
+		this.tooltipText = this.guide[this.currentGuide].text;
+		this.tooltipVisible = true;
+	    }
+	    console.log("[", event, "]:", itemType, this.graph.getNodeAttribute(item, "label"), this.currentGuide);
+	},
+	async hideGuide(event, itemType, item) {
+	    if (this.currentGuide >= 0) {
+		// this.$refs.guide.close();
+		this.tooltipVisible = false;
+		this.tooltipText = '';
+	    }
+	    console.log("[", event, "]:", itemType, this.graph.getNodeAttribute(item, "label"), this.currentGuide);
+	}
     },
     computed: {
 	// end_year: function() {
@@ -869,5 +1077,22 @@ div.load-layer {
 }
 .loader {
     top: 20%;
+}
+.tooltip {
+  position: absolute;
+  bottom: 0%;
+  left: 80%;
+  /* position: fixed; */
+  /* bottom: 10px; */
+  /* right: 10px; */
+  transform: translateX(-50%);
+  padding: 10px;
+  background-color: #333;
+  color: white;
+  border-radius: 5px;
+  white-space: nowrap;
+  visibility: visible;
+  opacity: 0.9;
+  transition: opacity 0.2s;
 }
 </style>

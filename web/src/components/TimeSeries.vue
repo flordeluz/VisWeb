@@ -187,21 +187,21 @@ export default {
 	legends: [],
 	loading_data: true,
 	showSpiral: false,
-	guide: [
-	    {
-		ref: "timeChart",
-		text: "Here you can navigate across all the temporal series. <br /> Select a range on the chart to zoom in, use the controls on the top-right side to pan over the chart or to zoom out."
-	    },
-	    {
-		ref: "macroTaskContainer",
-		text: "This is the diagram of macroTask you can use. <br /> "
-	    },
-	    {
-		ref: "currentOperation",
-		text: "Here you can see the current operation that you choose. First you can open a MacroTask and then select an operator."
-	    }
-	],
-	currentGuide: 0
+	// guide: [
+	//     {
+	// 	ref: "timeChart",
+	// 	text: "Here you can navigate across all the temporal series. <br /> Select a range on the chart to zoom in, use the controls on the top-right side to pan over the chart or to zoom out."
+	//     },
+	//     {
+	// 	ref: "macroTaskContainer",
+	// 	text: "This is the diagram of macroTask you can use. <br /> "
+	//     },
+	//     {
+	// 	ref: "currentOperation",
+	// 	text: "Here you can see the current operation that you choose. First you can open a MacroTask and then select an operator."
+	//     }
+	// ],
+	// currentGuide: 0
     }),
     //props: ["dataset", "station", "recommendations"],
     props: [],
