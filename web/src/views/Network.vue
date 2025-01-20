@@ -18,6 +18,23 @@
       <!-- noop -->
     </v-col>
     <v-col cols="12">
+      <div class="legend-tooltip" v-if="legendVisible">
+	<div class="legend-item">
+          <span class="dot redlg"></span> Pending activities
+	</div>
+	<div class="legend-item">
+          <span class="dot bluelg"></span> Applied activities
+	</div>
+	<div class="legend-item">
+          <span class="dot graylg"></span> Not ready yet due to pending
+	</div>
+	<div class="legend-item">
+          <span class="dot greenlg"></span> No more actions needed
+	</div>
+	<div class="legend-item">
+          <span class="dot orangelg"></span> Optional activities
+	</div>
+      </div>      
       <div v-html="rawcontainer"></div>
       <div class="tooltip" v-if="tooltipVisible">
 	{{ tooltipText }}
@@ -440,7 +457,8 @@ export default {
 	],
 	currentGuide: -1,
 	tooltipVisible: false,
-	tooltipText: ''	
+	tooltipText: '',
+	legendVisible: true
     }),
     methods: {
 	async execActivity(event, itemType, item) {
@@ -1095,4 +1113,34 @@ div.load-layer {
   opacity: 0.9;
   transition: opacity 0.2s;
 }
+.legend-tooltip {
+  position: absolute;
+  top: 0%;
+  right: 0%;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+.legend-item:last-child {
+  margin-bottom: 0;
+}
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 10px;
+}
+.redlg { background-color: red; }
+.bluelg { background-color: lightblue; }
+.graylg { background-color: lightgray; }
+.greenlg { background-color: lightgreen; }
+.orangelg { background-color: orange; }
 </style>
