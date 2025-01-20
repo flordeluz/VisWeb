@@ -97,6 +97,15 @@
       <div v-html="vtrend"></div>
     </v-card>
   </v-dialog>
+  <v-dialog v-model="noisdl" width="800">
+    <v-card mt="4">
+      <v-card-title class="headline grey lighten-2">
+        Noise
+      </v-card-title>
+      <!-- <v-img :src="noisim" :height="noishg" :width="noiswd"></v-img> -->
+      <div v-html="vnoise"></div>
+    </v-card>
+  </v-dialog>
 </v-container>
 </template>
 
@@ -143,6 +152,11 @@ export default {
 	// trenhg: 500,
 	// trenwd: 300,
 	vtrend: '<img src="data:image/png;base64,' + vcteicon + '">',
+	noisdl: false,
+	// noisim: "",
+	// noishg: 500,
+	// noiswd: 300,
+	vnoise: '<img src="data:image/png;base64,' + vcteicon + '">',
 	n_comp: "",
 	factor: 1,
 	main_operation: "",
@@ -259,7 +273,8 @@ export default {
 		"Analysis": {
 		    "Trend": "#767686",
 		    "Seasonality": "#767686",
-		    "Cyclicity": "#767686"
+		    "Cyclicity": "#767686",
+		    "Noise": "#767686"
 		}
 	    }
 	},
@@ -312,7 +327,8 @@ export default {
 		"Analysis": {
 		    "Trend": 311,
 		    "Seasonality": 312,
-		    "Cyclicity": 313
+		    "Cyclicity": 313,
+		    "Noise": 314
 		}
 	    }
 	},
@@ -492,6 +508,13 @@ export default {
 			    );
 			    this.vtrend = behavtr.data.trend;
 			    this.trendl = true;
+			} else if (label == "Noise" && (color == this.RED || color == this.ORANGE || color == this.BLUE) && size == this.ACTVSZ) {
+			    let behavns = await axios.get(
+				"http://localhost:8080/behavior/noise/" + this.dataset + "/" + this.station,
+				{ crossdomain: true }
+			    );
+			    this.vnoise = behavns.data.noise;
+			    this.noisdl = true;
 			} else if (label == "Linear" && (color == this.RED || color == this.ORANGE || color == this.BLUE) && size == this.ACTVSZ) {
 			    this.main_operation = "transform";
 			    this.main_path = path; // "transform/linear/";
@@ -757,9 +780,10 @@ export default {
 	    this.graph.addNode("PCA Alternatives", { x: 40, y: -10, size: this.ACTVSZ, label: "PCA Alternatives", forceLabel: true, path: "reduce/manual/" /* + this.n_comp */, type: "gradient", color: this.ACTVCO["Data Reduction"]["DimRed"]["PCA Alternatives"] });
 	    
 	    this.graph.addNode("Analysis", { x: 90, y: 36, size: this.SUBPSZ, label: "Analysis", forceLabel: true, type: "gradient", color: this.SUBPCO["Variables Behavior"]["Analysis"] });
-	    this.graph.addNode("Trend", { x: 110, y: 70, size: this.ACTVSZ, label: "Trend", forceLabel: true, path: "", type: "gradient", color: this.ACTVCO["Variables Behavior"]["Analysis"]["Trend"] });
-	    this.graph.addNode("Cyclicity", { x: 120, y: 50, size: this.ACTVSZ, label: "Cyclicity", forceLabel: true, path: "/spiral", type: "gradient", color: this.ACTVCO["Variables Behavior"]["Analysis"]["Cyclicity"] });
-	    this.graph.addNode("Seasonality", { x: 124, y: 26, size: this.ACTVSZ, label: "Seasonality", forceLabel: true, path: "", type: "gradient", color: this.ACTVCO["Variables Behavior"]["Analysis"]["Seasonality"] });
+	    this.graph.addNode("Trend", { x: 110, y: 68, size: this.ACTVSZ, label: "Trend", forceLabel: true, path: "", type: "gradient", color: this.ACTVCO["Variables Behavior"]["Analysis"]["Trend"] });
+	    this.graph.addNode("Cyclicity", { x: 120, y: 56, size: this.ACTVSZ, label: "Cyclicity", forceLabel: true, path: "/spiral", type: "gradient", color: this.ACTVCO["Variables Behavior"]["Analysis"]["Cyclicity"] });
+	    this.graph.addNode("Seasonality", { x: 124, y: 40, size: this.ACTVSZ, label: "Seasonality", forceLabel: true, path: "", type: "gradient", color: this.ACTVCO["Variables Behavior"]["Analysis"]["Seasonality"] });
+	    this.graph.addNode("Noise", { x: 120, y: 26, size: this.ACTVSZ, label: "Noise", forceLabel: true, path: "", type: "gradient", color: this.ACTVCO["Variables Behavior"]["Analysis"]["Noise"] });
 	    
 	    // Edge processes
 	    // this.graph.addEdge("Data Quality", "Data Reduction", { type: "curve", curvature: 0.4, label: "macrotarea", size: 7, color: this.GREEN });
@@ -827,6 +851,7 @@ export default {
 	    this.graph.addEdge("Analysis", "Trend", { type: "curve", curvature: 0.2, /*label: "microtarea",*/ size: 3, color: this.ACTVCO["Variables Behavior"]["Analysis"]["Trend"] });
 	    this.graph.addEdge("Analysis", "Cyclicity", { type: "curve", curvature: 0.1, /*label: "microtarea",*/ size: 3, color: this.ACTVCO["Variables Behavior"]["Analysis"]["Cyclicity"] });
 	    this.graph.addEdge("Analysis", "Seasonality", { type: "curve", curvature: -0.2, /*label: "microtarea",*/ size: 3, color: this.ACTVCO["Variables Behavior"]["Analysis"]["Seasonality"] });
+	    this.graph.addEdge("Analysis", "Noise", { type: "curve", curvature: -0.2, /*label: "microtarea",*/ size: 3, color: this.ACTVCO["Variables Behavior"]["Analysis"]["Noise"] });
 	    
 	    // Graph borders
 	    this.graph.addNode("Start", { x: -150, y: 66, size: 24, label: "Start", forceLabel: true, type: "gradient", color: this.LIGHTBLUE });
@@ -835,6 +860,7 @@ export default {
 	    this.graph.addEdge("Trend", "End", { type: "curve", curvature: 0.4, /*label: "end",*/ size: 2, color: this.LIGHTBLUE });
 	    this.graph.addEdge("Cyclicity", "End", { type: "curve", curvature: 0.1, /*label: "end",*/ size: 2, color: this.LIGHTBLUE });
 	    this.graph.addEdge("Seasonality", "End", { type: "curve", curvature: -0.2, /*label: "end",*/ size: 2, color: this.LIGHTBLUE });
+	    this.graph.addEdge("Noise", "End", { type: "curve", curvature: -0.2, /*label: "end",*/ size: 2, color: this.LIGHTBLUE });
 	    
 	    // Edge sequences
 	    // this.graph.addEdge("Clean", "Normalize", { type: "curve", label: "sequence", size: 3, color: this.LIGHTBLUE });

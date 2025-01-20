@@ -34,7 +34,7 @@ from AlgoritmosLimpieza import comprobarLimpieza
 from algoritmosNormalizacion import comprobarNormalizacion
 from algoritmosTransformacion import comprobarTransformacion
 from algoritmosReduccion2 import comprobarReduccion, check_dimensionality_reduction_fa
-from algoritmosEstacionalidad import comprobarEstacionalidad, seasonality_detection, trend_detection
+from algoritmosEstacionalidad import comprobarEstacionalidad, seasonality_detection, trend_detection, noise_detection
 from algoritmosCiclicidad2 import comprobarCiclicidad, verificar_ciclo_fft
 from algoritmosEstadisticas import describe_data, null_values_data, addinfo_data, corrmat_data, bivaran_data, boxplot_data
 # -------------------------------
@@ -324,6 +324,18 @@ def get_trend(dataset, station):
     reshtml = trend_detection(full_station_ds, loader.cols_list)
     # print("[ HTML ]:", reshtml)
     return { "trend": str(reshtml) }
+
+
+@route("/behavior/noise/<dataset>/<station>")
+@enable_cors
+def get_noise(dataset, station):
+    response.headers["Content-Type"] = "application/json"
+    global full_station_ds
+    global current_df
+    loader = loaders[dataset]
+    reshtml = noise_detection(full_station_ds, loader.cols_list)
+    # print("[ HTML ]:", reshtml)
+    return { "noise": str(reshtml) }
 
 
 @route("/recommendation/<dataset>/<station>")

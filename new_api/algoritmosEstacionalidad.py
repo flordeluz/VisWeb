@@ -75,6 +75,30 @@ def trend_detection(ds, cols_list):
     return reshtml
 
 
+def noise_detection(ds, cols_list):
+    # reshtml = '<p style="text-align:center"><h5><b>Tendencia</b></h5></p>'
+    reshtml = '';
+    pltid = 1
+    rows = len(cols_list)
+    plt.figure(figsize = (9, 6), dpi = 100)
+    _, ax = plt.subplots(rows, 1)
+    for coln in cols_list:
+        decomp = seasonal_decompose(ds[coln], period=1, model="additive", extrapolate_trend="freq")
+        noise = decomp.resid
+        ax = plt.subplot(rows, 1, pltid)
+        ax.plot(noise, label=coln, marker='.', markersize=1)
+        ax.legend(loc='upper left')
+        pltid += 1
+        #
+    plt.tight_layout()
+    s = io.BytesIO()
+    plt.savefig(s, format="png", bbox_inches="tight")
+    plt.close()
+    s = base64.b64encode(s.getvalue()).decode("utf-8").replace("\n", "")
+    reshtml += '<img src="data:image/png;base64,%s">' % s
+    return reshtml
+
+
 # PERIODICIDAD
 
 # def check_box_pierce(data, alpha = 0.05):
