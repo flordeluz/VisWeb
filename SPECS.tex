@@ -1,4 +1,4 @@
-% Created 2024-10-25 Fri 18:39
+% Created 2025-01-20 Mon 12:17
 % Intended LaTeX compiler: pdflatex
 \documentclass[a4paper]{article}
 \usepackage[utf8]{inputenc}
@@ -32,12 +32,12 @@
 
 
 \section{Introduction}
-\label{sec:org8632fca}
+\label{sec:orgbf0e457}
 
 The project explores, analyzes, and integrates Vue.JS and Python code with different models for clean and data completion.
 
 \section{Goals}
-\label{sec:orgd295d61}
+\label{sec:org070c49d}
 
 \begin{itemize}
 \item Complete the code by integrating different Python models into the software project.
@@ -48,7 +48,7 @@ The project explores, analyzes, and integrates Vue.JS and Python code with diffe
 \end{itemize}
 
 \section{State of the art}
-\label{sec:org968c012}
+\label{sec:org1e20276}
 
 \begin{itemize}
 \item Source code of the project(1), with documentation to install and deploy the software. The software currently reads data and graphs time series. It has options for data completion through rolling mean and kNN and partially cleaning data alternatives. It tracks for changes while navigating through the Diagram Operator interface graphically. Integrates Radial Chart for time series cycles.
@@ -57,10 +57,10 @@ The project explores, analyzes, and integrates Vue.JS and Python code with diffe
 \end{itemize}
 
 \section{Pre-implementation analysis}
-\label{sec:org9b9843d}
+\label{sec:org2e2a6ca}
 
 \subsection{Multilayer design}
-\label{sec:org2f83846}
+\label{sec:orgd3d8ba1}
 
 The critical aspects of the software are:
 
@@ -79,7 +79,7 @@ The critical aspects of the software are:
 \end{itemize}
 
 \subsection{Frontend specifics}
-\label{sec:org00a8154}
+\label{sec:orge13ab10}
 
 \sffamily \footnotesize
 \begin{center}
@@ -88,7 +88,7 @@ The critical aspects of the software are:
 \rmfamily \normalsize
 
 \subsection{Backend specifics}
-\label{sec:orgfe7f394}
+\label{sec:orga76c842}
 
 \sffamily \footnotesize
 \begin{center}
@@ -97,7 +97,7 @@ The critical aspects of the software are:
 \rmfamily \normalsize
 
 \subsection{Detected issues}
-\label{sec:orgfc84ea2}
+\label{sec:orgc183c84}
 
 \begin{itemize}
 \item Data structures. It requires adapting the current data structures of the program to the new dictionary of the tested and trained models.
@@ -107,11 +107,11 @@ The critical aspects of the software are:
 \item The Radial Diagram component \footnote{Spiral.vue} hardcode for temperature and precipitation. We will rewrite the code to accept different datasets and features. Additionally, it is currently consuming the old backend\footnote{api/main.py}. The old backend has to be re-implemented in the new backend\footnote{new\textunderscore api/main.py}.
 \end{itemize}
 
-\section{{\bfseries\sffamily TODO} Implementation}
-\label{sec:orgc900ccf}
+\section{{\bfseries\sffamily DONE} Implementation}
+\label{sec:orgbdfa8fb}
 
 \subsection{Activities summary}
-\label{sec:org9f4fdc2}
+\label{sec:orge267063}
 
 \begin{itemize}
 \item Adapt the Backend Data Structure.
@@ -131,10 +131,10 @@ The critical aspects of the software are:
 
 
 \subsection{{\bfseries\sffamily DONE} Activities execution}
-\label{sec:orgaa05662}
+\label{sec:org3861443}
 
 \subsubsection{Change log}
-\label{sec:org9abd103}
+\label{sec:org51e847b}
 
 Tracking changes on the program will be done by using diff to create a patch component that allows the creation of a checkpoint and registering the changes by the size of modify or created code\footnote{Tracking log in the appendix}. The folder structure is:
 
@@ -165,12 +165,12 @@ drwx & VisWeb-AlgoritmosLimpieza & Development Folder\\[0pt]
 \rmfamily
 
 \subsubsection{Backlog}
-\label{sec:org9331829}
+\label{sec:orgbd39370}
 
 The pending activities are in the appendix backlog section. These activities correspond to changes or reviews that depend on multiple program files around the software, and their resolutions will come on the project's timeline. Bugs will gradually fixed.
 
 \subsubsection{{\bfseries\sffamily DONE} Backend data structures}
-\label{sec:org40f130d}
+\label{sec:orgec8232e}
 
 Programs adaptation in the new\textunderscore api.
 
@@ -213,11 +213,11 @@ Programs adaptation in the new\textunderscore api.
 \rmfamily \normalsize
 
 \subsubsection{{\bfseries\sffamily DONE} Backend new specifications}
-\label{sec:org01db8bb}
+\label{sec:orgba18b6b}
 
 \begin{enumerate}
 \item {\bfseries\sffamily DONE} Classes and modules
-\label{sec:org9239d78}
+\label{sec:org0adfa3f}
 
 \sffamily \footnotesize
 \begin{center}
@@ -226,7 +226,7 @@ Programs adaptation in the new\textunderscore api.
 \rmfamily \normalsize
 
 \item {\bfseries\sffamily DONE} Sequence diagram
-\label{sec:org30f5025}
+\label{sec:org0b33c14}
 
 \sffamily \scriptsize
 \begin{center}
@@ -236,7 +236,7 @@ Programs adaptation in the new\textunderscore api.
 \end{enumerate}
 
 \subsubsection{{\bfseries\sffamily DONE} Backend new data structure and frontend integration}
-\label{sec:org56259a1}
+\label{sec:orgad37f7f}
 
 The initial state of the front end had two APIs. All the methods to grab data were migrated and transformed in the new API, leaving just one centralized processing Python API.
 
@@ -249,15 +249,15 @@ The main structure of the front end has not changed too much. The most relevant 
 \rmfamily \normalsize
 
 \subsubsection{Data repository and cache}
-\label{sec:org716afb7}
+\label{sec:orgc989999}
 
 The backend will support dataset uploading. The structure has been defined on folders as an ID inside a .data repository. It will allow us to keep the data treatment progress in folders with the same ID inside a .cache repository.
 
 \section{{\bfseries\sffamily DONE} Requirements}
-\label{sec:org96af9e7}
+\label{sec:orgc7f662d}
 
 \subsection{{\bfseries\sffamily DONE} Software}
-\label{sec:orge4c626a}
+\label{sec:org5ff3526}
 
 \begin{itemize}
 \item Python 3.12.7
@@ -270,7 +270,7 @@ The backend will support dataset uploading. The structure has been defined on fo
 \end{itemize}
 
 \subsection{{\bfseries\sffamily DONE} Hardware}
-\label{sec:orgc696c49}
+\label{sec:orgd7a4c00}
 
 \begin{itemize}
 \item Processor AMD64 or x86\textsubscript{64} architecture
@@ -284,22 +284,22 @@ The backend will support dataset uploading. The structure has been defined on fo
 \item GPU (Optional)
 \end{itemize}
 
-\section{{\bfseries\sffamily TODO} Visual Analytics Guidance Development}
-\label{sec:org303e1f4}
+\section{{\bfseries\sffamily DONE} Visual Analytics Guidance Development}
+\label{sec:org193f3a2}
 
-\subsection{{\bfseries\sffamily TODO} Spiral diagram analysis improvement}
-\label{sec:org0b7e9c2}
+\subsection{{\bfseries\sffamily DONE} Spiral diagram analysis improvement}
+\label{sec:orgbc6b07e}
 
 \begin{itemize}
 \item Compute segments and timespan for the Spiral. \textbf{Done}.
 
 \item Multiple time series integration. \textbf{Done}.
 
-\item Fix polygon coordinates when there are more than three dimensions. \textbf{In progress}.
+\item Fix polygon coordinates when there are more than three dimensions. \textbf{Done}.
 \end{itemize}
 
 \subsection{{\bfseries\sffamily DONE} Independent section for statistics}
-\label{sec:org5d524c3}
+\label{sec:org6dc04ce}
 
 \begin{itemize}
 \item Statistics of the time series (size, nulls, type of columns, or dimensions). \textbf{Done}.
@@ -312,7 +312,7 @@ The backend will support dataset uploading. The structure has been defined on fo
 \end{itemize}
 
 \subsection{{\bfseries\sffamily DONE} Flow diagram improvement}
-\label{sec:org9c35cec}
+\label{sec:org4493262}
 
 \begin{itemize}
 \item Data cleaning, Normalization and transformation, and Time-series behavior. \textbf{Done}.
@@ -323,7 +323,7 @@ The backend will support dataset uploading. The structure has been defined on fo
 \end{itemize}
 
 \section{{\bfseries\sffamily DONE} Format Multivariate Time Series Data}
-\label{sec:org19201fd}
+\label{sec:org85d2e4e}
 
 The program makes data preprocessing by inspecting data and giving recommendations through a hierarchical network graph navigation (3). The steps (5) related to this are:
 
@@ -346,7 +346,7 @@ The program makes data preprocessing by inspecting data and giving recommendatio
 \end{itemize}
 
 \section{References}
-\label{sec:orgac38a31}
+\label{sec:org811fad0}
 
 \begin{enumerate}
 \item \url{https://github.com/flordeluz/VisWeb}
@@ -358,10 +358,10 @@ The program makes data preprocessing by inspecting data and giving recommendatio
 
 \clearpage
 \section{Appendix}
-\label{sec:org6a64641}
+\label{sec:org94dba83}
 
 \subsection{Time Estimation Plan}
-\label{sec:org25174d6}
+\label{sec:org438a8aa}
 
 \begin{itemize}
 \item 2 months +4 backup weeks
@@ -395,7 +395,7 @@ The program makes data preprocessing by inspecting data and giving recommendatio
 \end{itemize}
 
 \subsection{Testing functions}
-\label{sec:orgc8d9623}
+\label{sec:orgd6520ae}
 
 \sffamily
 \begin{longtable}{ll}
@@ -509,7 +509,7 @@ algoritmosCiclicidad2 & detecta\textunderscore ciclo(Series, float): bool\\[0pt]
 \rmfamily
 
 \subsection{Change Log}
-\label{sec:org7572ff1}
+\label{sec:org8013106}
 
 \sffamily
 \begin{longtable}{lrlrrl}
@@ -554,11 +554,13 @@ algoritmosCiclicidad2 & detecta\textunderscore ciclo(Series, float): bool\\[0pt]
 -rw-r--r-- & 46989 & Jul & 9 & 01:33 & 20240709-013313.diff\\[0pt]
 -rw-r--r-- & 96392 & Jul & 12 & 01:51 & 20240712-015153.diff\\[0pt]
 -rw-r--r-- & 231634 & Jul & 17 & 01:38 & 20240717-013822.diff\\[0pt]
+-rw-rw-r-- & 1025353 & Jan & 5 & 16:25 & 20250105-162546.diff\\[0pt]
+-rw-rw-r-- & 52880 & Jan & 20 & 12:08 & 20250120-120815.diff\\[0pt]
 \end{longtable}
 \rmfamily
 
 \subsection{Backlog}
-\label{sec:orgf8fbf3a}
+\label{sec:org59ffa2d}
 
 \sffamily
 \begin{longtable}{ll}

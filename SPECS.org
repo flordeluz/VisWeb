@@ -62,7 +62,7 @@ The critical aspects of the software are:
 
 - The Radial Diagram component [fn:3:Spiral.vue] hardcode for temperature and precipitation. We will rewrite the code to accept different datasets and features. Additionally, it is currently consuming the old backend[fn:4:api/main.py]. The old backend has to be re-implemented in the new backend[fn:5:new\textunderscore api/main.py].  
 
-* TODO Implementation
+* DONE Implementation
 
 ** Activities summary
 
@@ -187,15 +187,15 @@ The backend will support dataset uploading. The structure has been defined on fo
 
 - GPU (Optional)
 
-* TODO Visual Analytics Guidance Development
+* DONE Visual Analytics Guidance Development
 
-** TODO Spiral diagram analysis improvement
+** DONE Spiral diagram analysis improvement
 
 - Compute segments and timespan for the Spiral. *Done*.
 
 - Multiple time series integration. *Done*.
 
-- Fix polygon coordinates when there are more than three dimensions. *In progress*.
+- Fix polygon coordinates when there are more than three dimensions. *Done*.
 
 ** DONE Independent section for statistics
 
@@ -367,33 +367,35 @@ The program makes data preprocessing by inspecting data and giving recommendatio
 \sffamily
 #+ATTR_LATEX: :mode table :environment longtable :booktabs
 #+CAPTION: List of patches by timestamp
-| *A*        | *Size* | *M* | *D* |   *H* | *Patch*              |
-|------------+--------+-----+-----+-------+----------------------|
-| -rw-r--r-- | 918794 | May |  22 | 01:38 | 20240522-013818.diff |
-| -rw-r--r-- |  32116 | May |  24 | 01:39 | 20240524-013931.diff |
-| -rw-r--r-- |  55590 | May |  24 | 18:17 | 20240524-181739.diff |
-| -rw-r--r-- |  40553 | May |  27 | 01:09 | 20240527-010932.diff |
-| -rw-r--r-- |  64068 | May |  28 | 01:45 | 20240528-014458.diff |
-| -rw-r--r-- | 160383 | Jun |   2 | 03:04 | 20240602-030410.diff |
-| -rw-r--r-- | 110627 | Jun |   4 | 02:45 | 20240604-024500.diff |
-| -rw-r--r-- |  63591 | Jun |   5 | 00:46 | 20240605-004621.diff |
-| -rw-r--r-- |  68193 | Jun |   6 | 02:31 | 20240606-023122.diff |
-| -rw-r--r-- |  33434 | Jun |   7 | 03:04 | 20240607-030453.diff |
-| -rw-r--r-- |  91512 | Jun |   8 | 01:59 | 20240608-015902.diff |
-| -rw-r--r-- |  76847 | Jun |  10 | 18:28 | 20240610-182855.diff |
-| -rw-r--r-- |  78312 | Jun |  16 | 01:54 | 20240616-015442.diff |
-| -rw-r--r-- |  24940 | Jun |  17 | 02:10 | 20240617-021030.diff |
-| -rw-r--r-- |  73776 | Jun |  18 | 01:05 | 20240618-010542.diff |
-| -rw-r--r-- |  27856 | Jun |  18 | 10:28 | 20240618-102832.diff |
-| -rw-r--r-- | 138469 | Jun |  25 | 02:45 | 20240625-024532.diff |
-| -rw-r--r-- |  65443 | Jun |  26 | 02:59 | 20240626-025901.diff |
-| -rw-r--r-- |  56919 | Jun |  27 | 00:56 | 20240627-005611.diff |
-| -rw-r--r-- |  24307 | Jul |   1 | 00:37 | 20240701-003738.diff |
-| -rw-r--r-- |  30011 | Jul |   3 | 16:51 | 20240703-165116.diff |
-| -rw-r--r-- |  91786 | Jul |   7 | 01:55 | 20240707-015505.diff |
-| -rw-r--r-- |  46989 | Jul |   9 | 01:33 | 20240709-013313.diff |
-| -rw-r--r-- |  96392 | Jul |  12 | 01:51 | 20240712-015153.diff |
-| -rw-r--r-- | 231634 | Jul |  17 | 01:38 | 20240717-013822.diff |
+| *A*        |  *Size* | *M* | *D* |   *H* | *Patch*              |
+|------------+---------+-----+-----+-------+----------------------|
+| -rw-r--r-- |  918794 | May |  22 | 01:38 | 20240522-013818.diff |
+| -rw-r--r-- |   32116 | May |  24 | 01:39 | 20240524-013931.diff |
+| -rw-r--r-- |   55590 | May |  24 | 18:17 | 20240524-181739.diff |
+| -rw-r--r-- |   40553 | May |  27 | 01:09 | 20240527-010932.diff |
+| -rw-r--r-- |   64068 | May |  28 | 01:45 | 20240528-014458.diff |
+| -rw-r--r-- |  160383 | Jun |   2 | 03:04 | 20240602-030410.diff |
+| -rw-r--r-- |  110627 | Jun |   4 | 02:45 | 20240604-024500.diff |
+| -rw-r--r-- |   63591 | Jun |   5 | 00:46 | 20240605-004621.diff |
+| -rw-r--r-- |   68193 | Jun |   6 | 02:31 | 20240606-023122.diff |
+| -rw-r--r-- |   33434 | Jun |   7 | 03:04 | 20240607-030453.diff |
+| -rw-r--r-- |   91512 | Jun |   8 | 01:59 | 20240608-015902.diff |
+| -rw-r--r-- |   76847 | Jun |  10 | 18:28 | 20240610-182855.diff |
+| -rw-r--r-- |   78312 | Jun |  16 | 01:54 | 20240616-015442.diff |
+| -rw-r--r-- |   24940 | Jun |  17 | 02:10 | 20240617-021030.diff |
+| -rw-r--r-- |   73776 | Jun |  18 | 01:05 | 20240618-010542.diff |
+| -rw-r--r-- |   27856 | Jun |  18 | 10:28 | 20240618-102832.diff |
+| -rw-r--r-- |  138469 | Jun |  25 | 02:45 | 20240625-024532.diff |
+| -rw-r--r-- |   65443 | Jun |  26 | 02:59 | 20240626-025901.diff |
+| -rw-r--r-- |   56919 | Jun |  27 | 00:56 | 20240627-005611.diff |
+| -rw-r--r-- |   24307 | Jul |   1 | 00:37 | 20240701-003738.diff |
+| -rw-r--r-- |   30011 | Jul |   3 | 16:51 | 20240703-165116.diff |
+| -rw-r--r-- |   91786 | Jul |   7 | 01:55 | 20240707-015505.diff |
+| -rw-r--r-- |   46989 | Jul |   9 | 01:33 | 20240709-013313.diff |
+| -rw-r--r-- |   96392 | Jul |  12 | 01:51 | 20240712-015153.diff |
+| -rw-r--r-- |  231634 | Jul |  17 | 01:38 | 20240717-013822.diff |
+| -rw-rw-r-- | 1025353 | Jan |   5 | 16:25 | 20250105-162546.diff |
+| -rw-rw-r-- |   52880 | Jan |  20 | 12:08 | 20250120-120815.diff |
 \rmfamily
 
 ** Backlog
