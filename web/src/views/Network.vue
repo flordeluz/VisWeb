@@ -258,7 +258,7 @@ export default {
 	    "Data Reduction": {
 		"DimRed": {
 		    "Factor Analysis": "#767686",
-		    "PCA Alternatives": "#767686"
+		    "PCA and correlation": "#767686"
 		}
 	    },
 	    // "Variables Behavior": {
@@ -312,7 +312,7 @@ export default {
 	    "Data Reduction": {
 		"DimRed": {
 		    "Factor Analysis": 211,
-		    "PCA Alternatives": 212
+		    "PCA and correlation": 212
 		}
 	    },
 	    // "Variables Behavior": {
@@ -439,8 +439,8 @@ export default {
 		text: "The process of reducing the number of random variables under consideration."
 	    },
 	    {
-		ref: "PCA Alternatives",
-		text: "Techniques like ICA or t-SNE used as alternatives to Principal Component Analysis."
+		ref: "PCA and correlation",
+		text: "It involves using the correlation with PCA to reduce dimensionality while accounting for variable relationships."
 	    },
 	    {
 		ref: "Factor Analysis",
@@ -519,7 +519,7 @@ export default {
 			    this.main_operation = "transform";
 			    this.main_path = path; // "transform/linear/";
 			    this.dialog = true;
-			} else if (label == "PCA Alternatives" && (color == this.RED || color == this.ORANGE || color == this.BLUE) && size == this.ACTVSZ) {
+			} else if (label == "PCA and correlation" && (color == this.RED || color == this.ORANGE || color == this.BLUE) && size == this.ACTVSZ) {
 			    this.main_operation = "reduce";
 			    this.main_path = path; // "reduce/manual/";
 			    this.dialog = true;
@@ -591,7 +591,6 @@ export default {
 	    console.log("[ It Recommends ]");
 	    console.log("[ Made Path ]: ", itpath);
 	    for (var process in itrecommends) {
-		// if (process != "Excluded Activities") {
 		console.log("[ Process ]:", process);
 		console.log("[ Subprocesses ]:", itrecommends[process]);
 		console.log("[ Subprocess Excluded Activities ]:", itextends["Excluded Activities"]);
@@ -641,22 +640,20 @@ export default {
 		    console.log("[ Activities ]:");
 		    for (var inactv in this.ACTVCO[process][itrecommends[process][subprocess]]) {
 			console.log(" ", inactv);
-			// if (typeof itextends["Excluded Activities"] !== "undefined" &&
-			//     itextends["Excluded Activities"].includes(inactv)) {
-			//     this.ACTVCO[process][itrecommends[process][subprocess]][inactv] = this.GREEN;
-			// } else {
-			//     this.ACTVCO[process][itrecommends[process][subprocess]][inactv] = this.RED;
-			//     this.ACTVBY.push(this.ACTVPR[process][itrecommends[process][subprocess]][inactv]);
-			// }
-			if (typeof itextends["Excluded Activities"] !== "undefined" && itextends["Excluded Activities"].length > 0) {
-			    if (itextends["Excluded Activities"].includes(inactv)) {
+			if (typeof itextends["Excluded Activities"] !== "undefined" && typeof itextends["Excluded Activities"][itrecommends[process][subprocess]] !== "undefined" && itextends["Excluded Activities"][itrecommends[process][subprocess]].length > 0) {
+			    if (itextends["Excluded Activities"][itrecommends[process][subprocess]].includes(inactv)) {
 				this.ACTVCO[process][itrecommends[process][subprocess]][inactv] = this.GREEN;
 			    } else {
-				this.ACTVCO[process][itrecommends[process][subprocess]][inactv] = this.ACTVPR[process][itrecommends[process][subprocess]][inactv] > 300 ? this.BLUE : this.ORANGE;
+				if ( this.ACTVPR[process][itrecommends[process][subprocess]][inactv] > 300 ) {
+				    this.ACTVCO[process][itrecommends[process][subprocess]][inactv] = this.BLUE;
+				} else {
+				    this.ACTVCO[process][itrecommends[process][subprocess]][inactv] = this.ORANGE;
+				    this.SUBPCO[process][itrecommends[process][subprocess]] = this.ORANGE;
+				    this.PROCCO[process] = this.ORANGE;
+				}
 				this.ACTVBY.push(this.ACTVPR[process][itrecommends[process][subprocess]][inactv]);
 			    }
 			} else {
-			    // this.ACTVCO[process][itrecommends[process][subprocess]][inactv] = this.ACTVPR[process][itrecommends[process][subprocess]][inactv] > 300 ? this.BLUE : this.RED;
 			    if ( this.ACTVPR[process][itrecommends[process][subprocess]][inactv] > 300 ) {
 				this.ACTVCO[process][itrecommends[process][subprocess]][inactv] = this.BLUE;
 			    } else if ( this.ACTVPR[process][itrecommends[process][subprocess]][inactv] % 150 < 10 ) {
@@ -668,7 +665,6 @@ export default {
 			}
 		    }
 		}
-		// }
 	    }
 	    if (typeof itextends["DimRed"] !== "undefined") {
 		console.log(itextends["DimRed"]);
@@ -777,7 +773,7 @@ export default {
 	    
 	    this.graph.addNode("DimRed", { x: 20, y: -30, size: this.SUBPSZ, label: "Dim. Reduction", forceLabel: true, type: "gradient", color: this.SUBPCO["Data Reduction"]["DimRed"] });
 	    this.graph.addNode("Factor Analysis", { x: 50, y: -40, size: this.ACTVSZ, label: "Factor Analysis", forceLabel: true, path: "reduce/factor/" + this.n_comp, type: "gradient", color: this.ACTVCO["Data Reduction"]["DimRed"]["Factor Analysis"] });
-	    this.graph.addNode("PCA Alternatives", { x: 40, y: -10, size: this.ACTVSZ, label: "PCA Alternatives", forceLabel: true, path: "reduce/manual/" /* + this.n_comp */, type: "gradient", color: this.ACTVCO["Data Reduction"]["DimRed"]["PCA Alternatives"] });
+	    this.graph.addNode("PCA and correlation", { x: 40, y: -10, size: this.ACTVSZ, label: "PCA and correlation", forceLabel: true, path: "reduce/manual/" /* + this.n_comp */, type: "gradient", color: this.ACTVCO["Data Reduction"]["DimRed"]["PCA and correlation"] });
 	    
 	    this.graph.addNode("Analysis", { x: 90, y: 36, size: this.SUBPSZ, label: "Analysis", forceLabel: true, type: "gradient", color: this.SUBPCO["Variables Behavior"]["Analysis"] });
 	    this.graph.addNode("Trend", { x: 110, y: 68, size: this.ACTVSZ, label: "Trend", forceLabel: true, path: "", type: "gradient", color: this.ACTVCO["Variables Behavior"]["Analysis"]["Trend"] });
@@ -842,10 +838,10 @@ export default {
 	    
 	    this.graph.addEdge("Data Reduction", "DimRed", { type: "curve", curvature: -0.2, /*label: "tarea",*/ size: 5, color: this.SUBPCO["Data Reduction"]["DimRed"] });
 	    this.graph.addEdge("DimRed", "Factor Analysis", { type: "curve", curvature: -0.1, /*label: "microtarea",*/ size: 3, color: this.ACTVCO["Data Reduction"]["DimRed"]["Factor Analysis"] });
-	    this.graph.addEdge("DimRed", "PCA Alternatives", { type: "curve", curvature: 0.1, /*label: "microtarea",*/ size: 3, color: this.ACTVCO["Data Reduction"]["DimRed"]["PCA Alternatives"] });
+	    this.graph.addEdge("DimRed", "PCA and correlation", { type: "curve", curvature: 0.1, /*label: "microtarea",*/ size: 3, color: this.ACTVCO["Data Reduction"]["DimRed"]["PCA and correlation"] });
 	    
 	    this.graph.addEdge("Factor Analysis", "Variables Behavior", { type: "curve", curvature: -0.4, /*label: "macrotarea",*/ size: 3, color: this.GREEN });
-	    this.graph.addEdge("PCA Alternatives", "Variables Behavior", { type: "curve", curvature: 0.2, /*label: "macrotarea",*/ size: 3, color: this.GREEN });
+	    this.graph.addEdge("PCA and correlation", "Variables Behavior", { type: "curve", curvature: 0.2, /*label: "macrotarea",*/ size: 3, color: this.GREEN });
 	    
 	    this.graph.addEdge("Variables Behavior", "Analysis", { type: "curve", curvature: 0.2, /*label: "tarea",*/ size: 5, color: this.SUBPCO["Variables Behavior"]["Analysis"] });
 	    this.graph.addEdge("Analysis", "Trend", { type: "curve", curvature: 0.2, /*label: "microtarea",*/ size: 3, color: this.ACTVCO["Variables Behavior"]["Analysis"]["Trend"] });
@@ -988,7 +984,7 @@ export default {
 			case "Linear": this.currentGuide = 23; break;
 			case "Data Reduction": this.currentGuide = 24; break;
 			case "Dim. Reduction": this.currentGuide = 25; break;
-			case "PCA Alternatives": this.currentGuide = 26; break;
+			case "PCA and correlation": this.currentGuide = 26; break;
 			case "Factor Analysis": this.currentGuide = 27; break;
 			case "Variables Behavior": this.currentGuide = 28; break;
 			case "Analysis": this.currentGuide = 29; break;

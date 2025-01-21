@@ -374,8 +374,10 @@ def recommendation_by_station(dataset, station):
         "Data Reduction": [], # Filled with Subprocesses
         "Data Quality": [], # Filled with Subprocesses
         "Variables Behavior": [], # Filled with Subprocesses
+        # # -- Excluded activities of the current subprocess
+        # "Excluded Activities": [] # Filled with Subprocess Activities
     }
-    dic["Excluded Activities"] = {};
+    dic["Excluded Activities"] = [];
     current_df = None
     # if current_df is None:
     # null_values = station_df.isna().sum().sum()
@@ -403,22 +405,24 @@ def recommendation_by_station(dataset, station):
             if not gr.did_iqr_treatment(loader.smo) or not gr.did_sdv_treatment(loader.smo):
                 recommendations["Data Quality"].append("Clean")
                 recommendations["Data Quality"].append("Outliers")
-                dic["Excluded Activities"]["Outliers"] = []
+                # gr.reset_iqr_treatment(loader.smo)
+                # gr.reset_sdv_treatment(loader.smo)
                 if gr.did_iqr_treatment(loader.smo):
-                    dic["Excluded Activities"]["Outliers"].append("Interquartile Range")
+                    dic["Excluded Activities"].append("Interquartile Range")
                     #
                 if gr.did_sdv_treatment(loader.smo):
-                    dic["Excluded Activities"]["Outliers"].append("Z-Score")
+                    dic["Excluded Activities"].append("Z-Score")
                     #
         if status_norm:
             recommendations["Data Quality"].append("Normalize")
         else:
+            # print("[ NOT RECOMMENDATIONS ]", not recommendations["Data Quality"])
+            # print("[ NEGATIVES ]", np.any(current_df.values < 0))
             if not recommendations["Data Quality"] and np.any(current_df.values < 0):
                 recommendations["Data Quality"].append("Normalize")
-                dic["Excluded Activities"]["Normalize"] = []
-                dic["Excluded Activities"]["Normalize"].append("Standard")
-                dic["Excluded Activities"]["Normalize"].append("MaxAbs")
-                dic["Excluded Activities"]["Normalize"].append("Robust")
+                dic["Excluded Activities"].append("Standard")
+                dic["Excluded Activities"].append("MaxAbs")
+                dic["Excluded Activities"].append("Robust")
                 #
         if status_transform:
             recommendations["Data Quality"].append("Transform")
@@ -431,11 +435,8 @@ def recommendation_by_station(dataset, station):
                 recommendations["Data Reduction"].append("DimRed")
                 # print("[ DICRED: ", dic["DimRed"], "]")
                 fa_treatment = [element for element in dic["DimRed"] if "FA Dim.Reduction" in element]
-                if ( len(fa_treatment) == 0 ):
-                    dic["Excluded Activities"]["DimRed"] = []
-                    dic["Excluded Activities"]["DimRed"].append("Factor Analysis")
-                    recommendations["Variables Behavior"].append("Analysis")
-                    #
+                if ( len(fa_treatment) == 0 ): dic["Excluded Activities"].append("Factor Analysis")
+                #
             else:
                 recommendations["Variables Behavior"].append("Analysis")
                 #
