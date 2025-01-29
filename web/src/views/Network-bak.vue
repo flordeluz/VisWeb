@@ -111,6 +111,7 @@
 
 <script>
 // -*- mode: JavaScript -*-
+import { AppBus } from '../appBus';
 import EdgeCurveProgram from "@sigma/edge-curve";
 // import { createNodeImageProgram } from "@sigma/node-image";
 import Graph from "graphology";
@@ -640,11 +641,17 @@ export default {
 		    console.log("[ Activities ]:");
 		    for (var inactv in this.ACTVCO[process][itrecommends[process][subprocess]]) {
 			console.log(" ", inactv);
-			if (typeof itextends["Excluded Activities"] !== "undefined" && itextends["Excluded Activities"].length > 0) {
-			    if (itextends["Excluded Activities"].includes(inactv)) {
+			if (typeof itextends["Excluded Activities"] !== "undefined" && typeof itextends["Excluded Activities"][itrecommends[process][subprocess]] !== "undefined" && itextends["Excluded Activities"][itrecommends[process][subprocess]].length > 0) {
+			    if (itextends["Excluded Activities"][itrecommends[process][subprocess]].includes(inactv)) {
 				this.ACTVCO[process][itrecommends[process][subprocess]][inactv] = this.GREEN;
 			    } else {
-				this.ACTVCO[process][itrecommends[process][subprocess]][inactv] = this.ACTVPR[process][itrecommends[process][subprocess]][inactv] > 300 ? this.BLUE : this.ORANGE;
+				if ( this.ACTVPR[process][itrecommends[process][subprocess]][inactv] > 300 ) {
+				    this.ACTVCO[process][itrecommends[process][subprocess]][inactv] = this.BLUE;
+				} else {
+				    this.ACTVCO[process][itrecommends[process][subprocess]][inactv] = this.ORANGE;
+				    this.SUBPCO[process][itrecommends[process][subprocess]] = this.ORANGE;
+				    this.PROCCO[process] = this.ORANGE;
+				}
 				this.ACTVBY.push(this.ACTVPR[process][itrecommends[process][subprocess]][inactv]);
 			    }
 			} else {
@@ -1016,10 +1023,16 @@ export default {
     mounted: function() {
 	this.dataset = this.$route.params.dataset;
 	this.station = this.$route.params.station;
-	document.getElementById("dynNet").href=`/net/${this.dataset}/${this.station}`;
-	document.getElementById("dynVisualize").href=`/visualize/${this.dataset}/${this.station}`;
-	document.getElementById("dynStats").href=`/stats/${this.dataset}/${this.station}`;
-	document.getElementById("dynSpiral").href=`/spiral/${this.dataset}/${this.station}`;
+	AppBus.$emit('disabled-buttons', false);
+	AppBus.$emit('update-button-home', false, true);
+	AppBus.$emit('update-button-net', true, false);
+	AppBus.$emit('update-button-visualize', false, true);
+	AppBus.$emit('update-button-stats', false, true);
+	AppBus.$emit('update-button-spiral', false, true);
+	document.getElementById("dynNet").href = `/net/${this.dataset}/${this.station}`;
+	document.getElementById("dynVisualize").href = `/visualize/${this.dataset}/${this.station}`;
+	document.getElementById("dynStats").href = `/stats/${this.dataset}/${this.station}`;
+	document.getElementById("dynSpiral").href = `/spiral/${this.dataset}/${this.station}`;
 	console.log("[ Mounted Network View ]: (", this.dataset, ",", this.station, ")");
 	axios.get(
 	    "http://localhost:8080/data/" + this.dataset + "/" + this.station,

@@ -36,6 +36,10 @@
 	</div>
       </div>      
       <div v-html="rawcontainer"></div>
+      <div class="message-tooltip" v-if="messageVisible">
+	<b>Hint:</b><br>
+	{{ messageText }}
+      </div>
       <div class="tooltip" v-if="tooltipVisible">
 	{{ tooltipText }}
       </div>
@@ -111,6 +115,7 @@
 
 <script>
 // -*- mode: JavaScript -*-
+import { AppBus } from '../appBus';
 import EdgeCurveProgram from "@sigma/edge-curve";
 // import { createNodeImageProgram } from "@sigma/node-image";
 import Graph from "graphology";
@@ -474,6 +479,8 @@ export default {
 	currentGuide: -1,
 	tooltipVisible: false,
 	tooltipText: '',
+	messageVisible: true,
+	messageText: "A hint will appear here.",
 	legendVisible: true
     }),
     methods: {
@@ -613,6 +620,7 @@ export default {
 		    // this.SUBPCO[process][itrecommends[process][subprocess]] = this.SUBPPR[process][itrecommends[process][subprocess]] > 30 ? this.BLUE : this.RED;
 		    if ( this.SUBPPR[process][itrecommends[process][subprocess]] > 30 ) {
 			this.SUBPCO[process][itrecommends[process][subprocess]] = /* this.BLUE */ this.LIGHTBLUE;
+			this.messageText = "Ready for " + itrecommends[process][subprocess] + ".";
 		    } else if ( this.SUBPPR[process][itrecommends[process][subprocess]] == 15 ) {
 			this.SUBPCO[process][itrecommends[process][subprocess]] = this.ORANGE;
 			if ( itrecommends[process].length == 1 ) {
@@ -620,6 +628,13 @@ export default {
 			}
 		    } else {
 			this.SUBPCO[process][itrecommends[process][subprocess]] = this.RED;
+			if ( this.SUBPPR[process][itrecommends[process][subprocess]] != 11 ) { // Exception for pseudo node Clean
+			    if (this.messageText == "A hint will appear here.") {
+				this.messageText = "It is about time to complete " + itrecommends[process][subprocess] + ". Choose any algorithm under the " + itrecommends[process][subprocess] + "' children nodes.";
+			    } else {
+				this.messageText += " Optionally " + itrecommends[process][subprocess] + ".";
+			    }
+			}
 		    }
 		    this.SUBPBY.push(this.SUBPPR[process][itrecommends[process][subprocess]]);
 		    for (var prio_coloring_s in this.SUBPPR[process]) {
@@ -1022,10 +1037,16 @@ export default {
     mounted: function() {
 	this.dataset = this.$route.params.dataset;
 	this.station = this.$route.params.station;
-	document.getElementById("dynNet").href=`/net/${this.dataset}/${this.station}`;
-	document.getElementById("dynVisualize").href=`/visualize/${this.dataset}/${this.station}`;
-	document.getElementById("dynStats").href=`/stats/${this.dataset}/${this.station}`;
-	document.getElementById("dynSpiral").href=`/spiral/${this.dataset}/${this.station}`;
+	AppBus.$emit('disabled-buttons', false);
+	AppBus.$emit('update-button-home', false, true);
+	AppBus.$emit('update-button-net', true, false);
+	AppBus.$emit('update-button-visualize', false, true);
+	AppBus.$emit('update-button-stats', false, true);
+	AppBus.$emit('update-button-spiral', false, true);
+	document.getElementById("dynNet").href = `/net/${this.dataset}/${this.station}`;
+	document.getElementById("dynVisualize").href = `/visualize/${this.dataset}/${this.station}`;
+	document.getElementById("dynStats").href = `/stats/${this.dataset}/${this.station}`;
+	document.getElementById("dynSpiral").href = `/spiral/${this.dataset}/${this.station}`;
 	console.log("[ Mounted Network View ]: (", this.dataset, ",", this.station, ")");
 	axios.get(
 	    "http://localhost:8080/data/" + this.dataset + "/" + this.station,
@@ -1121,11 +1142,12 @@ div.load-layer {
 .tooltip {
   position: absolute;
   bottom: 0%;
-  left: 80%;
+  /* left: 80%; */
+  right: 0%;
   /* position: fixed; */
   /* bottom: 10px; */
   /* right: 10px; */
-  transform: translateX(-50%);
+  /* transform: translateX(-50%); */
   padding: 10px;
   background-color: #333;
   color: white;
@@ -1139,6 +1161,7 @@ div.load-layer {
   position: absolute;
   top: 0%;
   right: 0%;
+  width: 256px;
   background-color: #fff;
   border: 1px solid #ccc;
   padding: 10px;
@@ -1165,4 +1188,18 @@ div.load-layer {
 .graylg { background-color: lightgray; }
 .greenlg { background-color: lightgreen; }
 .orangelg { background-color: orange; }
+.message-tooltip {
+  position: absolute;
+  top: 70%;
+  right: 0%;
+  width: 256px;
+  background-color: #ee5;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: left;
+  word-wrap: break-word;
+  white-space: pre-line;  
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
 </style>

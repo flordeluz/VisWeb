@@ -130,6 +130,8 @@
 </style>
 
 <script>
+// -*- mode: JavaScript -*-
+import { AppBus } from '../appBus';
 // import MG from "metrics-graphics"
 import axios from "axios"
 import Spiral from "@/views/point_spiral"
@@ -783,6 +785,12 @@ export default {
 	this.algorithms = {}
 	this.dataset = this.$route.params.dataset
 	this.station = this.$route.params.station
+	AppBus.$emit('disabled-buttons', false);
+	AppBus.$emit('update-button-home', false, true);
+	AppBus.$emit('update-button-net', false, true);
+	AppBus.$emit('update-button-visualize', true, false);
+	AppBus.$emit('update-button-stats', false, true);
+	AppBus.$emit('update-button-spiral', false, true);
 	document.getElementById("dynNet").href=`/net/${this.dataset}/${this.station}`;
 	document.getElementById("dynVisualize").href=`/visualize/${this.dataset}/${this.station}`;
 	document.getElementById("dynStats").href=`/stats/${this.dataset}/${this.station}`;

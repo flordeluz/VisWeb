@@ -180,6 +180,7 @@
 
 <script>
 // -*- mode: JavaScript -*-
+import { AppBus } from '../appBus';
 import Spiral from "@/views/point_spiral"
 import * as d3 from "d3"
 import axios from "axios"
@@ -498,6 +499,12 @@ export default {
     mounted: function() {
 	this.dataset = this.$route.params.dataset;
 	this.station = this.$route.params.station;
+	AppBus.$emit('disabled-buttons', false);
+	AppBus.$emit('update-button-home', false, true);
+	AppBus.$emit('update-button-net', false, true);
+	AppBus.$emit('update-button-visualize', false, true);
+	AppBus.$emit('update-button-stats', false, true);
+	AppBus.$emit('update-button-spiral', true, false);
 	document.getElementById("dynNet").href=`/net/${this.dataset}/${this.station}`;
 	document.getElementById("dynVisualize").href=`/visualize/${this.dataset}/${this.station}`;
 	document.getElementById("dynStats").href=`/stats/${this.dataset}/${this.station}`;
