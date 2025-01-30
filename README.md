@@ -1,8 +1,11 @@
 # VisWeb
 
+
 ## Changelog
 
 - The new API centralizes all the backend processing
+- See SPECS.pdf or SPECS.org for development details.
+
 
 ## TODO:
 
@@ -14,11 +17,12 @@
 - [x] Add original data
 - [x] Put max points in the cyclicity operator
 - [x] Add a spiral graph to cyclicity
-- [ ] Close an operator
+- [x] Close an operator
 - [x] Feature discovery
 - [x] Informative tooltip topics
 - [x] Legend
 - [ ] Import/Export data
+
 
 ## BUGS:
 
@@ -28,8 +32,6 @@
 - [x] Legendre needs limits when there are nulls in very long periods (smoothed Legendre)
 - [x] The polygon with more than three dimensions needs to be fixed
 
-
-See SPECS.pdf or SPECS.org for development details.
 
 ## Run the Backend server
 
