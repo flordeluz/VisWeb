@@ -50,6 +50,6 @@ Go to the web folder and install dependencies with the following:
 
 `cd web && npm install`
 
-Then, start the client with:
+Then, start the server with:
 
 `npm run serve`
