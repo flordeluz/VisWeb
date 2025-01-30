@@ -29,11 +29,11 @@
 - [x] The polygon with more than three dimensions needs to be fixed
 
 
-## Run the new API server
+See SPECS.pdf or SPECS.org for development details.
 
-A new structure for datasets has been developed. See SPECS.pdf or SPECS.org for details.
+## Run the Backend server
 
-The easiest way to run the software is by installing the full Anaconda distribution. If you don't want to use the Anaconda's base environment directly, clone it (backup locally and import). After the installation run the Anaconda prompt application from the desired environment, which will allow you to use the Python version provided by Anaconda. Finally, go to the new_api folder (cd command) and install the dependencies:
+Installing the full Anaconda distribution is the easiest way to run the software. Use the base environment directly. If you want a separate environment clone the base (backup locally and import). After the installation run the Anaconda prompt application from the desired environment, which will allow you to use the Python version provided by Anaconda. Finally, go to the new_api folder (cd command) and install the dependencies as follows:
 
 `cd new_api && pip install -r requirements.txt`
 
@@ -42,7 +42,7 @@ Then, start the server with:
 `python main.py`
 
 
-## Run the Client
+## Run the Frontend server
 
 Go to the web folder and install dependencies with the following:
 
