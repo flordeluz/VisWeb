@@ -167,6 +167,14 @@ export default {
 	main_operation: "",
 	main_path: "",
 	RED: "#FA4F40", // ACTION Enabler
+	REDLS: [
+	    "#4B0000",
+	    "#660000",
+	    "#800000",
+	    "#A50D0D",
+	    "#C21807",
+	    "#E03228",
+	    "#FA4F40" ], // ACTION Enabler
 	ORANGE: "#FF6600", // ACTION Enabler
 	BLUE: "#727EE0", // ACTION Enabler
 	LIGHTBLUE: "#3399f8",
@@ -530,7 +538,7 @@ export default {
 			    this.main_operation = "reduce";
 			    this.main_path = path; // "reduce/manual/";
 			    this.dialog = true;
-			} else if ((color == this.RED || color == this.ORANGE || color == this.BLUE) && size == this.ACTVSZ) {
+			} else if ((this.REDLS.includes(color) || color == this.ORANGE || color == this.BLUE) && size == this.ACTVSZ) {
 			    action = true;
 			}
 			console.log("[", event, "]:", itemType, label, x_i, y_i, "action:", action);
@@ -556,6 +564,8 @@ export default {
 			let actionrc = await axios.get(req_string, { crossdomain: true });
 			console.log(actionrc);
 			this.executing_task = false;
+			// console.log("[ WAIT ]");
+			// await new Promise(r => setTimeout(r, 1000));
 			location.reload();
 		    }
 		}
@@ -595,8 +605,10 @@ export default {
 	    let itrecommends = steprc.data[0];
 	    let itextends = steprc.data[1];
 	    let itpath = steprc.data[2];
+	    let italgoprio = steprc.data[3];
 	    console.log("[ It Recommends ]");
 	    console.log("[ Made Path ]: ", itpath);
+	    console.log("[ Algorithms priority ]: ", italgoprio);
 	    for (var process in itrecommends) {
 		console.log("[ Process ]:", process);
 		console.log("[ Subprocesses ]:", itrecommends[process]);
@@ -933,7 +945,16 @@ export default {
 		    last_madepath = itpath[madepath];
 		}
 	    }
-	    
+	    if (italgoprio.length > 0) {
+		for (var algoidx in italgoprio) {
+		    if (algoidx == 0) {
+			this.messageText += " Use " + italgoprio[algoidx];
+		    }
+		    if (this.graph.getNodeAttribute(italgoprio[algoidx], 'color') == this.RED) {
+			this.graph.setNodeAttribute(italgoprio[algoidx], 'color', this.REDLS[algoidx]);
+		    }
+		}
+	    }
 	    this.renderer = new Sigma(this.graph, this.container, {
 		nodeProgramClasses: {
 		    // image: createNodeImageProgram(),

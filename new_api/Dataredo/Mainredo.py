@@ -124,6 +124,9 @@ class MainredoClass:
     def did_fill_w_kneighbors(self, smo) -> bool:
         pass
 
+    def best_algo_metrics(self, smo) -> DataFrame:
+        pass
+
     def best_fit_to_fill(self, smo, x_flr) -> dict:
         pass
 

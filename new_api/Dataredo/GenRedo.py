@@ -1584,6 +1584,20 @@ class GenRedo(MainredoClass):
             return True
 
 
+    def best_algo_metrics(self, smo):
+        hdf = metricdff(columns = ["PROG", "STATION", "FEATURE", "MODEL", "MAE", "MSE", "RMSE", "MEDAE", "R2", "MAPE", "WMAPE"])
+        nfindsf(hdf, smo, self.prognl)
+        hdf = hdf.sort_values(by=["STATION", "FEATURE", "WMAPE"], ignore_index=True)
+        hdf.drop_duplicates(subset=["STATION", "FEATURE"], inplace=True)
+        # curr_max_rows = pd.options.display.max_rows
+        # pd.set_option('display.max_rows', None)
+        # display(hdf)
+        # pd.set_option('display.max_rows', curr_max_rows)
+        print(hdf.info())
+        print(hdf)
+        return hdf
+
+
     def best_fit_to_fill(self, smo, x_flr, station=None):
         hdf = metricdff(columns = ["PROG", "STATION", "FEATURE", "MODEL", "MAE", "MSE", "RMSE", "MEDAE", "R2", "MAPE", "WMAPE"])
         nfindsf(hdf, smo, self.prognl)

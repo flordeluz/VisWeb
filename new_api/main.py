@@ -1,5 +1,12 @@
+# -*- mode: python -*-
+#
+# Copyright (C) 2024  Victor C. Salas P.
+#
+# Author: Victor C. Salas P. <nmagko@gmail.com>
+
 # Essential Libraries
 from os import stat
+import copy
 import bottle
 from bottle import request, response, route, static_file, view
 import re
@@ -382,11 +389,48 @@ def recommendation_by_station(dataset, station):
     null_values = full_station_df.isna().sum().sum()
     current_dataset = dataset
     current_station = station
+    algo_prio = []
     if (null_values > 0):
         dic["Clean"] = "Null Values"
         recommendations["Data Quality"].append("Clean")
         recommendations["Data Quality"].append("Nulls")
         print("[ Null Values:", null_values, "]")
+        tmp_full_station_ds = copy.deepcopy(full_station_ds)
+        tmp_loader_smo = copy.deepcopy(loader.smo)
+        tmp_loader_minsample = copy.deepcopy(loader.minsample)
+        tmp_loader_valdnsize = copy.deepcopy(loader.valdnsize)
+        tmp_loader_x_flr = copy.deepcopy(loader.x_flr)
+        tmp_loader_cols_list = copy.deepcopy(loader.cols_list)
+        tmp_loader_time_list = copy.deepcopy(loader.time_list)
+        tmp_loader_smo = gr.fill_w_meanmedian(tmp_full_station_ds, tmp_loader_smo, tmp_loader_minsample, tmp_loader_valdnsize, tmp_loader_x_flr, tmp_loader_cols_list, tmp_loader_time_list)
+        tmp_loader_smo = gr.fill_w_decisiontree(tmp_full_station_ds, tmp_loader_smo, tmp_loader_minsample, tmp_loader_valdnsize, tmp_loader_x_flr, tmp_loader_cols_list, tmp_loader_time_list)
+        tmp_loader_smo = gr.fill_w_gradientboosting(tmp_full_station_ds, tmp_loader_smo, tmp_loader_minsample, tmp_loader_valdnsize, tmp_loader_x_flr, tmp_loader_cols_list, tmp_loader_time_list)
+        tmp_loader_smo = gr.fill_w_locallyweighted(tmp_full_station_ds, tmp_loader_smo, tmp_loader_minsample, tmp_loader_valdnsize, tmp_loader_x_flr, tmp_loader_cols_list, tmp_loader_time_list)
+        tmp_loader_smo = gr.fill_w_legendre(tmp_full_station_ds, tmp_loader_smo, tmp_loader_minsample, tmp_loader_valdnsize, tmp_loader_x_flr, tmp_loader_cols_list, tmp_loader_time_list)
+        tmp_loader_smo = gr.fill_w_randomforest(tmp_full_station_ds, tmp_loader_smo, tmp_loader_minsample, tmp_loader_valdnsize, tmp_loader_x_flr, tmp_loader_cols_list, tmp_loader_time_list)
+        tmp_loader_smo = gr.fill_w_kneighbors(tmp_full_station_ds, tmp_loader_smo, tmp_loader_minsample, tmp_loader_valdnsize, tmp_loader_x_flr, tmp_loader_cols_list, tmp_loader_time_list)
+        print("[ Computed metrics ]:")
+        tmp_hdf = gr.best_algo_metrics(tmp_loader_smo)
+        tmp_hdf = tmp_hdf[["PROG", "WMAPE"]].copy()
+        tmp_hdf["count"] = tmp_hdf.groupby("PROG")["PROG"].transform("count")
+        tmp_hdf = tmp_hdf.groupby("PROG").agg({"WMAPE": "mean", "count": "first"}).reset_index()
+        tmp_hdf = tmp_hdf.sort_values(by="WMAPE", ascending=True)
+        tmp_hdf = tmp_hdf.sort_values(by="count", ascending=False)
+        print(tmp_hdf)
+        tmp_hdf = list(tmp_hdf["PROG"])
+        print(tmp_hdf)
+        tmp_mapping = {
+            "RM" : "Rolling Mean",
+            "DTR": "Decision Tree",
+            "SGB": "Stochastic Gradient",
+            "LWR": "Locally Weighted",
+            "LGD": "Legendre",
+            "RFR": "Random Forest",
+            "KNN": "KNN"
+        }
+        tmp_hdf = [tmp_mapping[item] for item in tmp_hdf]
+        print(tmp_hdf)
+        algo_prio = tmp_hdf.copy()
     else:
         full_station_ds = full_station_df
         current_df = station_df
@@ -444,6 +488,7 @@ def recommendation_by_station(dataset, station):
     env.append(res)
     env.append(dic)
     env.append(made_path)
+    env.append(algo_prio)
     dic = {}
     return json.dumps(env)
 
