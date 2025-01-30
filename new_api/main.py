@@ -725,20 +725,21 @@ def reduce_dataset(dataset, method, n_comp):
     global aux_df
     global made_path
     made_path.append("DimRed")
-    res = True
+    # res = True
     if method == "factor":
         made_path.append("Factor Analysis")
-        # status_reduccion, messages_reduccion = comprobarReduccion(current_df, par = False)
-        res, n_comp = check_dimensionality_reduction_fa(current_df)
+        # # res, n_comp = check_dimensionality_reduction_fa(current_df)
+        # n_comp = re.sub(", +", ",", n_comp).split(",")
         #
     elif method == "manual":
         made_path.append("PCA and correlation")
-        n_comp = re.sub(", +", ",", n_comp).split(",")
+        # n_comp = re.sub(", +", ",", n_comp).split(",")
         #
-    if res:
-        loader.smo, loader.cols_list = gr.drop_features(loader.smo, loader.cols_list, n_comp)
-        loader.ds = loader.smo["full"].copy().reset_index()
-        #
+    n_comp = re.sub(", +", ",", n_comp).split(",")
+    # if res:
+    loader.smo, loader.cols_list = gr.drop_features(loader.smo, loader.cols_list, n_comp)
+    loader.ds = loader.smo["full"].copy().reset_index()
+    #
     print("[ Old df:\n", current_df, "\n]")
     json_data, df, full_station_ds = loader.get_data(current_station, resample="D")
     current_df = df
