@@ -424,4 +424,18 @@ The program makes data preprocessing by inspecting data and giving recommendatio
 | frontend? if so, uncomment the referred line in the get-raw-data().     |               |
 | *Resolution:* We are using different structures inside .smo.            |               |
 |-------------------------------------------------------------------------+---------------|
+| For large datasets the prediction time of null values pre-evaluation    | /Unsolved/    |
+| goes like:                                                              |               |
+| decisiontree    : too slow,  >   2 mins                                 |               |
+| kneighbors      : too slow,  >   2 mins                                 |               |
+| gradientboosting: slow,      >   1 min  < 2 mins                        |               |
+| randomforest    : medium,    >  20 secs < 1 min                         |               |
+| meanmedian      : regular,   <= 20 secs                                 |               |
+| locallyweighted : fast,      <=  6 secs                                 |               |
+| legendre        : very fast, <=  2 secs                                 |               |
+| *Resolution:* For large datasets predict with medium to fast algos.     |               |
+| *Author's note:* While testing large dataset stations of Madrid's data, |               |
+| KNN gave better predictions. It is too risky to exclude slower algos    |               |
+| in the early stage of nulls' pre-evaluation.                            |               |
+|-------------------------------------------------------------------------+---------------|
 \rmfamily

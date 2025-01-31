@@ -16,6 +16,9 @@
       <div v-html="describes"></div>
     </v-col>
   </v-row>
+  <v-row dense align="center" v-if="datasetSelected">
+    <h5><b>Describing Data</b></h5>
+  </v-row>
   <v-row dense align="center" justify="center" v-if="datasetSelected">
     <v-col cols="5">
       <div v-html="nullsperc"></div>
@@ -198,15 +201,34 @@ td.slideOp:hover {
     background-color: rgba(6, 10, 223, 0.109);
     cursor: pointer;
 }
+.dataframe {
+    font-size: 10pt; 
+    font-family: sans-serif;
+    border-collapse: collapse; 
+    border: 2px solid silver;
+}
 .dataframe tbody tr th:only-of-type {
+    font-size: 11pt; 
     vertical-align: middle;
 }
-
 .dataframe tbody tr th {
     vertical-align: top;
 }
-
 .dataframe thead th {
+    font-size: 11pt; 
+    background: lightgray;
     text-align: right;
+}
+.dataframe td, th {
+    padding: 5px;
+    border-left: 2px solid silver;
+    border-right: 2px solid silver;
+}
+.dataframe tr:nth-child(even) {
+    background: #F0F0F0;
+}
+.dataframe tr:hover {
+    background: #DFEFFF;
+    cursor: pointer;
 }
 </style>

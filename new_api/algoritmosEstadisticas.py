@@ -14,8 +14,10 @@ import seaborn as sns
 
 
 def describe_data(ds):
+    reshtml = '<p style="text-align:center"><h5><b>Descriptive Statistics</b></h5></p>'
     descriptivestats = ds.describe(include = "all")
-    return descriptivestats.T.to_html(classes="table table-stripped")
+    reshtml += descriptivestats.T.to_html(classes="table table-stripped")
+    return reshtml
 
 
 def null_values_data(ds):
@@ -30,7 +32,7 @@ def null_values_data(ds):
         #
     if (have_nulls):
         nullspercentage = (ds.isnull().sum() / ds.shape[0])*100
-        reshtml += '<p style="text-align:center"><h5><b>Dataset has null values</b></h5></p>'
+        reshtml += '<p><b>Dataset has null values</b></p>'
         for gtix in nullspercentage.keys():
             if (nullspercentage[gtix] >= 50):
                 gt50.append(gtix)
@@ -46,7 +48,7 @@ def null_values_data(ds):
         reshtml += "</p>"
         #
     else:
-        reshtml += '<p style="text-align:center"><h5><b>Dataset has not null values</b></h5></p>'
+        reshtml += '<p><b>Dataset has not null values</b></p>'
         #
     return reshtml
 
@@ -54,12 +56,12 @@ def null_values_data(ds):
 def addinfo_data(ds, cols_list, catg_list):
     reshtml = ""
     if (ds.duplicated().sum() > 0):
-        reshtml += '<p style="text-align:center"><h5><b>Dataset has duplicate records</b></h5></p>'
+        reshtml += '<p><b>Dataset has duplicate records</b></p>'
     else:
-        reshtml += '<p style="text-align:center"><h5><b>Dataset has not duplicate records</b></h5></p>'
+        reshtml += '<p><b>Dataset has not duplicate records</b></p>'
         #
     descriptivestats = ds.describe(include = "all")
-    reshtml += '<p style="text-align:center"><h5><b>Detecting outliers with IQR</b></h5></p>'
+    reshtml += '<p><u><b>Skewness and Outliers</b></u></p>'
     reshtml += "<p>"
     for nfld in cols_list:
         IQR = descriptivestats[nfld]["75%"] - descriptivestats[nfld]["25%"]
@@ -148,7 +150,7 @@ def boxhisf(data, feature, figsize = (10, 5), kde = True, dpi = 100):
 
 
 def boxplot_data(ds, cols_list):
-    reshtml = '<p style="text-align:center"><h5><b>Outliers and Distribution</b></h5></p>'
+    reshtml = '<p style="text-align:center"><h5><b>Data Distribution</b></h5></p>'
     print("[ Boxplot DS shape ]:", ds.shape);
     for coln in cols_list:
         print("[ Boxplot Feature ]:", coln, "[ shape ]:", ds[coln].shape);
