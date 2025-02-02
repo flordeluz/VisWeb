@@ -540,6 +540,9 @@ export default {
 			    this.dialog = true;
 			} else if ((this.REDLS.includes(color) || color == this.ORANGE || color == this.BLUE) && size == this.ACTVSZ) {
 			    action = true;
+			    if (color != this.BLUE) {
+				AppBus.$emit('data-changed', true);
+			    }
 			}
 			console.log("[", event, "]:", itemType, label, x_i, y_i, "action:", action);
 		    } else if (itemType === "edge") {
@@ -1163,48 +1166,48 @@ div.load-layer {
     top: 20%;
 }
 .tooltip {
-  position: absolute;
-  bottom: 0%;
-  /* left: 80%; */
-  right: 0%;
-  /* position: fixed; */
-  /* bottom: 10px; */
-  /* right: 10px; */
-  /* transform: translateX(-50%); */
-  padding: 10px;
-  background-color: #333;
-  color: white;
-  border-radius: 5px;
-  white-space: nowrap;
-  visibility: visible;
-  opacity: 0.9;
-  transition: opacity 0.2s;
+    position: absolute;
+    bottom: 0%;
+    /* left: 80%; */
+    right: 0%;
+    /* position: fixed; */
+    /* bottom: 10px; */
+    /* right: 10px; */
+    /* transform: translateX(-50%); */
+    padding: 10px;
+    background-color: #333;
+    color: white;
+    border-radius: 5px;
+    white-space: nowrap;
+    visibility: visible;
+    opacity: 0.9;
+    transition: opacity 0.2s;
 }
 .legend-tooltip {
-  position: absolute;
-  top: 0%;
-  right: 0%;
-  width: 256px;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  padding: 10px;
-  border-radius: 5px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    top: 0%;
+    right: 0%;
+    width: 256px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 .legend-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
 }
 .legend-item:last-child {
-  margin-bottom: 0;
+    margin-bottom: 0;
 }
 .dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  display: inline-block;
-  margin-right: 10px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 10px;
 }
 .redlg { background-color: red; }
 .bluelg { background-color: lightblue; }
@@ -1212,17 +1215,17 @@ div.load-layer {
 .greenlg { background-color: lightgreen; }
 .orangelg { background-color: orange; }
 .message-tooltip {
-  position: absolute;
-  top: 70%;
-  right: 0%;
-  width: 256px;
-  background-color: #ee5;
-  border: 1px solid #ccc;
-  padding: 10px;
-  border-radius: 5px;
-  text-align: left;
-  word-wrap: break-word;
-  white-space: pre-line;  
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    top: 70%;
+    right: 0%;
+    width: 256px;
+    background-color: #ee5;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: left;
+    word-wrap: break-word;
+    white-space: pre-line;  
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 </style>

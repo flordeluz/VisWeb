@@ -97,6 +97,7 @@ export default {
 		document.body.appendChild(link);
 		link.click();
 		document.body.removeChild(link);
+		AppBus.$emit('data-changed', false);
 	    } catch (error) {
 		this.message = 'Error exporting file.';
 	    }
