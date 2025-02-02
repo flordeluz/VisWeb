@@ -238,6 +238,22 @@ def get_time_span(dataset, station, resample):
              "status": str(timespan_status) }
 
 
+@route("/assets/getfiles")
+@enable_cors
+def get_assets():
+    response.headers["Content-Type"] = "application/json"
+    return json.dumps(list(loaders.keys()))
+
+
+@route("/assets/exportfile/<dataset>/<station>")
+@enable_cors
+def export_asset(dataset, station):
+    response.headers["Content-Type"] = "application/json"
+    global full_station_ds
+    global current_df
+    return current_df.to_csv()
+
+
 @route("/stats/describe/<dataset>/<station>")
 @enable_cors
 def get_describe(dataset, station):

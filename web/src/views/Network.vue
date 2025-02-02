@@ -385,7 +385,7 @@ export default {
 	    },
 	    {
 		ref: "kNN",
-		text: "A non-parametric algorithm that classifies data based on the closest training examples."
+		text: "A non-parametric algorithm for classification and regression based on the closest training examples."
 	    },
 	    {
 		ref: "Outliers",
@@ -642,7 +642,7 @@ export default {
 			this.SUBPCO[process][itrecommends[process][subprocess]] = this.RED;
 			if ( this.SUBPPR[process][itrecommends[process][subprocess]] != 11 ) { // Exception for pseudo node Clean
 			    if (this.messageText == "A hint will appear here.") {
-				this.messageText = "It is about time to complete " + itrecommends[process][subprocess] + ". Choose any algorithm under the " + itrecommends[process][subprocess] + "' children nodes.";
+				this.messageText = "It is about time to handle " + itrecommends[process][subprocess] + ". Choose any algorithm under the " + itrecommends[process][subprocess] + "' children nodes.";
 			    } else {
 				this.messageText += " Optionally " + itrecommends[process][subprocess] + ".";
 			    }
@@ -948,7 +948,7 @@ export default {
 	    if (italgoprio.length > 0) {
 		for (var algoidx in italgoprio) {
 		    if (algoidx == 0) {
-			this.messageText += " Use " + italgoprio[algoidx];
+			this.messageText += " Use " + italgoprio[algoidx] + ".";
 		    }
 		    if (this.graph.getNodeAttribute(italgoprio[algoidx], 'color') == this.RED) {
 			this.graph.setNodeAttribute(italgoprio[algoidx], 'color', this.REDLS[algoidx]);
@@ -1060,10 +1060,12 @@ export default {
 	this.station = this.$route.params.station;
 	AppBus.$emit('disabled-buttons', false);
 	AppBus.$emit('update-button-home', false, true);
+	AppBus.$emit('update-button-assets', false, true);
 	AppBus.$emit('update-button-net', true, false);
 	AppBus.$emit('update-button-visualize', false, true);
 	AppBus.$emit('update-button-stats', false, true);
 	AppBus.$emit('update-button-spiral', false, true);
+	document.getElementById("dynAssets").href=`/assets/${this.dataset}/${this.station}`;
 	document.getElementById("dynNet").href = `/net/${this.dataset}/${this.station}`;
 	document.getElementById("dynVisualize").href = `/visualize/${this.dataset}/${this.station}`;
 	document.getElementById("dynStats").href = `/stats/${this.dataset}/${this.station}`;

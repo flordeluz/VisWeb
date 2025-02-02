@@ -76,6 +76,7 @@ export default {
 	    console.log("[ Station ]:", this.station)
 	    // this.$router.push(`/visualize/${this.dataset}/${this.station}`);
 	    this.$router.push(`/net/${this.dataset}/${this.station}`);
+	    document.getElementById("dynAssets").href=`/assets/${this.dataset}/${this.station}`;
 	    document.getElementById("dynNet").href=`/net/${this.dataset}/${this.station}`;
 	    document.getElementById("dynVisualize").href=`/visualize/${this.dataset}/${this.station}`;
 	    document.getElementById("dynStats").href=`/stats/${this.dataset}/${this.station}`;

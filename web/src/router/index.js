@@ -48,7 +48,23 @@ const routes = [
 	meta: {
 	    reload: true
 	}
-    }
+    },
+    {
+	path: "/assets",
+	name: "Import data",
+	component: () => import("../views/Assets.vue"),
+	meta: {
+	    reload: true
+	}
+    },
+    {
+	path: "/assets/:dataset/:station",
+	name: "Import and Export data",
+	component: () => import("../views/Assets.vue"),
+	meta: {
+	    reload: true
+	}
+    }    
 ]
 
 const router = new VueRouter({

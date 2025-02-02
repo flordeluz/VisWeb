@@ -787,10 +787,12 @@ export default {
 	this.station = this.$route.params.station
 	AppBus.$emit('disabled-buttons', false);
 	AppBus.$emit('update-button-home', false, true);
+	AppBus.$emit('update-button-assets', false, true);
 	AppBus.$emit('update-button-net', false, true);
 	AppBus.$emit('update-button-visualize', true, false);
 	AppBus.$emit('update-button-stats', false, true);
 	AppBus.$emit('update-button-spiral', false, true);
+	document.getElementById("dynAssets").href=`/assets/${this.dataset}/${this.station}`;
 	document.getElementById("dynNet").href=`/net/${this.dataset}/${this.station}`;
 	document.getElementById("dynVisualize").href=`/visualize/${this.dataset}/${this.station}`;
 	document.getElementById("dynStats").href=`/stats/${this.dataset}/${this.station}`;

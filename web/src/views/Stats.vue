@@ -133,10 +133,12 @@ export default {
 	this.station = this.$route.params.station;
 	AppBus.$emit('disabled-buttons', false);
 	AppBus.$emit('update-button-home', false, true);
+	AppBus.$emit('update-button-assets', false, true);
 	AppBus.$emit('update-button-net', false, true);
 	AppBus.$emit('update-button-visualize', false, true);
 	AppBus.$emit('update-button-stats', true, false);
 	AppBus.$emit('update-button-spiral', false, true);
+	document.getElementById("dynAssets").href=`/assets/${this.dataset}/${this.station}`;
 	document.getElementById("dynNet").href=`/net/${this.dataset}/${this.station}`;
 	document.getElementById("dynVisualize").href=`/visualize/${this.dataset}/${this.station}`;
 	document.getElementById("dynStats").href=`/stats/${this.dataset}/${this.station}`;
@@ -205,7 +207,7 @@ td.slideOp:hover {
     font-size: 10pt; 
     font-family: sans-serif;
     border-collapse: collapse; 
-    border: 2px solid silver;
+    border: 2px solid lightgray; /* silver */
 }
 .dataframe tbody tr th:only-of-type {
     font-size: 11pt; 
@@ -216,19 +218,19 @@ td.slideOp:hover {
 }
 .dataframe thead th {
     font-size: 11pt; 
-    background: lightgray;
+    background: #DFEFFF;
     text-align: right;
 }
 .dataframe td, th {
     padding: 5px;
-    border-left: 2px solid silver;
-    border-right: 2px solid silver;
+    border-left: 2px solid lightgray; /* silver */
+    border-right: 2px solid lightgray; /* silver */
 }
 .dataframe tr:nth-child(even) {
     background: #F0F0F0;
 }
 .dataframe tr:hover {
-    background: #DFEFFF;
+    background: #FFFFDF;
     cursor: pointer;
 }
 </style>

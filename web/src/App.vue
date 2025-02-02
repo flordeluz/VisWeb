@@ -5,6 +5,7 @@
       <h1>{{ pageTitle }}</h1></v-toolbar-title>
     <v-spacer></v-spacer>
     <v-btn class="mr-2" href="/metadata" :elevated="isElevatedHome" :outlined="isOutlinedHome" color="white">Home</v-btn>
+    <v-btn class="mr-2" href="/assets" id="dynAssets" :elevated="isElevatedAssets" :outlined="isOutlinedAssets" color="white">Assets</v-btn>
     <v-btn class="mr-2" href="/net" id="dynNet" :elevated="isElevatedNet" :outlined="isOutlinedNet" :disabled="buttonsDisabled" color="white">Navigation</v-btn>
     <v-btn class="mr-2" href="/visualize" id="dynVisualize" :elevated="isElevatedVisualize" :outlined="isOutlinedVisualize" :disabled="buttonsDisabled" color="white">Time Series</v-btn>
     <v-btn class="mr-2" href="/stats" id="dynStats" :elevated="isElevatedStats" :outlined="isOutlinedStats" :disabled="buttonsDisabled" color="white">Statistics</v-btn>
@@ -52,6 +53,8 @@ export default {
 	buttonsDisabled: true,
 	isElevatedHome: true,
 	isOutlinedHome: false,
+	isElevatedAssets: false,
+	isOutlinedAssets: true,
 	isElevatedNet: false,
 	isOutlinedNet: true,
 	isElevatedVisualize: false,
@@ -80,6 +83,10 @@ export default {
 	    this.isElevatedHome = elevated;
 	    this.isOutlinedHome = outlined;
 	});
+	AppBus.$on('update-button-assets', (elevated, outlined) => {
+	    this.isElevatedAssets = elevated;
+	    this.isOutlinedAssets = outlined;
+	});
 	AppBus.$on('update-button-net', (elevated, outlined) => {
 	    this.isElevatedNet = elevated;
 	    this.isOutlinedNet = outlined;
@@ -100,6 +107,7 @@ export default {
     beforeDestroy: function() {
 	AppBus.$off('disabled-buttons');
 	AppBus.$off('update-button-home');
+	AppBus.$off('update-button-assets');
 	AppBus.$off('update-button-net');
 	AppBus.$off('update-button-visualize');
 	AppBus.$off('update-button-stats');
