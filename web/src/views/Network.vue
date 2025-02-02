@@ -594,6 +594,9 @@ export default {
 	    console.log(req_string);
 	    let actionrc = await axios.get(req_string, { crossdomain: true });
 	    console.log(actionrc);
+	    if (this.executing_task) {
+		AppBus.$emit('data-changed', true);
+	    }
 	    this.executing_task = false;
 	    this.dialog = false;
 	    this.$refs["parameters_form"].reset();
