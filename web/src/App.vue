@@ -152,6 +152,7 @@ export default {
 	},
 	confirmExit() {
 	    this.exitdl = false;
+	    localStorage.setItem('dataChanged', JSON.stringify(false));
 	    window.location.href = "/metadata";
 	},
     }
