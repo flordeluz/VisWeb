@@ -351,6 +351,18 @@ class GenRedo(MainredoClass):
             return False
         
 
+    def set_interval(self, minx, maxx, smo):
+        print("[ INTERVAL UNMASKED ]")
+        print(smo["full"])
+        print(smo["full"].shape)
+        mask = (smo["full"].index >= pd.to_datetime(minx)) & (smo["full"].index <= pd.to_datetime(maxx))
+        print("[ INTERVAL MASKED ]")
+        print(smo["full"][mask])
+        print(smo["full"][mask].shape)
+        smo["full"] = smo["full"][mask]
+        return smo
+
+
     def linear_transform(self, num, ds, smo, cols_list):
         # Private constants by method and algo
         method = "transform"

@@ -238,6 +238,25 @@ def get_time_span(dataset, station, resample):
              "status": str(timespan_status) }
 
 
+@route("/setinterval/<dataset>/<station>/<minx>/<maxx>")
+@enable_cors
+def set_interval(dataset, station, minx, maxx):
+    loader = loaders[dataset]
+    response.headers["Content-Type"] = "application/json"
+    global current_station
+    global full_station_ds
+    global current_df
+    global aux_df
+    loader.smo = gr.set_interval(minx, maxx, loader.smo)
+    loader.ds = loader.smo["full"].copy().reset_index()
+    print("[ Old df:\n", current_df, "\n]")
+    json_data, df, full_station_ds = loader.get_data(current_station, resample="D")
+    current_df = df
+    aux_df = df
+    print("[ Current df:\n", current_df, "\n]")
+    return json_data
+
+
 @route("/assets/getfiles")
 @enable_cors
 def get_assets():

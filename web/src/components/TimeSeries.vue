@@ -9,12 +9,16 @@
     <v-col class="text-center text-h4 text-capitalize">Dataset: {{ this.dataset }} - {{ this.station }}</v-col>
   </v-row>
   <v-row v-if="chart" justify="center" dense>
-    <v-col class="text-center text-h5 text-capitalize">Interval: {{ this.minX }} - {{ this.maxX }}</v-col>
+    <v-col cols="4" class="text-center text-h5 text-capitalize">Interval: {{ this.minX }} - {{ this.maxX }}</v-col>
+    <v-col v-if="shSetInterval" cols="1"><button @click="setInterval">Set</button></v-col>
   </v-row>
   <v-row justify="center" dense>
     <v-col cols="10">
       <div id="graph1" class="firstRow graphOne" ref="timeChart" :diameter="200"></div>
     </v-col>
+  </v-row>
+  <v-row v-if="message" class="message" justify="center">
+    <h5><b>{{ message }}</b></h5>
   </v-row>
 </v-container>
 </template>
@@ -80,6 +84,8 @@ export default {
 	// features: [],
 	legends: [],
 	loading_data: true,
+	message: '',
+	shSetInterval: false
     }),
     //props: ["dataset", "station", "recommendations"],
     props: [],
@@ -112,9 +118,12 @@ export default {
 	    if ( axisX.viewportMinimum == null || axisX.viewportMaximum == null) {
 		this.minX = this.strDates[0];
 		this.maxX = this.strDates[this.strDates.length-1];
+		this.shSetInterval = false;
+		this.message = '';
 	    } else {
 		this.minX = this.strDates[Math.floor(Math.abs(axisX.viewportMinimum))];
 		this.maxX = this.strDates[Math.floor(Math.abs(axisX.viewportMaximum))];
+		this.shSetInterval = true;
 	    }
 	},
 	minmaxInterval(raw_data) {
@@ -179,7 +188,21 @@ export default {
 	    })
 	    this.legends = keys
 	    return resData
+	},
+	async setInterval() {
+	    try {
+		const response = await axios.get(
+		    'http://localhost:8080/setinterval/' + this.dataset + '/' + this.station + '/' + this.minX + '/' + this.maxX,
+		    { crossdomain: true }
+		);
+		console.log(response);
+		this.shSetInterval = false;
+		location.reload();
+	    } catch (error) {
+		this.message = 'Connection error setting Interval.';
+	    }
 	}
+	
     },
     mounted: function () {
 	// this.isClean = false
@@ -303,10 +326,31 @@ div.load-layer {
     background-image: linear-gradient(60deg, #64b3f4 0%, #c2e59c 100%) !important;
 }
 .graphOne {
-    height: 76vh;
+    height: 72vh;
     width: 100%; /* 1080px; */
     position: relative;
     border: 3px solid #8FBC8F; /* #73AD21; */
     border-radius: 6px;
+}
+.message {
+    background-color: #DFEFFF;
+    /* border: 2px solid lightgray; */
+    padding: 10px;
+    font-size: 10pt; 
+    font-family: sans-serif;
+    border-radius: 5px;
+    text-align: left;
+    word-wrap: break-word;
+    white-space: pre-line;  
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+    color: red;
+}
+button {
+    padding: 5px;
+    min-width: 100px;
+    border-collapse: collapse; 
+    border: 2px solid lightblue;
+    background-color: #DFEFFF;
 }
 </style>

@@ -159,6 +159,7 @@ export default {
 }
 button {
     padding: 5px;
+    min-width: 100px;
     border-collapse: collapse; 
     border: 2px solid lightblue;
     background-color: #DFEFFF;

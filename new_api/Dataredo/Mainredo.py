@@ -28,6 +28,9 @@ class MainredoClass:
     def reset_sdv_treatment(self, smo) -> bool:
         pass
 
+    def set_interval(self, minx, maxx, smo) -> dict:
+        pass
+
     def linear_transform(self, num, ds, smo, cols_list) -> (DataFrame, dict):
         pass
 
