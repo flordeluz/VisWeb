@@ -36,12 +36,12 @@
 </template>
 
 <script>
-import TimeSeries from "../components/TimeSeries.vue"
+// import TimeSeries from "../components/TimeSeries.vue"
 // @ is an alias to /src
 
 export default {
     name: "Home",
-    components: { TimeSeries },
+    // components: { TimeSeries },
     data: () => ({
 	dataset: "majes",
 	station: "majes",
@@ -53,6 +53,7 @@ export default {
 	],
 	datasetSelected: false
     }),
-    methods: {}
-}
+    methods: {
+    }
+};
 </script>

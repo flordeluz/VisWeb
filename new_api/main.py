@@ -5,6 +5,7 @@
 # Author: Victor C. Salas P. <nmagko@gmail.com>
 
 # Essential Libraries
+import os
 from os import stat
 import copy
 import bottle
@@ -12,6 +13,7 @@ from bottle import request, response, route, static_file, view
 import re
 import json
 import simplejson
+import io
 
 from pandas.core.frame import DataFrame
 from pandas.io.parsers import read_csv
@@ -56,6 +58,10 @@ from Dataredo.GenRedo import GenRedo
 # import threading
 # import concurrent.futures
 
+# Container
+UPLOAD_FOLDER = './.cache/'
+UPLOADED_FILE_LIST = os.path.join(UPLOAD_FOLDER, '.uploaded.dat')
+
 # Shared Dictionary
 resultados_threads = {}
 
@@ -90,6 +96,15 @@ knn_imputer = KNNImputer(missing_values=-1, n_neighbors=10, weights="uniform")
 simple_imp = SimpleImputer(missing_values=-1, strategy="mean")
 iter_imp = IterativeImputer(missing_values=-1, max_iter=20)
 
+
+loaders = {
+    "madrid": ml,
+    "aqp": aqpl,
+    "india": il,
+    "brasil": bl
+}
+
+
 # Objects, Classes, Functions, Methods, And Procedures
 def enable_cors(fn):
     def wrapper(*args, **kwargs):
@@ -105,13 +120,41 @@ def enable_cors(fn):
     return wrapper
 
 
-loaders = {
-    "madrid": ml,
-    "aqp": aqpl,
-    "india": il,
-    "brasil": bl
-}
+# Preparing CSV when it is imported
+def sanitize_headers(headers):
+    return [re.sub(r'[^a-zA-Z0-9]', '', col).lower() for col in headers]
 
+
+def process_csv(filename, file):
+    try:
+        df = pd.read_csv(file, thousands=',')
+        df.columns = sanitize_headers(df.columns)
+        date_cols = [col for col in df.columns if pd.to_datetime(df[col], errors='coerce').notna().all()]
+        if not date_cols:
+            raise ValueError("No date-type column found in the file.")
+        if 'date' in date_cols:
+            first_date_col = 'date'
+        else:
+            first_date_col = date_cols[0]
+            #
+        df = df.rename(columns={first_date_col: 'date'})
+        df['date'] = pd.to_datetime(df['date'], errors='coerce').dt.strftime('%Y-%m-%d')
+        cols = ['date'] + [col for col in df.columns if col != 'date']
+        df = df[cols]
+        for col in df.columns:
+            if df[col].dtype == object:
+                df[col] = pd.to_numeric(df[col].str.replace(',', ''), errors='ignore')
+                #
+        if 'station' not in df.columns:
+            df['station'] = filename
+            #
+        output = io.StringIO()
+        df.to_csv(output, index=False)
+        output.seek(0)
+        return output
+    except Exception as e:
+        raise ValueError(f"Error processing CSV file: {str(e)}")
+    
 
 response.headers["Content-Type"] = "application/json"
 
@@ -271,6 +314,39 @@ def export_asset(dataset, station):
     global full_station_ds
     global current_df
     return current_df.to_csv()
+
+
+@route("/assets/importfile", method="POST")
+@enable_cors
+def import_asset():
+    response.headers["Content-Type"] = "application/json"
+    file = request.files.get("file")
+    filename = request.forms.get("filename", "").strip().lower()
+    if not file or not filename:
+        response.status = 400
+        print("[ IMPORT ERROR ]:", "Missing file or filename")
+        return { "error": "Missing file or filename" }
+    filepath = os.path.join(UPLOAD_FOLDER, filename + ".csv")
+    if os.path.exists(filepath):
+        response.status = 400
+        print("[ IMPORT ERROR ]:", "File already exists")
+        return { "error": "File already exists" }
+    try:
+        processed_file = process_csv(filename, file.file)
+        with open(filepath, 'w', newline='') as f:
+            f.write(processed_file.getvalue())
+            #
+        with open(UPLOADED_FILE_LIST, 'a') as f:
+            # f.write(name_without_ext + "\n")
+            f.write(filename + "\n")
+            #
+        loaders[filename] = GenLoader(filepath)
+        print("[ IMPORT MESSAGE ]:", "File uploaded successfully!")
+        return { "message": "File uploaded successfully!" }
+    except Exception as e:
+        response.status = 500
+        print("[ IMPORT ERROR ]:", str(e))
+        return { "error": str(e) }
 
 
 @route("/stats/describe/<dataset>/<station>")

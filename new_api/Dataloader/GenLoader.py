@@ -94,6 +94,13 @@ class GenLoader(MainloaderClass):
             self.freq = "D"
             self.y_dep = "TEMP"
             #
+        elif re.match(r".*\.cache\/", self.path): # Generic Driver
+            self.data = pd.read_csv(self.path, low_memory=False)
+            self.ds = self.data
+            self.ds["date"] = pd.to_datetime(self.ds["date"], format = "%Y-%m-%d")
+            self.freq = "D"
+            self.y_dep = self.ds.columns[1]
+            #
         self.x_flr = "station"
         self.ds.rename(columns = {"Date":"date", "StationId":self.x_flr, "stationname":self.x_flr}, inplace = True)
         self.ds[self.x_flr] = self.ds[self.x_flr].astype(str)

@@ -34,6 +34,10 @@
   <v-row v-if="message" class="message" justify="center">
     <h5><b>{{ message }}</b></h5>
   </v-row>
+  <v-row dense class="vhrow" align="center" v-if="information" justify="center"/>
+  <v-row v-if="information" class="information" justify="center">
+    <h5><b>{{ information }}</b></h5>
+  </v-row>
 </v-container>
 </template>
 
@@ -50,7 +54,8 @@ export default {
 	fileList: [],
 	selectedFile: null,
 	customFilename: '',
-	message: ''
+	message: '',
+	information: ''
     }),
     methods: {
 	async fetchFiles() {
@@ -60,6 +65,7 @@ export default {
 		console.log("[ response ]:", this.fileList);
 	    } catch (error) {
 		this.message = 'Error fetching file list.';
+		this.information = '';
 	    }
 	},
 	handleFileUpload(event) {
@@ -68,6 +74,7 @@ export default {
 	async uploadFile() {
 	    if (!this.selectedFile) {
 		this.message = 'Please select a file first.';
+		this.information = '';
 		return;
 	    }
 	    
@@ -80,10 +87,12 @@ export default {
 		const response = await axios.post('http://localhost:8080/assets/importfile', formData, {
 		    headers: { 'Content-Type': 'multipart/form-data' }
 		});
-		this.message = response.data.message || 'File uploaded successfully!';
+		this.information = response.data.message || 'File uploaded.';
+		this.message = '';
 		this.fetchFiles(); // Refresh file list
 	    } catch (error) {
 		this.message = 'Error uploading file.';
+		this.information = '';
 	    }
 	},
 	async exportFile() {
@@ -100,6 +109,7 @@ export default {
 		AppBus.$emit('data-changed', false);
 	    } catch (error) {
 		this.message = 'Error exporting file.';
+		this.information = '';
 	    }
 	}
     },
@@ -156,6 +166,20 @@ export default {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     margin-top: 10px;
     color: red;
+}
+.information {
+    background-color: #DFEFFF;
+    /* border: 2px solid lightgray; */
+    padding: 10px;
+    font-size: 10pt; 
+    font-family: sans-serif;
+    border-radius: 5px;
+    text-align: left;
+    word-wrap: break-word;
+    white-space: pre-line;  
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+    color: green;
 }
 button {
     padding: 5px;

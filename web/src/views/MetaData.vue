@@ -53,6 +53,7 @@ export default {
     name: "MetaData",
     //components: { TimeSeries },
     data: () => ({
+	itemsList: [],
 	items: [
 	    { text: "Madrid", value: "madrid" },
 	    { text: "Peru", value: "aqp" },
@@ -68,6 +69,21 @@ export default {
 	loading: false
     }),
     methods: {
+	async fetchItems() {
+	    try {
+		const response = await axios.get('http://localhost:8080/assets/getfiles');
+		this.itemsList = response.data;
+		this.items = this.itemsList.map(item => ({
+		    text: item,
+		    value: item
+		}));
+		console.log("[ response ]:", this.itemsList);
+		console.log("[ changed ]:", this.items);
+	    } catch (error) {
+		this.message = 'Error fetching file list.';
+		this.information = '';
+	    }
+	},
 	async openStation(item) {
 	    console.log("[ Loading station ]:", item)
 	    //await this.getRecommendations(this.dataset, item.name)
@@ -89,11 +105,6 @@ export default {
 	    this.recommendations = recommendations
 	    console.log("[ Recommendations ]:", recommendations)
 	},
-	// newRecommendations(data) {
-	//     console.log("[ Additional recommendations ]:", data.recomends)
-	//     this.recommendations = data.recomends
-	//     console.log("[ Updated recommendations ]:", this.recommendations)
-	// },
 	titleCase(str) {
 	    return str.toLowerCase().replace(/\b(\w)/g, s => s.toUpperCase())
 	},
@@ -167,6 +178,10 @@ export default {
 		})
 	    console.log(this.dataset, this.station)
 	}
+    },
+    mounted: function() {
+	console.log("[ MOUNTED ]");
+	this.fetchItems();
     }
 }
 </script>
