@@ -74,7 +74,7 @@ export default {
 		const response = await axios.get('http://localhost:8080/assets/getfiles');
 		this.itemsList = response.data;
 		this.items = this.itemsList.map(item => ({
-		    text: item,
+		    text: item.toUpperCase(),
 		    value: item
 		}));
 		console.log("[ response ]:", this.itemsList);

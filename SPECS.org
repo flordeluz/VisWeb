@@ -400,6 +400,7 @@ The program makes data preprocessing by inspecting data and giving recommendatio
 | -rw-rw-r-- |   48118 | Jan |  29 | 01:22 | 20250129-012158.diff |
 | -rw-rw-r-- |   12685 | Jan |  30 | 10:32 | 20250130-103221.diff |
 | -rw-rw-r-- |   36912 | Feb |   2 | 00:08 | 20250202-000816.diff |
+| -rw-rw-r-- |  115526 | Feb |  10 | 09:59 | 20250210-095953.diff |
 \rmfamily
 
 ** Backlog
@@ -407,36 +408,37 @@ The program makes data preprocessing by inspecting data and giving recommendatio
 \sffamily
 #+ATTR_LATEX: :mode table :environment longtable :booktabs
 #+CAPTION: List of Backlog activities
-|-------------------------------------------------------------------------+---------------|
-| *Activity*                                                              | *Status*      |
-|-------------------------------------------------------------------------+---------------|
-| Some parts of the code are setting -1 to complete null values. It needs | /Closed/      |
-| a review of the data with negative values like temperature.             |               |
-| *Resolution:* Used for initial visualization purposes.                  |               |
-|-------------------------------------------------------------------------+---------------|
-| View action buttons have to be reviewed in the front end. There are     | /Closed/      |
-| buttons in the tree view requesting labels instead of the key data used |               |
-| to look for.                                                            |               |
-| *Resolution:* Remove action buttons on non-relevant leaf labels.        |               |
-|-------------------------------------------------------------------------+---------------|
-| Integrate data and cache repositories with the front end.               | /In Progress/ |
-|-------------------------------------------------------------------------+---------------|
-| Does get-raw-data() revert .ds to .smo["raw"] when invoked in the       | /Closed/      |
-| frontend? if so, uncomment the referred line in the get-raw-data().     |               |
-| *Resolution:* We are using different structures inside .smo.            |               |
-|-------------------------------------------------------------------------+---------------|
-| For large datasets the prediction time of null values pre-evaluation    | /Unsolved/    |
-| goes like:                                                              |               |
-| decisiontree    : too slow,  >   2 mins                                 |               |
-| kneighbors      : too slow,  >   2 mins                                 |               |
-| gradientboosting: slow,      >   1 min  < 2 mins                        |               |
-| randomforest    : medium,    >  20 secs < 1 min                         |               |
-| meanmedian      : regular,   <= 20 secs                                 |               |
-| locallyweighted : fast,      <=  6 secs                                 |               |
-| legendre        : very fast, <=  2 secs                                 |               |
-| *Resolution:* For large datasets predict with medium to fast algos.     |               |
-| *Author's note:* While testing large dataset stations of Madrid's data, |               |
-| KNN gave better predictions. It is too risky to exclude slower algos    |               |
-| in the early stage of nulls' pre-evaluation.                            |               |
-|-------------------------------------------------------------------------+---------------|
+|-------------------------------------------------------------------------+------------|
+| *Activity*                                                              | *Status*   |
+|-------------------------------------------------------------------------+------------|
+| Some parts of the code are setting -1 to complete null values. It needs | /Closed/   |
+| a review of the data with negative values like temperature.             |            |
+| *Resolution:* Used for initial visualization purposes.                  |            |
+|-------------------------------------------------------------------------+------------|
+| View action buttons have to be reviewed in the front end. There are     | /Closed/   |
+| buttons in the tree view requesting labels instead of the key data used |            |
+| to look for.                                                            |            |
+| *Resolution:* Remove action buttons on non-relevant leaf labels.        |            |
+|-------------------------------------------------------------------------+------------|
+| Integrate data and cache repositories with the front end.               | /Closed/   |
+| *Resolution:* Implemented.                                              |            |
+|-------------------------------------------------------------------------+------------|
+| Does get-raw-data() revert .ds to .smo["raw"] when invoked in the       | /Closed/   |
+| frontend? if so, uncomment the referred line in the get-raw-data().     |            |
+| *Resolution:* We are using different structures inside .smo.            |            |
+|-------------------------------------------------------------------------+------------|
+| For large datasets the prediction time of null values pre-evaluation    | /Unsolved/ |
+| goes like:                                                              |            |
+| decisiontree    : too slow,  >   2 mins                                 |            |
+| kneighbors      : too slow,  >   2 mins                                 |            |
+| gradientboosting: slow,      >   1 min  < 2 mins                        |            |
+| randomforest    : medium,    >  20 secs < 1 min                         |            |
+| meanmedian      : regular,   <= 20 secs                                 |            |
+| locallyweighted : fast,      <=  6 secs                                 |            |
+| legendre        : very fast, <=  2 secs                                 |            |
+| *Resolution:* For large datasets predict with medium to fast algos.     |            |
+| *Author's note:* While testing large dataset stations of Madrid's data, |            |
+| KNN gave better predictions. It is too risky to exclude slower algos    |            |
+| in the early stage of nulls' pre-evaluation.                            |            |
+|-------------------------------------------------------------------------+------------|
 \rmfamily

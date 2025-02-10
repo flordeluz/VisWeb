@@ -66,7 +66,7 @@ UPLOADED_FILE_LIST = os.path.join(UPLOAD_FOLDER, '.uploaded.dat')
 resultados_threads = {}
 
 # Loaders
-# HINT: Main Loader Class For Data Sources
+# HINT: Native datasets
 # -------------------------------
 # DATA SOURCES MSG: A loop for reading folder names inside .data container
 # DATA SOURCES MSG: will create path variables to be used as GenLoader
@@ -80,7 +80,6 @@ aqpl = GenLoader(pe_path)
 br_path = "./.data/Brasil/Data_AirQuality/"
 bl = GenLoader(br_path)
 # -------------------------------
-
 # Scalers (Scale and Normalization)
 # minmax_scaler = MinMaxScaler()
 # sc_scaler = StandardScaler()
@@ -104,6 +103,17 @@ loaders = {
     "brasil": bl
 }
 
+# Loaders
+# HINT: Imported datasets
+if os.path.exists(UPLOADED_FILE_LIST):
+    with open(UPLOADED_FILE_LIST, 'r') as f:
+        for line in f:
+            filename = line.strip()
+            csv_path = os.path.join(UPLOAD_FOLDER, filename + ".csv")
+            
+            if os.path.exists(csv_path):
+                loaders[filename] = GenLoader(csv_path)
+                #
 
 # Objects, Classes, Functions, Methods, And Procedures
 def enable_cors(fn):
