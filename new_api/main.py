@@ -969,4 +969,5 @@ def server_static(filepath):
 
 
 # Set reloader=False when the development finishes to accel the program.
-bottle.run(host="localhost", reloader=True, debug=True)
+# bottle.run(host="localhost", reloader=True, debug=True)
+bottle.run(host="localhost", reloader=False, debug=True)

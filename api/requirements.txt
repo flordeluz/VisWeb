@@ -1,4 +1,0 @@
-bottle
-sklearn
-statsmodels
-simplejson

@@ -12,6 +12,44 @@
   <v-row dense align="center" justify="center">
     <h3><b>Import Dataset from CSV File</b></h3>
   </v-row>
+  <v-row dense align="center" justify="space-between">
+    To import your CSV file correctly, the first row must contain column headers, and at least one column must be a date type (in days). If multiple date columns exist, the first one from the left will be used as the key. Column names are not required, but the key date column will be automatically renamed 'date.'
+  </v-row>
+  <v-row dense align="center" justify="space-between">
+    You may also include a special column called 'station.' If your dataset lacks this column, it will be created automatically based on the dataset name. If present, the 'station' column will be used to group and analyze data by station.
+  </v-row>
+  <v-row dense align="center" justify="center">
+    <v-col cols="5" align="center" justify="center">
+      <b>Example 1: ASSET1.csv</b>
+      <table class="w-full border border-gray-300">
+        <thead class="bg-gray-200">
+          <tr>
+	    <th v-for="header in asset1Headers" :key="header" class="border p-2">{{ header }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(row, index) in asset1Data" :key="index" class="border">
+	    <td v-for="(value, key) in row" :key="key" class="border p-2">{{ value }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </v-col>
+    <v-col cols="5" align="center" justify="center">
+      <b>Example 2: MULTIPLE-ASSETS.csv</b>
+      <table class="w-full border border-gray-300">
+        <thead class="bg-gray-200">
+          <tr>
+	    <th v-for="header in multiAssetHeaders" :key="header" class="border p-2">{{ header }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(row, index) in multiAssetData" :key="index" class="border">
+	    <td v-for="(value, key) in row" :key="key" class="border p-2">{{ value }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </v-col>
+  </v-row>
   <v-row dense align="center" justify="center">
     <v-col cols="3" align="center" justify="center">
       <input v-model="customFilename" placeholder="Optional dataset name" />
@@ -55,7 +93,20 @@ export default {
 	selectedFile: null,
 	customFilename: '',
 	message: '',
-	information: ''
+	information: '',
+	asset1Headers: ["Date", "Price", "Open", "Vol.", "Change %"],
+	asset1Data: [
+            { Date: "02/10/2025", Price: "96,947.0", Open: "96,469.2", "Vol.": "53.83K", "Change %": "0.50%" },
+            { Date: "02/09/2025", Price: "96,469.2", Open: "96,448.4", "Vol.": "48.38K", "Change %": "0.02%" },
+            { Date: "02/08/2025", Price: "96,447.9", Open: "96,513.5", "Vol.": "38.99K", "Change %": "-0.07%" },
+	],
+	multiAssetHeaders: ["Date", "Price", "Open", "Vol.", "Change %", "Station"],
+	multiAssetData: [
+            { Date: "02/10/2025", Price: "96,947.0", Open: "96,469.2", "Vol.": "53.83K", "Change %": "0.50%", Station: "Asset1" },
+            { Date: "02/09/2025", Price: "96,469.2", Open: "96,448.4", "Vol.": "48.38K", "Change %": "0.02%", Station: "Asset1" },
+            { Date: "02/10/2025", Price: "69,148.0", Open: "71,627.3", "Vol.": "93.69K", "Change %": "-3.47%", Station: "Asset2" },
+            { Date: "02/09/2025", Price: "71,630.1", Open: "69,358.0", "Vol.": "105.78K", "Change %": "3.27%", Station: "Asset2" },
+	]
     }),
     methods: {
 	async fetchFiles() {
@@ -196,5 +247,15 @@ input {
 .vhrow {
     padding: 20px;
     border-bottom: solid 1px #DFEFFF;
+}
+table {
+    border-collapse: collapse;
+}
+th, td {
+    padding: 1px;
+    text-align: left;
+}
+th {
+    background-color: #DFEFFF;
 }
 </style>
