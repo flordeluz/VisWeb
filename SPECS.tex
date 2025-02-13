@@ -1,4 +1,4 @@
-% Created 2025-02-13 Thu 10:15
+% Created 2025-02-13 Thu 12:19
 % Intended LaTeX compiler: pdflatex
 \documentclass[a4paper]{article}
 \usepackage[utf8]{inputenc}
@@ -15,6 +15,7 @@
 \usepackage[table]{xcolor}
 \usepackage{booktabs}
 \usepackage{svg}
+\usepackage{dirtree}
 \author{Victor C, Flor De Luz}
 \date{2024-05-20}
 \title{DATA ANALYSIS AND VISUALIZATION OF MULTIVARIATE TIME SERIES SOFTWARE}
@@ -32,12 +33,12 @@
 
 
 \section{Introduction}
-\label{sec:org3e7b165}
+\label{sec:orgc9a491c}
 
 The project explores, analyzes, and integrates Vue.JS and Python code with different models for clean and data completion.
 
 \section{Goals}
-\label{sec:org42b5cc7}
+\label{sec:orge7d6b49}
 
 \begin{itemize}
 \item Complete the code by integrating different Python models into the software project.
@@ -48,7 +49,7 @@ The project explores, analyzes, and integrates Vue.JS and Python code with diffe
 \end{itemize}
 
 \section{State of the art}
-\label{sec:org9258e58}
+\label{sec:org134df44}
 
 \begin{itemize}
 \item Source code of the project(1), with documentation to install and deploy the software. The software currently reads data and graphs time series. It has options for data completion through rolling mean and kNN and partially cleaning data alternatives. It tracks for changes while navigating through the Diagram Operator interface graphically. Integrates Radial Chart for time series cycles.
@@ -57,10 +58,10 @@ The project explores, analyzes, and integrates Vue.JS and Python code with diffe
 \end{itemize}
 
 \section{Pre-implementation analysis}
-\label{sec:org56af25e}
+\label{sec:org7be2826}
 
 \subsection{Multilayer design}
-\label{sec:org2c79699}
+\label{sec:org01ec52e}
 
 The critical aspects of the software are:
 
@@ -79,7 +80,7 @@ The critical aspects of the software are:
 \end{itemize}
 
 \subsection{Frontend specifics}
-\label{sec:org1925d31}
+\label{sec:org9a15311}
 
 \sffamily \footnotesize
 \begin{center}
@@ -88,7 +89,7 @@ The critical aspects of the software are:
 \rmfamily \normalsize
 
 \subsection{Backend specifics}
-\label{sec:org0d49132}
+\label{sec:org29e08c7}
 
 \sffamily \footnotesize
 \begin{center}
@@ -97,7 +98,7 @@ The critical aspects of the software are:
 \rmfamily \normalsize
 
 \subsection{Detected issues}
-\label{sec:org94819b1}
+\label{sec:orgfb1d883}
 
 \begin{itemize}
 \item Data structures. It requires adapting the current data structures of the program to the new dictionary of the tested and trained models.
@@ -108,10 +109,10 @@ The critical aspects of the software are:
 \end{itemize}
 
 \section{{\bfseries\sffamily DONE} Implementation}
-\label{sec:orge3d6919}
+\label{sec:org931e93b}
 
 \subsection{Activities summary}
-\label{sec:orgf2d597e}
+\label{sec:orgaa0dbf3}
 
 \begin{itemize}
 \item Adapt the Backend Data Structure.
@@ -131,10 +132,10 @@ The critical aspects of the software are:
 
 
 \subsection{{\bfseries\sffamily DONE} Activities execution}
-\label{sec:org0f78437}
+\label{sec:org0de527d}
 
 \subsubsection{Change log}
-\label{sec:org3c2aa42}
+\label{sec:orgb289699}
 
 Tracking changes on the program will be done by using diff to create a patch component that allows the creation of a checkpoint and registering the changes by the size of modify or created code\footnote{Tracking log in the appendix}. The folder structure is:
 
@@ -165,12 +166,12 @@ drwx & VisWeb-AlgoritmosLimpieza & Development Folder\\[0pt]
 \rmfamily
 
 \subsubsection{Backlog}
-\label{sec:org9f8a6fa}
+\label{sec:orgd537de3}
 
 The pending activities are in the appendix backlog section. These activities correspond to changes or reviews that depend on multiple program files around the software, and their resolutions will come on the project's timeline. Bugs will gradually fixed.
 
 \subsubsection{{\bfseries\sffamily DONE} Backend data structures}
-\label{sec:orge0df063}
+\label{sec:orgd9ccf2b}
 
 Programs adaptation in the new\textunderscore api.
 
@@ -213,11 +214,11 @@ Programs adaptation in the new\textunderscore api.
 \rmfamily \normalsize
 
 \subsubsection{{\bfseries\sffamily DONE} Backend new specifications}
-\label{sec:orgc0aecc3}
+\label{sec:org3bb93a0}
 
 \begin{enumerate}
 \item {\bfseries\sffamily DONE} Classes and modules
-\label{sec:org6fcf535}
+\label{sec:org9a57930}
 
 \sffamily \footnotesize
 \begin{center}
@@ -226,7 +227,7 @@ Programs adaptation in the new\textunderscore api.
 \rmfamily \normalsize
 
 \item {\bfseries\sffamily DONE} Sequence diagram
-\label{sec:orgafacbb7}
+\label{sec:orga2c3d90}
 
 \sffamily \scriptsize
 \begin{center}
@@ -236,7 +237,7 @@ Programs adaptation in the new\textunderscore api.
 \end{enumerate}
 
 \subsubsection{{\bfseries\sffamily DONE} Backend new data structure and frontend integration}
-\label{sec:org30559ba}
+\label{sec:org06a52f3}
 
 The initial state of the front end had two APIs. All the methods to grab data were migrated and transformed in the new API, leaving just one centralized processing Python API.
 
@@ -249,15 +250,15 @@ The main structure of the front end has not changed too much. The most relevant 
 \rmfamily \normalsize
 
 \subsubsection{Data repository and cache}
-\label{sec:orgb21fb5e}
+\label{sec:org0f44987}
 
 The backend will support dataset uploading. The structure has been defined on folders as an ID inside a .data repository. It will allow us to keep the data treatment progress in folders with the same ID inside a .cache repository.
 
 \section{{\bfseries\sffamily DONE} Requirements}
-\label{sec:orgd75bad3}
+\label{sec:org26d5e70}
 
 \subsection{{\bfseries\sffamily DONE} Software}
-\label{sec:org087a96f}
+\label{sec:orgfbffa3e}
 
 \begin{itemize}
 \item Python 3.12.7
@@ -270,7 +271,7 @@ The backend will support dataset uploading. The structure has been defined on fo
 \end{itemize}
 
 \subsection{{\bfseries\sffamily DONE} Hardware}
-\label{sec:org31952b9}
+\label{sec:org0ff8b63}
 
 \begin{itemize}
 \item Processor AMD64 or x86\textsubscript{64} architecture
@@ -285,10 +286,10 @@ The backend will support dataset uploading. The structure has been defined on fo
 \end{itemize}
 
 \section{{\bfseries\sffamily DONE} Visual Analytics Guidance Development}
-\label{sec:orgf820884}
+\label{sec:org2414a23}
 
 \subsection{{\bfseries\sffamily DONE} Spiral diagram analysis improvement}
-\label{sec:orge80948a}
+\label{sec:orgd2159b3}
 
 \begin{itemize}
 \item Compute segments and timespan for the Spiral. \textbf{Done}.
@@ -299,7 +300,7 @@ The backend will support dataset uploading. The structure has been defined on fo
 \end{itemize}
 
 \subsection{{\bfseries\sffamily DONE} Independent section for statistics}
-\label{sec:orga584013}
+\label{sec:org19e84e3}
 
 \begin{itemize}
 \item Statistics of the time series (size, nulls, type of columns, or dimensions). \textbf{Done}.
@@ -312,7 +313,7 @@ The backend will support dataset uploading. The structure has been defined on fo
 \end{itemize}
 
 \subsection{{\bfseries\sffamily DONE} Flow diagram improvement}
-\label{sec:orgd53d32a}
+\label{sec:orga782d07}
 
 \begin{itemize}
 \item Data cleaning, Normalization and transformation, and Time-series behavior. \textbf{Done}.
@@ -323,7 +324,7 @@ The backend will support dataset uploading. The structure has been defined on fo
 \end{itemize}
 
 \section{{\bfseries\sffamily DONE} Format Multivariate Time Series Data}
-\label{sec:org32a4cff}
+\label{sec:org4655f80}
 
 The program makes data preprocessing by inspecting data and giving recommendations through a hierarchical network graph navigation (3). The steps (5) related to this are:
 
@@ -346,7 +347,7 @@ The program makes data preprocessing by inspecting data and giving recommendatio
 \end{itemize}
 
 \section{References}
-\label{sec:org30cf2d1}
+\label{sec:org2c19417}
 
 \begin{enumerate}
 \item \url{https://github.com/flordeluz/VisWeb}
@@ -358,10 +359,10 @@ The program makes data preprocessing by inspecting data and giving recommendatio
 
 \clearpage
 \section{Appendix}
-\label{sec:orga600484}
+\label{sec:org3605781}
 
 \subsection{Time Estimation Plan}
-\label{sec:org2507285}
+\label{sec:orgf2a5857}
 
 \begin{itemize}
 \item 2 months +4 backup weeks
@@ -395,7 +396,7 @@ The program makes data preprocessing by inspecting data and giving recommendatio
 \end{itemize}
 
 \subsection{Testing functions}
-\label{sec:org95302e9}
+\label{sec:org24b9163}
 
 Testing functions are executed to give advice when the system is processing the signal. In the case of nulls, it uses WMAPE to prioritize the imputation algorithms, the rest are selected by the majority because each algorithm evaluates the same. When testing, more than 50\% evaluate true and false otherwise. Trend algorithms do not detect, just use decomposition to break the signal in its main components.
 
@@ -453,111 +454,117 @@ Decomposition & seasonality\textunderscore detection(Series, Array): LOB\\[0pt]
 \rmfamily
 
 \subsection{Dictionary}
-\label{sec:org5ed4b3a}
+\label{sec:org8fbc7c1}
 
 The dictionary is dynamic, it grows at any algorithm or action made. Data is mostly held on Dataframes. Classes can retain information on the object like testing functions described in the previous subsection. The function contains the signal.
 
 The following is an excerpt from the dictionary. It repeats for each loader class.
 
-\begin{verbatim}
-loaders (dict): Class type, one per dataset.
-|__ aqp: GenLoader
-|__ brasil: GenLoader
-|__ btc: GenLoader
-|__ chiguata: GenLoader
-|__ india: GenLoader
-|__ madrid: GenLoader
+\medskip
+\dirtree{%
+.1 loaders (dict): Class type, one per dataset.
+.2 aqp: GenLoader.
+.2 brasil: GenLoader.
+.2 btc: GenLoader.
+.2 chiguata: GenLoader.
+.2 india: GenLoader.
+.2 madrid: GenLoader.
+}
 
-aqp: Main dataset.
-|__ RM (dict): Imputation algorithm applied.
-|   |__ MAJES (dict): Group or substation.
-|       |__ PPT: function     |
-|       |__ TNM: function     | Dimensions
-|       |__ TXM: function     |
-|__ cache (dict)
-|__ full: DataFrame: Full group or substation-treated data.
-|__ iqr: DataFrame:  An entry of data for each executed algorithm.
-|__ raw: DataFrame:  Full group or substations unchanged data.
-|__ redo (dict)
-    |__ fill (dict)
-    |   |__ decisiontree: bool
-    |   |__ gradientboosting: bool
-    |   |__ kneighbors: bool
-    |   |__ legendre: bool
-    |   |__ locallyweighted: bool
-    |   |__ meanmedian: bool
-    |   |__ randomforest: bool
-    |__ norm (dict)
-    |   |__ maxabs: bool
-    |   |__ minmax: bool
-    |   |__ robust: bool
-    |   |__ standard: bool
-    |__ outliers (dict)
-    |   |__ iqr: bool
-    |   |__ sdv: bool
-    |__ transform (dict)
-        |__ diff: bool
-        |__ linear: bool
-        |__ log: bool
-        |__ quadratic: bool
-        |__ sqrt: bool
-\end{verbatim}
+\medskip
+\dirtree{%
+.1 aqp: Main dataset.
+.2 RM (dict): Imputation algorithm applied.
+.3 MAJES (dict): Group or substation.
+.4 PPT: function (Dimension).
+.4 TNM: function (Dimension).
+.4 TXM: function (Dimension).
+.2 cache (dict).
+.2 full: DataFrame: Full group or substation-treated data.
+.2 iqr: DataFrame:  An entry of data for each executed algorithm.
+.2 raw: DataFrame:  Full group or substations unchanged data.
+.2 redo (dict).
+.3 fill (dict).
+.4 decisiontree: bool.
+.4 gradientboosting: bool.
+.4 kneighbors: bool.
+.4 legendre: bool.
+.4 locallyweighted: bool.
+.4 meanmedian: bool.
+.4 randomforest: bool.
+.3 norm (dict).
+.4 maxabs: bool.
+.4 minmax: bool.
+.4 robust: bool.
+.4 standard: bool.
+.3 outliers (dict).
+.4 iqr: bool.
+.4 sdv: bool.
+.3 transform (dict).
+.4 diff: bool.
+.4 linear: bool.
+.4 log: bool.
+.4 quadratic: bool.
+.4 sqrt: bool.
+}
 
 
 \subsection{Network coloring}
-\label{sec:orgf489f23}
+\label{sec:org540d609}
 
 Color attributes are applied with information that comes from the backend as arrays.
 
 The coloring algorithm works as each node is gray by default, then each node name that comes in the subprocess array overwrites as red then adjacent nodes on the right are colored green, and left or parents are colored red. If an array exception shows up it replaces the red node with orange. The activities array carries information about when a dialog will be launched if the user picks the activity. The array made-path carries the executed actions and allows the algorithm to overwrite the colors of the nodes as blue, the coloring process follows the graph adjacency theory.
 
+\medskip
 Trace:
 
+\medskip
 \textbf{Stage 1:}
 \begin{verbatim}
-[ Algorithms priority ]:  
-Array [ "Rolling Mean" ]
+    [ Algorithms priority ]:
+    Array [ "Rolling Mean" ]
 
-[ Subprocesses ]: 
-Array [ "Clean", "Nulls" ]
+    [ Subprocesses ]:
+    Array [ "Clean", "Nulls" ]
 \end{verbatim}
 
 \textbf{Stage 2:}
 \begin{verbatim}
-[ Made Path ]:  
-Array(3) [ "Clean", "Nulls", "Rolling Mean" ]
-
-[ Subprocesses ]: 
-Array [ "Clean", "Outliers" ]
+    [ Made Path ]:
+    Array(3) [ "Clean", "Nulls", "Rolling Mean" ]
+    
+    [ Subprocesses ]:
+    Array [ "Clean", "Outliers" ]
 \end{verbatim}
 
 \textbf{Stage 3:}
 \begin{verbatim}
-[ Made Path ]:  
-Array(6) [ "Clean", "Nulls", "Rolling Mean", "Clean", "Outliers",
-"Interquartile Range" ]
-
-[ Subprocesses ]: 
-Array [ "DimRed" ]
-
-[ Activities ]:
-Array(3) [ "Multicollinearity Dim.Reduction=['PPT']", "PCA
-Dim.Reduction", "FA Dim.Reduction=['PPT']" ]
+    [ Made Path ]:
+    Array(6) [ "Clean", "Nulls", "Rolling Mean", "Clean", "Outliers",
+    "Interquartile Range" ]
+    
+    [ Subprocesses ]:
+    Array [ "DimRed" ]
+    
+    [ Activities ]:
+    Array(3) [ "Multicollinearity Dim.Reduction=['PPT']", "PCA
+    Dim.Reduction", "FA Dim.Reduction=['PPT']" ]
 \end{verbatim}
 
 \textbf{Stage 4:}
 \begin{verbatim}
-[ Made Path ]:  
-Array(8) [ "Clean", "Nulls", "Rolling Mean", "Clean", "Outliers",
-"Interquartile Range", "DimRed", "Factor Analysis" ]
-
-[ Subprocesses ]: 
-Array [ "Analysis" ]
+    [ Made Path ]:
+    Array(8) [ "Clean", "Nulls", "Rolling Mean", "Clean", "Outliers",
+    "Interquartile Range", "DimRed", "Factor Analysis" ]
+    
+    [ Subprocesses ]:
+    Array [ "Analysis" ]
 \end{verbatim}
 
 
 \subsection{Change Log}
-\label{sec:org5d18048}
+\label{sec:org9b9fe99}
 
 \sffamily
 \begin{longtable}{lrlrrl}
@@ -613,7 +620,7 @@ Array [ "Analysis" ]
 \rmfamily
 
 \subsection{Backlog}
-\label{sec:orgbca565a}
+\label{sec:orga57f501}
 
 \sffamily
 \begin{longtable}{ll}

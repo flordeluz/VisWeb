@@ -7,6 +7,7 @@
 #+LATEX_HEADER: \usepackage[table]{xcolor}
 #+LATEX_HEADER: \usepackage{booktabs}
 #+LATEX_HEADER: \usepackage{svg}
+#+LATEX_HEADER: \usepackage{dirtree}
 
 * Introduction
 
@@ -312,49 +313,57 @@ The dictionary is dynamic, it grows at any algorithm or action made. Data is mos
 
 The following is an excerpt from the dictionary. It repeats for each loader class.
 
-\begin{verbatim}
-loaders (dict): Class type, one per dataset.
-|__ aqp: GenLoader
-|__ brasil: GenLoader
-|__ btc: GenLoader
-|__ chiguata: GenLoader
-|__ india: GenLoader
-|__ madrid: GenLoader
+\medskip
+#+BEGIN_EXPORT latex
+\dirtree{%
+.1 loaders (dict): Class type, one per dataset.
+.2 aqp: GenLoader.
+.2 brasil: GenLoader.
+.2 btc: GenLoader.
+.2 chiguata: GenLoader.
+.2 india: GenLoader.
+.2 madrid: GenLoader.
+}
+#+END_EXPORT
 
-aqp: Main dataset.
-|__ RM (dict): Imputation algorithm applied.
-|   |__ MAJES (dict): Group or substation.
-|       |__ PPT: function     |
-|       |__ TNM: function     | Dimensions
-|       |__ TXM: function     |
-|__ cache (dict)
-|__ full: DataFrame: Full group or substation-treated data.
-|__ iqr: DataFrame:  An entry of data for each executed algorithm.
-|__ raw: DataFrame:  Full group or substations unchanged data.
-|__ redo (dict)
-    |__ fill (dict)
-    |   |__ decisiontree: bool
-    |   |__ gradientboosting: bool
-    |   |__ kneighbors: bool
-    |   |__ legendre: bool
-    |   |__ locallyweighted: bool
-    |   |__ meanmedian: bool
-    |   |__ randomforest: bool
-    |__ norm (dict)
-    |   |__ maxabs: bool
-    |   |__ minmax: bool
-    |   |__ robust: bool
-    |   |__ standard: bool
-    |__ outliers (dict)
-    |   |__ iqr: bool
-    |   |__ sdv: bool
-    |__ transform (dict)
-        |__ diff: bool
-        |__ linear: bool
-        |__ log: bool
-        |__ quadratic: bool
-        |__ sqrt: bool
-\end{verbatim}
+\medskip
+#+BEGIN_EXPORT latex
+\dirtree{%
+.1 aqp: Main dataset.
+.2 RM (dict): Imputation algorithm applied.
+.3 MAJES (dict): Group or substation.
+.4 PPT: function (Dimension).
+.4 TNM: function (Dimension).
+.4 TXM: function (Dimension).
+.2 cache (dict).
+.2 full: DataFrame: Full group or substation-treated data.
+.2 iqr: DataFrame:  An entry of data for each executed algorithm.
+.2 raw: DataFrame:  Full group or substations unchanged data.
+.2 redo (dict).
+.3 fill (dict).
+.4 decisiontree: bool.
+.4 gradientboosting: bool.
+.4 kneighbors: bool.
+.4 legendre: bool.
+.4 locallyweighted: bool.
+.4 meanmedian: bool.
+.4 randomforest: bool.
+.3 norm (dict).
+.4 maxabs: bool.
+.4 minmax: bool.
+.4 robust: bool.
+.4 standard: bool.
+.3 outliers (dict).
+.4 iqr: bool.
+.4 sdv: bool.
+.3 transform (dict).
+.4 diff: bool.
+.4 linear: bool.
+.4 log: bool.
+.4 quadratic: bool.
+.4 sqrt: bool.
+}
+#+END_EXPORT
 
 
 ** Network coloring
@@ -363,48 +372,50 @@ Color attributes are applied with information that comes from the backend as arr
 
 The coloring algorithm works as each node is gray by default, then each node name that comes in the subprocess array overwrites as red then adjacent nodes on the right are colored green, and left or parents are colored red. If an array exception shows up it replaces the red node with orange. The activities array carries information about when a dialog will be launched if the user picks the activity. The array made-path carries the executed actions and allows the algorithm to overwrite the colors of the nodes as blue, the coloring process follows the graph adjacency theory.
 
+\medskip
 Trace:
 
+\medskip
 *Stage 1:*
 \begin{verbatim}
-[ Algorithms priority ]:  
-Array [ "Rolling Mean" ]
+    [ Algorithms priority ]:
+    Array [ "Rolling Mean" ]
 
-[ Subprocesses ]: 
-Array [ "Clean", "Nulls" ]
+    [ Subprocesses ]:
+    Array [ "Clean", "Nulls" ]
 \end{verbatim}
 
 *Stage 2:*
 \begin{verbatim}
-[ Made Path ]:  
-Array(3) [ "Clean", "Nulls", "Rolling Mean" ]
-
-[ Subprocesses ]: 
-Array [ "Clean", "Outliers" ]
+    [ Made Path ]:
+    Array(3) [ "Clean", "Nulls", "Rolling Mean" ]
+    
+    [ Subprocesses ]:
+    Array [ "Clean", "Outliers" ]
 \end{verbatim}
 
 *Stage 3:*
 \begin{verbatim}
-[ Made Path ]:  
-Array(6) [ "Clean", "Nulls", "Rolling Mean", "Clean", "Outliers",
-"Interquartile Range" ]
-
-[ Subprocesses ]: 
-Array [ "DimRed" ]
-
-[ Activities ]:
-Array(3) [ "Multicollinearity Dim.Reduction=['PPT']", "PCA
-Dim.Reduction", "FA Dim.Reduction=['PPT']" ]
+    [ Made Path ]:
+    Array(6) [ "Clean", "Nulls", "Rolling Mean", "Clean", "Outliers",
+    "Interquartile Range" ]
+    
+    [ Subprocesses ]:
+    Array [ "DimRed" ]
+    
+    [ Activities ]:
+    Array(3) [ "Multicollinearity Dim.Reduction=['PPT']", "PCA
+    Dim.Reduction", "FA Dim.Reduction=['PPT']" ]
 \end{verbatim}
 
 *Stage 4:*
 \begin{verbatim}
-[ Made Path ]:  
-Array(8) [ "Clean", "Nulls", "Rolling Mean", "Clean", "Outliers",
-"Interquartile Range", "DimRed", "Factor Analysis" ]
-
-[ Subprocesses ]: 
-Array [ "Analysis" ]
+    [ Made Path ]:
+    Array(8) [ "Clean", "Nulls", "Rolling Mean", "Clean", "Outliers",
+    "Interquartile Range", "DimRed", "Factor Analysis" ]
+    
+    [ Subprocesses ]:
+    Array [ "Analysis" ]
 \end{verbatim}
 
 
