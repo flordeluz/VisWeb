@@ -141,3 +141,6 @@ class MainredoClass:
 
     def drop_features(self, smo, cols_list, n_comp) -> (dict, list):
         pass
+
+    def show_dict_tree(self, smo) -> None:
+        pass

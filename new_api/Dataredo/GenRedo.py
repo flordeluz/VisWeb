@@ -12,6 +12,7 @@ import pandas as pd
 import re
 import json
 # from IPython.display import display
+from treelib import Tree
 # Rolling Mean & Moving Median
 # from statistics import mean, median, mode
 from sklearn.metrics import mean_absolute_error, mean_squared_error, median_absolute_error, r2_score, mean_absolute_percentage_error
@@ -139,6 +140,27 @@ def smooth_legendre(y_dep, y_hat, y_src):
         y_hat = sl_scaler.fit_transform(y_hat.reshape(-1, 1))
         print("[", y_dep, "SMOOTHED. Source min/max:", sl_min_src, sl_max_src, "Predicted min/max:", sl_min_hat, sl_max_hat, "Scale min/max:", sl_min, sl_max, "]")
     return y_hat.flatten()
+
+
+def get_type_and_shape(value):
+    if isinstance(value, dict):
+        return "dict"
+    elif isinstance(value, list):
+        return f"list[{len(value)}]"
+    elif isinstance(value, np.ndarray):
+        return f"ndarray{value.shape}"
+    else:
+        return type(value).__name__
+
+
+def dict_to_tree(tree, parent, d):
+    for k, v in d.items():
+        node_id = f"{parent}.{k}"
+        if isinstance(v, dict):
+            tree.create_node(tag=f"{k} ({get_type_and_shape(v)})", identifier=node_id, parent=parent)
+            dict_to_tree(tree, node_id, v)
+        else:
+            tree.create_node(tag=f"{k}: {get_type_and_shape(v)}", identifier=node_id, parent=parent)
 
 
 # CLASS DEFINITION
@@ -1708,6 +1730,13 @@ class GenRedo(MainredoClass):
                 #
         cols_list = smo["full"].select_dtypes(include = np.number).columns.tolist()
         return smo, cols_list
+
+
+    def show_dict_tree(self, smo):
+        tree = Tree()
+        tree.create_node("root", "root")
+        dict_to_tree(tree, "root", smo)
+        tree.show()
 
 
 # UNIT TESTING SECTION

@@ -1,4 +1,4 @@
-% Created 2025-02-10 Mon 10:03
+% Created 2025-02-13 Thu 03:46
 % Intended LaTeX compiler: pdflatex
 \documentclass[a4paper]{article}
 \usepackage[utf8]{inputenc}
@@ -32,12 +32,12 @@
 
 
 \section{Introduction}
-\label{sec:orgf4e6ce5}
+\label{sec:org66b71b1}
 
 The project explores, analyzes, and integrates Vue.JS and Python code with different models for clean and data completion.
 
 \section{Goals}
-\label{sec:org787d9b8}
+\label{sec:org673c4dc}
 
 \begin{itemize}
 \item Complete the code by integrating different Python models into the software project.
@@ -48,7 +48,7 @@ The project explores, analyzes, and integrates Vue.JS and Python code with diffe
 \end{itemize}
 
 \section{State of the art}
-\label{sec:org28f2838}
+\label{sec:orgaee5a35}
 
 \begin{itemize}
 \item Source code of the project(1), with documentation to install and deploy the software. The software currently reads data and graphs time series. It has options for data completion through rolling mean and kNN and partially cleaning data alternatives. It tracks for changes while navigating through the Diagram Operator interface graphically. Integrates Radial Chart for time series cycles.
@@ -57,10 +57,10 @@ The project explores, analyzes, and integrates Vue.JS and Python code with diffe
 \end{itemize}
 
 \section{Pre-implementation analysis}
-\label{sec:orgc3f5e40}
+\label{sec:orgedf6905}
 
 \subsection{Multilayer design}
-\label{sec:orgc9b7b15}
+\label{sec:org67df0a8}
 
 The critical aspects of the software are:
 
@@ -79,7 +79,7 @@ The critical aspects of the software are:
 \end{itemize}
 
 \subsection{Frontend specifics}
-\label{sec:org5a33963}
+\label{sec:orgd75c7b6}
 
 \sffamily \footnotesize
 \begin{center}
@@ -88,7 +88,7 @@ The critical aspects of the software are:
 \rmfamily \normalsize
 
 \subsection{Backend specifics}
-\label{sec:org701760b}
+\label{sec:org31e260e}
 
 \sffamily \footnotesize
 \begin{center}
@@ -97,7 +97,7 @@ The critical aspects of the software are:
 \rmfamily \normalsize
 
 \subsection{Detected issues}
-\label{sec:org3235a25}
+\label{sec:org20feccc}
 
 \begin{itemize}
 \item Data structures. It requires adapting the current data structures of the program to the new dictionary of the tested and trained models.
@@ -108,10 +108,10 @@ The critical aspects of the software are:
 \end{itemize}
 
 \section{{\bfseries\sffamily DONE} Implementation}
-\label{sec:org43f6067}
+\label{sec:org93ba10a}
 
 \subsection{Activities summary}
-\label{sec:orgf4d4ce1}
+\label{sec:org5c82532}
 
 \begin{itemize}
 \item Adapt the Backend Data Structure.
@@ -131,10 +131,10 @@ The critical aspects of the software are:
 
 
 \subsection{{\bfseries\sffamily DONE} Activities execution}
-\label{sec:org954cb9f}
+\label{sec:org2c47333}
 
 \subsubsection{Change log}
-\label{sec:org664a88c}
+\label{sec:org559a4f7}
 
 Tracking changes on the program will be done by using diff to create a patch component that allows the creation of a checkpoint and registering the changes by the size of modify or created code\footnote{Tracking log in the appendix}. The folder structure is:
 
@@ -165,12 +165,12 @@ drwx & VisWeb-AlgoritmosLimpieza & Development Folder\\[0pt]
 \rmfamily
 
 \subsubsection{Backlog}
-\label{sec:orgf74cdc8}
+\label{sec:orgaeead3a}
 
 The pending activities are in the appendix backlog section. These activities correspond to changes or reviews that depend on multiple program files around the software, and their resolutions will come on the project's timeline. Bugs will gradually fixed.
 
 \subsubsection{{\bfseries\sffamily DONE} Backend data structures}
-\label{sec:orgad608dd}
+\label{sec:org8727723}
 
 Programs adaptation in the new\textunderscore api.
 
@@ -213,11 +213,11 @@ Programs adaptation in the new\textunderscore api.
 \rmfamily \normalsize
 
 \subsubsection{{\bfseries\sffamily DONE} Backend new specifications}
-\label{sec:org481bb74}
+\label{sec:org3489a77}
 
 \begin{enumerate}
 \item {\bfseries\sffamily DONE} Classes and modules
-\label{sec:orga55c69e}
+\label{sec:org151e4fe}
 
 \sffamily \footnotesize
 \begin{center}
@@ -226,7 +226,7 @@ Programs adaptation in the new\textunderscore api.
 \rmfamily \normalsize
 
 \item {\bfseries\sffamily DONE} Sequence diagram
-\label{sec:orga343298}
+\label{sec:org1f37bba}
 
 \sffamily \scriptsize
 \begin{center}
@@ -236,7 +236,7 @@ Programs adaptation in the new\textunderscore api.
 \end{enumerate}
 
 \subsubsection{{\bfseries\sffamily DONE} Backend new data structure and frontend integration}
-\label{sec:org3b79521}
+\label{sec:org7485a21}
 
 The initial state of the front end had two APIs. All the methods to grab data were migrated and transformed in the new API, leaving just one centralized processing Python API.
 
@@ -249,15 +249,15 @@ The main structure of the front end has not changed too much. The most relevant 
 \rmfamily \normalsize
 
 \subsubsection{Data repository and cache}
-\label{sec:org8ed285b}
+\label{sec:org7016b60}
 
 The backend will support dataset uploading. The structure has been defined on folders as an ID inside a .data repository. It will allow us to keep the data treatment progress in folders with the same ID inside a .cache repository.
 
 \section{{\bfseries\sffamily DONE} Requirements}
-\label{sec:org8280444}
+\label{sec:orgc8da40d}
 
 \subsection{{\bfseries\sffamily DONE} Software}
-\label{sec:org2421971}
+\label{sec:orgb40c177}
 
 \begin{itemize}
 \item Python 3.12.7
@@ -270,7 +270,7 @@ The backend will support dataset uploading. The structure has been defined on fo
 \end{itemize}
 
 \subsection{{\bfseries\sffamily DONE} Hardware}
-\label{sec:orga56e313}
+\label{sec:orgbbfde63}
 
 \begin{itemize}
 \item Processor AMD64 or x86\textsubscript{64} architecture
@@ -285,10 +285,10 @@ The backend will support dataset uploading. The structure has been defined on fo
 \end{itemize}
 
 \section{{\bfseries\sffamily DONE} Visual Analytics Guidance Development}
-\label{sec:org17161b3}
+\label{sec:orga3ac269}
 
 \subsection{{\bfseries\sffamily DONE} Spiral diagram analysis improvement}
-\label{sec:org2d94749}
+\label{sec:orge011339}
 
 \begin{itemize}
 \item Compute segments and timespan for the Spiral. \textbf{Done}.
@@ -299,7 +299,7 @@ The backend will support dataset uploading. The structure has been defined on fo
 \end{itemize}
 
 \subsection{{\bfseries\sffamily DONE} Independent section for statistics}
-\label{sec:orged3de50}
+\label{sec:orgfe42b25}
 
 \begin{itemize}
 \item Statistics of the time series (size, nulls, type of columns, or dimensions). \textbf{Done}.
@@ -312,7 +312,7 @@ The backend will support dataset uploading. The structure has been defined on fo
 \end{itemize}
 
 \subsection{{\bfseries\sffamily DONE} Flow diagram improvement}
-\label{sec:org8bed5d8}
+\label{sec:org476c6b6}
 
 \begin{itemize}
 \item Data cleaning, Normalization and transformation, and Time-series behavior. \textbf{Done}.
@@ -323,7 +323,7 @@ The backend will support dataset uploading. The structure has been defined on fo
 \end{itemize}
 
 \section{{\bfseries\sffamily DONE} Format Multivariate Time Series Data}
-\label{sec:org2af5302}
+\label{sec:org1b0d6a5}
 
 The program makes data preprocessing by inspecting data and giving recommendations through a hierarchical network graph navigation (3). The steps (5) related to this are:
 
@@ -346,7 +346,7 @@ The program makes data preprocessing by inspecting data and giving recommendatio
 \end{itemize}
 
 \section{References}
-\label{sec:orge01975b}
+\label{sec:org09f9ef0}
 
 \begin{enumerate}
 \item \url{https://github.com/flordeluz/VisWeb}
@@ -358,10 +358,10 @@ The program makes data preprocessing by inspecting data and giving recommendatio
 
 \clearpage
 \section{Appendix}
-\label{sec:orgc1eca4a}
+\label{sec:orga8b7b62}
 
 \subsection{Time Estimation Plan}
-\label{sec:orgca3fa2f}
+\label{sec:orga6b5254}
 
 \begin{itemize}
 \item 2 months +4 backup weeks
@@ -395,7 +395,9 @@ The program makes data preprocessing by inspecting data and giving recommendatio
 \end{itemize}
 
 \subsection{Testing functions}
-\label{sec:org3b639a6}
+\label{sec:orgf1d8f35}
+
+Testing functions are executed to give advice when the system is processing the signal. In the case of nulls, it uses WMAPE to prioritize the imputation algorithms, the rest are selected by the majority because each algorithm evaluates the same. When testing, more than 50\% evaluate true and false otherwise. Trend algorithms do not detect, just use decomposition to break the signal in its main components.
 
 \sffamily
 \begin{longtable}{ll}
@@ -415,101 +417,144 @@ The program makes data preprocessing by inspecting data and giving recommendatio
 \endfoot
 \endlastfoot
 \hline
-AlgoritmosLimpieza & obtener\textunderscore ruido\textunderscore de(DF, int): bool\\[0pt]
+Nulls imputation & null\textunderscore values\textunderscore data(DF): bool\\[0pt]
+ & fill\textunderscore w\textunderscore meanmedian(*dict)\\[0pt]
+ & fill\textunderscore w\textunderscore decisiontree(*dict)\\[0pt]
+ & fill\textunderscore w\textunderscore gradientboosting(*dict)\\[0pt]
+ & fill\textunderscore w\textunderscore locallyweighted(*dict)\\[0pt]
+ & fill\textunderscore w\textunderscore legendre(*dict)\\[0pt]
+ & fill\textunderscore w\textunderscore randomforest(*dict)\\[0pt]
+ & fill\textunderscore w\textunderscore kneighbors(*dict)\\[0pt]
+\hline
+Cleaning & obtener\textunderscore ruido\textunderscore de(DF, int): bool\\[0pt]
  & obtener\textunderscore ruido\textunderscore cv(DF, float): bool\\[0pt]
- & obtener\textunderscore ruido\textunderscore ri(DF): bool\\[0pt]
+ & obtener\textunderscore outlier\textunderscore iqr(DF): bool\\[0pt]
  & obtener\textunderscore outlier\textunderscore zscore(DF, int): bool\\[0pt]
- & grubbs\textunderscore max\textunderscore test(DF, float): bool, float\\[0pt]
- & grubbs\textunderscore min\textunderscore test(DF, float): bool, float\\[0pt]
  & obtener\textunderscore outlier\textunderscore grubbs(DF, float): bool\\[0pt]
- & obtener\textunderscore outlier\textunderscore dixon(DF): bool\\[0pt]
- & ejecutarFuncionesMultihilo(DF, list): None\\[0pt]
- & comprobarLimpieza(DF): bool, string\\[0pt]
 \hline
-algoritmosNormalizacion & obtener\textunderscore estacionaria\textunderscore mv(DF, float): bool\\[0pt]
- & obtener\textunderscore no\textunderscore patrones\textunderscore estacionalidad(DF, int): bool\\[0pt]
- & def obtener\textunderscore distribucion\textunderscore conocida(DF): bool\\[0pt]
- & ejecutarFuncionesMultihilo(DF, list): None\\[0pt]
- & comprobarNormalizacion(DF): bool, string\\[0pt]
+Normalization & obtener\textunderscore no\textunderscore patrones\textunderscore estacionalidad(DF, int): bool\\[0pt]
+ & obtener\textunderscore distribucion\textunderscore conocida(DF): bool\\[0pt]
 \hline
-algoritmosTransformacion & obtener\textunderscore no\textunderscore estacionariedad\textunderscore adf(DF, float): bool\\[0pt]
+Transformation & obtener\textunderscore no\textunderscore estacionariedad\textunderscore adf(DF, float): bool\\[0pt]
  & obtener\textunderscore no\textunderscore estacionariedad\textunderscore kpss(DF, float): bool\\[0pt]
  & obtener\textunderscore comportamiento\textunderscore persistente\textunderscore hurst(DF): bool\\[0pt]
- & ejecutarFuncionesMultihilo(DF, list): None\\[0pt]
- & comprobarTransformacion(DF): bool, string\\[0pt]
 \hline
-algoritmosReduccion2 & verificar\textunderscore correlacion\textunderscore pearson(DF, float): bool\\[0pt]
+Reduction & verificar\textunderscore correlacion\textunderscore pearson(DF, float): bool\\[0pt]
  & verificar\textunderscore correlacion\textunderscore spearman(DF, float): bool\\[0pt]
  & verificar\textunderscore correlacion\textunderscore kendall(DF, float): bool\\[0pt]
- & verificar\textunderscore linealidad(DF, float): bool\\[0pt]
- & verificar\textunderscore linealidad\textunderscore regression(DF, float): bool\\[0pt]
- & verificar\textunderscore linealidad\textunderscore pca(DF, float): bool\\[0pt]
- & verificar\textunderscore linealidad\textunderscore acf(DF, float): bool\\[0pt]
- & verificar\textunderscore linealidad\textunderscore pacf(DF, float): bool\\[0pt]
- & verificar\textunderscore estacionariedad\textunderscore adf(DF, float): bool\\[0pt]
- & verificar\textunderscore estacionariedad\textunderscore kpss(DF, float): bool\\[0pt]
- & verificar\textunderscore estabilidad\textunderscore descomposicion(DF, float): bool\\[0pt]
- & verificar\textunderscore estabilidad\textunderscore lsvr(DF, float): bool\\[0pt]
- & verificar\textunderscore dimensionality\textunderscore reduction\textunderscore pca(DF, float): bool\\[0pt]
- & verificar\textunderscore dimensionality\textunderscore reduction\textunderscore fa(DF, int, float): bool\\[0pt]
- & ejecutarFuncionesMultihilo(DF, list): None\\[0pt]
- & comprobarReduccion(DF): bool, string\\[0pt]
+ & check\textunderscore multicollinearity(DF, int): bool\\[0pt]
+ & check\textunderscore dimensionality\textunderscore reduction\textunderscore pca(DF, float): bool\\[0pt]
+ & check\textunderscore dimensionality\textunderscore reduction\textunderscore fa(DF, int, float): bool\\[0pt]
 \hline
-algoritmosEstacionalidad & check\textunderscore box\textunderscore pierce(Series, float): bool\\[0pt]
- & verificar\textunderscore box\textunderscore pierce(DF): bool\\[0pt]
- & check\textunderscore box\textunderscore pierce2(Series, float): bool\\[0pt]
- & verificar\textunderscore box\textunderscore pierce2(DF): bool\\[0pt]
- & check\textunderscore periodicity\textunderscore fft(Series, float): bool\\[0pt]
- & verificar\textunderscore periodicidad\textunderscore fft(DF): bool\\[0pt]
- & check\textunderscore periodicity\textunderscore fft2(Series): bool\\[0pt]
- & verificar\textunderscore periodicidad\textunderscore fft2(DF): bool\\[0pt]
- & check\textunderscore periodicity\textunderscore fft3(Series): bool\\[0pt]
- & verificar\textunderscore periodicidad\textunderscore fft3(DF): bool\\[0pt]
- & check\textunderscore periodicity\textunderscore acf\textunderscore pacf(Series, float): bool\\[0pt]
- & verificar\textunderscore periodicidad\textunderscore acf\textunderscore pacf(DF): bool\\[0pt]
- & check\textunderscore wavelet\textunderscore periodicity(Series, float): bool\\[0pt]
- & verificar\textunderscore periodicidad\textunderscore wavelet(DF): bool\\[0pt]
- & check\textunderscore seasonal\textunderscore periodicity(Series, int, float): bool\\[0pt]
- & verificar\textunderscore descomposiocion\textunderscore stl(DF, int): bool\\[0pt]
- & fisher\textunderscore seasonality\textunderscore test(Series, float): bool\\[0pt]
- & verificar\textunderscore estacionalidad\textunderscore fisher(DF): bool\\[0pt]
- & check\textunderscore amplitude(Series, float): bool\\[0pt]
- & verificar\textunderscore amplitud(DF): bool\\[0pt]
- & check\textunderscore amplitude\textunderscore fft(Series, float): bool\\[0pt]
- & verificar\textunderscore amplitud\textunderscore fft(DF): bool\\[0pt]
- & check\textunderscore frequency\textunderscore fft(Series, float): bool\\[0pt]
- & verificar\textunderscore frecuencia\textunderscore fft(DF): bool\\[0pt]
- & check\textunderscore frequency\textunderscore acf(Series, float): bool\\[0pt]
- & verificar\textunderscore frecuencia\textunderscore acf(DF): bool\\[0pt]
- & determine\textunderscore timespan(DF, float): bool\\[0pt]
- & verificar\textunderscore duracion(DF): bool\\[0pt]
- & ejecutarFuncionesMultihilo(DF, list): None\\[0pt]
- & comprobarEstacionalidad(DF): bool, string\\[0pt]
-\hline
-algoritmosCiclicidad2 & detecta\textunderscore ciclo(Series, float): bool\\[0pt]
- & verificar\textunderscore ciclo\textunderscore fft(DF): bool\\[0pt]
- & consistencia\textunderscore ciclo\textunderscore fft(Series, int, float): bool\\[0pt]
- & verificar\textunderscore consistencia\textunderscore fft(DF): bool\\[0pt]
- & consistencia\textunderscore ciclo\textunderscore acf(Series, int, float): bool\\[0pt]
- & verificar\textunderscore consistencia\textunderscore acf(DF): bool\\[0pt]
- & verificar\textunderscore consistencia\textunderscore forma\textunderscore duracion(DF): bool\\[0pt]
- & consistencia\textunderscore ciclo\textunderscore varianza(Series, int, float): bool\\[0pt]
- & verificar\textunderscore consistencia\textunderscore varianza(DF): bool\\[0pt]
- & consistencia\textunderscore ciclo\textunderscore pearsonr(Series, array, int, float): bool\\[0pt]
- & sinusoidal(array, array, array, array, array): array\\[0pt]
- & forma\textunderscore ciclos\textunderscore sinusoidal(Series, int, float): bool\\[0pt]
- & verificar\textunderscore ciclos\textunderscore sinusoidal(DF): bool\\[0pt]
- & frecuencia\textunderscore ciclos\textunderscore fft(Series, float, float): bool\\[0pt]
- & verificar\textunderscore frecuencia\textunderscore fft(DF): bool\\[0pt]
- & frecuencia\textunderscore ciclos\textunderscore acf(Series, int, int): bool\\[0pt]
- & verificar\textunderscore frecuencia\textunderscore acf(DF): bool\\[0pt]
- & ejecutarFuncionesMultihilo(DF, list): None\\[0pt]
- & comprobarCiclicidad(DF): bool, string\\[0pt]
+Decomposition & seasonality\textunderscore detection(Series, Array): LOB\\[0pt]
+ & trend\textunderscore detection(Series, Array): LOB\\[0pt]
+ & noise\textunderscore detection(Series, Array): LOB\\[0pt]
 \end{longtable}
 \rmfamily
 
+\subsection{Dictionary}
+\label{sec:orgdbe4888}
+
+The dictionary is dynamic, it grows at any algorithm or action made. Data is mostly held on Dataframes. Classes can retain information on the object like testing functions described in the previous subsection. The function contains the signal.
+
+The following is an excerpt from the dictionary. It repeats for each loader class.
+
+\begin{verbatim}
+loaders (dict)
+|-- aqp: GenLoader
+|-- brasil: GenLoader
+|-- btc: GenLoader
+|-- chiguata: GenLoader
+|-- india: GenLoader
+\-- madrid: GenLoader
+
+aqp
+|-- RM (dict)
+|   \-- MAJES (dict)
+|       |-- PPT: function
+|       |-- TNM: function
+|       \-- TXM: function
+|-- cache (dict)
+|-- full: DataFrame
+|-- iqr: DataFrame
+|-- raw: DataFrame
+\-- redo (dict)
+    |-- fill (dict)
+    |   |-- decisiontree: bool
+    |   |-- gradientboosting: bool
+    |   |-- kneighbors: bool
+    |   |-- legendre: bool
+    |   |-- locallyweighted: bool
+    |   |-- meanmedian: bool
+    |   \-- randomforest: bool
+    |-- norm (dict)
+    |   |-- maxabs: bool
+    |   |-- minmax: bool
+    |   |-- robust: bool
+    |   \-- standard: bool
+    |-- outliers (dict)
+    |   |-- iqr: bool
+    |   \-- sdv: bool
+    \-- transform (dict)
+        |-- diff: bool
+        |-- linear: bool
+        |-- log: bool
+        |-- quadratic: bool
+        \-- sqrt: bool
+\end{verbatim}
+
+
+\subsection{Network coloring}
+\label{sec:org63e6dad}
+
+Color attributes are applied with information that comes from the backend as arrays.
+
+The coloring algorithm works as each node is gray by default, then each node name that comes in the subprocess array overwrites as red then adjacent nodes on the right are colored green, and left or parents are colored red. If an array exception shows up it replaces the red node with orange. The activities array carries information about when a dialog will be launched if the user picks the activity. The array made-path carries the executed actions and allows the algorithm to overwrite the colors of the nodes as blue, the coloring process follows the graph adjacency theory.
+
+Trace:
+
+\textbf{Stage 1:}
+\begin{verbatim}
+[ Algorithms priority ]:  
+Array [ "Rolling Mean" ]
+
+[ Subprocesses ]: 
+Array [ "Clean", "Nulls" ]
+\end{verbatim}
+
+\textbf{Stage 2:}
+\begin{verbatim}
+[ Made Path ]:  
+Array(3) [ "Clean", "Nulls", "Rolling Mean" ]
+
+[ Subprocesses ]: 
+Array [ "Clean", "Outliers" ]
+\end{verbatim}
+
+\textbf{Stage 3:}
+\begin{verbatim}
+[ Made Path ]:  
+Array(6) [ "Clean", "Nulls", "Rolling Mean", "Clean", "Outliers", "Interquartile Range" ]
+
+[ Subprocesses ]: 
+Array [ "DimRed" ]
+
+[ Activities ]:
+Array(3) [ "Multicollinearity Dim.Reduction=['PPT']", "PCA Dim.Reduction", "FA Dim.Reduction=['PPT']" ]
+\end{verbatim}
+
+\textbf{Stage 4:}
+\begin{verbatim}
+[ Made Path ]:  
+Array(8) [ "Clean", "Nulls", "Rolling Mean", "Clean", "Outliers", "Interquartile Range", "DimRed", "Factor Analysis" ]
+
+[ Subprocesses ]: 
+Array [ "Analysis" ]
+\end{verbatim}
+
+
 \subsection{Change Log}
-\label{sec:org43e105a}
+\label{sec:orga7abd76}
 
 \sffamily
 \begin{longtable}{lrlrrl}
@@ -565,7 +610,7 @@ algoritmosCiclicidad2 & detecta\textunderscore ciclo(Series, float): bool\\[0pt]
 \rmfamily
 
 \subsection{Backlog}
-\label{sec:orge5edc24}
+\label{sec:orge8b75e7}
 
 \sffamily
 \begin{longtable}{ll}

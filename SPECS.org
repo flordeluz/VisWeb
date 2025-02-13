@@ -265,102 +265,145 @@ The program makes data preprocessing by inspecting data and giving recommendatio
 
 ** Testing functions
 
+Testing functions are executed to give advice when the system is processing the signal. In the case of nulls, it uses WMAPE to prioritize the imputation algorithms, the rest are selected by the majority because each algorithm evaluates the same. When testing, more than 50% evaluate true and false otherwise. Trend algorithms do not detect, just use decomposition to break the signal in its main components.
+
 \sffamily
 #+ATTR_LATEX: :mode table :environment longtable :booktabs
 #+CAPTION: Testing function modules
-| *Module*                 | *Functions*                                                                                              |
-|--------------------------+----------------------------------------------------------------------------------------------------------|
-| AlgoritmosLimpieza       | obtener\textunderscore ruido\textunderscore de(DF, int): bool                                            |
-|                          | obtener\textunderscore ruido\textunderscore cv(DF, float): bool                                          |
-|                          | obtener\textunderscore ruido\textunderscore ri(DF): bool                                                 |
-|                          | obtener\textunderscore outlier\textunderscore zscore(DF, int): bool                                      |
-|                          | grubbs\textunderscore max\textunderscore test(DF, float): bool, float                                    |
-|                          | grubbs\textunderscore min\textunderscore test(DF, float): bool, float                                    |
-|                          | obtener\textunderscore outlier\textunderscore grubbs(DF, float): bool                                    |
-|                          | obtener\textunderscore outlier\textunderscore dixon(DF): bool                                            |
-|                          | ejecutarFuncionesMultihilo(DF, list): None                                                               |
-|                          | comprobarLimpieza(DF): bool, string                                                                      |
-|--------------------------+----------------------------------------------------------------------------------------------------------|
-| algoritmosNormalizacion  | obtener\textunderscore estacionaria\textunderscore mv(DF, float): bool                                   |
-|                          | obtener\textunderscore no\textunderscore patrones\textunderscore estacionalidad(DF, int): bool           |
-|                          | def obtener\textunderscore distribucion\textunderscore conocida(DF): bool                                |
-|                          | ejecutarFuncionesMultihilo(DF, list): None                                                               |
-|                          | comprobarNormalizacion(DF): bool, string                                                                 |
-|--------------------------+----------------------------------------------------------------------------------------------------------|
-| algoritmosTransformacion | obtener\textunderscore no\textunderscore estacionariedad\textunderscore adf(DF, float): bool             |
-|                          | obtener\textunderscore no\textunderscore estacionariedad\textunderscore kpss(DF, float): bool            |
-|                          | obtener\textunderscore comportamiento\textunderscore persistente\textunderscore hurst(DF): bool          |
-|                          | ejecutarFuncionesMultihilo(DF, list): None                                                               |
-|                          | comprobarTransformacion(DF): bool, string                                                                |
-|--------------------------+----------------------------------------------------------------------------------------------------------|
-| algoritmosReduccion2     | verificar\textunderscore correlacion\textunderscore pearson(DF, float): bool                             |
-|                          | verificar\textunderscore correlacion\textunderscore spearman(DF, float): bool                            |
-|                          | verificar\textunderscore correlacion\textunderscore kendall(DF, float): bool                             |
-|                          | verificar\textunderscore linealidad(DF, float): bool                                                     |
-|                          | verificar\textunderscore linealidad\textunderscore regression(DF, float): bool                           |
-|                          | verificar\textunderscore linealidad\textunderscore pca(DF, float): bool                                  |
-|                          | verificar\textunderscore linealidad\textunderscore acf(DF, float): bool                                  |
-|                          | verificar\textunderscore linealidad\textunderscore pacf(DF, float): bool                                 |
-|                          | verificar\textunderscore estacionariedad\textunderscore adf(DF, float): bool                             |
-|                          | verificar\textunderscore estacionariedad\textunderscore kpss(DF, float): bool                            |
-|                          | verificar\textunderscore estabilidad\textunderscore descomposicion(DF, float): bool                      |
-|                          | verificar\textunderscore estabilidad\textunderscore lsvr(DF, float): bool                                |
-|                          | verificar\textunderscore dimensionality\textunderscore reduction\textunderscore pca(DF, float): bool     |
-|                          | verificar\textunderscore dimensionality\textunderscore reduction\textunderscore fa(DF, int, float): bool |
-|                          | ejecutarFuncionesMultihilo(DF, list): None                                                               |
-|                          | comprobarReduccion(DF): bool, string                                                                     |
-|--------------------------+----------------------------------------------------------------------------------------------------------|
-| algoritmosEstacionalidad | check\textunderscore box\textunderscore pierce(Series, float): bool                                      |
-|                          | verificar\textunderscore box\textunderscore pierce(DF): bool                                             |
-|                          | check\textunderscore box\textunderscore pierce2(Series, float): bool                                     |
-|                          | verificar\textunderscore box\textunderscore pierce2(DF): bool                                            |
-|                          | check\textunderscore periodicity\textunderscore fft(Series, float): bool                                 |
-|                          | verificar\textunderscore periodicidad\textunderscore fft(DF): bool                                       |
-|                          | check\textunderscore periodicity\textunderscore fft2(Series): bool                                       |
-|                          | verificar\textunderscore periodicidad\textunderscore fft2(DF): bool                                      |
-|                          | check\textunderscore periodicity\textunderscore fft3(Series): bool                                       |
-|                          | verificar\textunderscore periodicidad\textunderscore fft3(DF): bool                                      |
-|                          | check\textunderscore periodicity\textunderscore acf\textunderscore pacf(Series, float): bool             |
-|                          | verificar\textunderscore periodicidad\textunderscore acf\textunderscore pacf(DF): bool                   |
-|                          | check\textunderscore wavelet\textunderscore periodicity(Series, float): bool                             |
-|                          | verificar\textunderscore periodicidad\textunderscore wavelet(DF): bool                                   |
-|                          | check\textunderscore seasonal\textunderscore periodicity(Series, int, float): bool                       |
-|                          | verificar\textunderscore descomposiocion\textunderscore stl(DF, int): bool                               |
-|                          | fisher\textunderscore seasonality\textunderscore test(Series, float): bool                               |
-|                          | verificar\textunderscore estacionalidad\textunderscore fisher(DF): bool                                  |
-|                          | check\textunderscore amplitude(Series, float): bool                                                      |
-|                          | verificar\textunderscore amplitud(DF): bool                                                              |
-|                          | check\textunderscore amplitude\textunderscore fft(Series, float): bool                                   |
-|                          | verificar\textunderscore amplitud\textunderscore fft(DF): bool                                           |
-|                          | check\textunderscore frequency\textunderscore fft(Series, float): bool                                   |
-|                          | verificar\textunderscore frecuencia\textunderscore fft(DF): bool                                         |
-|                          | check\textunderscore frequency\textunderscore acf(Series, float): bool                                   |
-|                          | verificar\textunderscore frecuencia\textunderscore acf(DF): bool                                         |
-|                          | determine\textunderscore timespan(DF, float): bool                                                       |
-|                          | verificar\textunderscore duracion(DF): bool                                                              |
-|                          | ejecutarFuncionesMultihilo(DF, list): None                                                               |
-|                          | comprobarEstacionalidad(DF): bool, string                                                                |
-|--------------------------+----------------------------------------------------------------------------------------------------------|
-| algoritmosCiclicidad2    | detecta\textunderscore ciclo(Series, float): bool                                                        |
-|                          | verificar\textunderscore ciclo\textunderscore fft(DF): bool                                              |
-|                          | consistencia\textunderscore ciclo\textunderscore fft(Series, int, float): bool                           |
-|                          | verificar\textunderscore consistencia\textunderscore fft(DF): bool                                       |
-|                          | consistencia\textunderscore ciclo\textunderscore acf(Series, int, float): bool                           |
-|                          | verificar\textunderscore consistencia\textunderscore acf(DF): bool                                       |
-|                          | verificar\textunderscore consistencia\textunderscore forma\textunderscore duracion(DF): bool             |
-|                          | consistencia\textunderscore ciclo\textunderscore varianza(Series, int, float): bool                      |
-|                          | verificar\textunderscore consistencia\textunderscore varianza(DF): bool                                  |
-|                          | consistencia\textunderscore ciclo\textunderscore pearsonr(Series, array, int, float): bool               |
-|                          | sinusoidal(array, array, array, array, array): array                                                     |
-|                          | forma\textunderscore ciclos\textunderscore sinusoidal(Series, int, float): bool                          |
-|                          | verificar\textunderscore ciclos\textunderscore sinusoidal(DF): bool                                      |
-|                          | frecuencia\textunderscore ciclos\textunderscore fft(Series, float, float): bool                          |
-|                          | verificar\textunderscore frecuencia\textunderscore fft(DF): bool                                         |
-|                          | frecuencia\textunderscore ciclos\textunderscore acf(Series, int, int): bool                              |
-|                          | verificar\textunderscore frecuencia\textunderscore acf(DF): bool                                         |
-|                          | ejecutarFuncionesMultihilo(DF, list): None                                                               |
-|                          | comprobarCiclicidad(DF): bool, string                                                                    |
+| *Module*         | *Functions*                                                                                          |
+|------------------+------------------------------------------------------------------------------------------------------|
+| Nulls imputation | null\textunderscore values\textunderscore data(DF): bool                                             |
+|                  | fill\textunderscore w\textunderscore meanmedian(*dict)                                               |
+|                  | fill\textunderscore w\textunderscore decisiontree(*dict)                                             |
+|                  | fill\textunderscore w\textunderscore gradientboosting(*dict)                                         |
+|                  | fill\textunderscore w\textunderscore locallyweighted(*dict)                                          |
+|                  | fill\textunderscore w\textunderscore legendre(*dict)                                                 |
+|                  | fill\textunderscore w\textunderscore randomforest(*dict)                                             |
+|                  | fill\textunderscore w\textunderscore kneighbors(*dict)                                               |
+|------------------+------------------------------------------------------------------------------------------------------|
+| Cleaning         | obtener\textunderscore ruido\textunderscore de(DF, int): bool                                        |
+|                  | obtener\textunderscore ruido\textunderscore cv(DF, float): bool                                      |
+|                  | obtener\textunderscore outlier\textunderscore iqr(DF): bool                                          |
+|                  | obtener\textunderscore outlier\textunderscore zscore(DF, int): bool                                  |
+|                  | obtener\textunderscore outlier\textunderscore grubbs(DF, float): bool                                |
+|------------------+------------------------------------------------------------------------------------------------------|
+| Normalization    | obtener\textunderscore no\textunderscore patrones\textunderscore estacionalidad(DF, int): bool       |
+|                  | obtener\textunderscore distribucion\textunderscore conocida(DF): bool                                |
+|------------------+------------------------------------------------------------------------------------------------------|
+| Transformation   | obtener\textunderscore no\textunderscore estacionariedad\textunderscore adf(DF, float): bool         |
+|                  | obtener\textunderscore no\textunderscore estacionariedad\textunderscore kpss(DF, float): bool        |
+|                  | obtener\textunderscore comportamiento\textunderscore persistente\textunderscore hurst(DF): bool      |
+|------------------+------------------------------------------------------------------------------------------------------|
+| Reduction        | verificar\textunderscore correlacion\textunderscore pearson(DF, float): bool                         |
+|                  | verificar\textunderscore correlacion\textunderscore spearman(DF, float): bool                        |
+|                  | verificar\textunderscore correlacion\textunderscore kendall(DF, float): bool                         |
+|                  | check\textunderscore multicollinearity(DF, int): bool                                                |
+|                  | check\textunderscore dimensionality\textunderscore reduction\textunderscore pca(DF, float): bool     |
+|                  | check\textunderscore dimensionality\textunderscore reduction\textunderscore fa(DF, int, float): bool |
+|------------------+------------------------------------------------------------------------------------------------------|
+| Decomposition    | seasonality\textunderscore detection(Series, Array): LOB                                             |
+|                  | trend\textunderscore detection(Series, Array): LOB                                                   |
+|                  | noise\textunderscore detection(Series, Array): LOB                                                   |
 \rmfamily
+
+** Dictionary
+
+The dictionary is dynamic, it grows at any algorithm or action made. Data is mostly held on Dataframes. Classes can retain information on the object like testing functions described in the previous subsection. The function contains the signal.
+
+The following is an excerpt from the dictionary. It repeats for each loader class.
+
+\begin{verbatim}
+loaders (dict)
+|-- aqp: GenLoader
+|-- brasil: GenLoader
+|-- btc: GenLoader
+|-- chiguata: GenLoader
+|-- india: GenLoader
+\-- madrid: GenLoader
+
+aqp
+|-- RM (dict)
+|   \-- MAJES (dict)
+|       |-- PPT: function
+|       |-- TNM: function
+|       \-- TXM: function
+|-- cache (dict)
+|-- full: DataFrame
+|-- iqr: DataFrame
+|-- raw: DataFrame
+\-- redo (dict)
+    |-- fill (dict)
+    |   |-- decisiontree: bool
+    |   |-- gradientboosting: bool
+    |   |-- kneighbors: bool
+    |   |-- legendre: bool
+    |   |-- locallyweighted: bool
+    |   |-- meanmedian: bool
+    |   \-- randomforest: bool
+    |-- norm (dict)
+    |   |-- maxabs: bool
+    |   |-- minmax: bool
+    |   |-- robust: bool
+    |   \-- standard: bool
+    |-- outliers (dict)
+    |   |-- iqr: bool
+    |   \-- sdv: bool
+    \-- transform (dict)
+        |-- diff: bool
+        |-- linear: bool
+        |-- log: bool
+        |-- quadratic: bool
+        \-- sqrt: bool
+\end{verbatim}
+
+
+** Network coloring
+
+Color attributes are applied with information that comes from the backend as arrays.
+
+The coloring algorithm works as each node is gray by default, then each node name that comes in the subprocess array overwrites as red then adjacent nodes on the right are colored green, and left or parents are colored red. If an array exception shows up it replaces the red node with orange. The activities array carries information about when a dialog will be launched if the user picks the activity. The array made-path carries the executed actions and allows the algorithm to overwrite the colors of the nodes as blue, the coloring process follows the graph adjacency theory.
+
+Trace:
+
+*Stage 1:*
+\begin{verbatim}
+[ Algorithms priority ]:  
+Array [ "Rolling Mean" ]
+
+[ Subprocesses ]: 
+Array [ "Clean", "Nulls" ]
+\end{verbatim}
+
+*Stage 2:*
+\begin{verbatim}
+[ Made Path ]:  
+Array(3) [ "Clean", "Nulls", "Rolling Mean" ]
+
+[ Subprocesses ]: 
+Array [ "Clean", "Outliers" ]
+\end{verbatim}
+
+*Stage 3:*
+\begin{verbatim}
+[ Made Path ]:  
+Array(6) [ "Clean", "Nulls", "Rolling Mean", "Clean", "Outliers", "Interquartile Range" ]
+
+[ Subprocesses ]: 
+Array [ "DimRed" ]
+
+[ Activities ]:
+Array(3) [ "Multicollinearity Dim.Reduction=['PPT']", "PCA Dim.Reduction", "FA Dim.Reduction=['PPT']" ]
+\end{verbatim}
+
+*Stage 4:*
+\begin{verbatim}
+[ Made Path ]:  
+Array(8) [ "Clean", "Nulls", "Rolling Mean", "Clean", "Outliers", "Interquartile Range", "DimRed", "Factor Analysis" ]
+
+[ Subprocesses ]: 
+Array [ "Analysis" ]
+\end{verbatim}
+
 
 ** Change Log
 

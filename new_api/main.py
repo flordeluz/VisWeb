@@ -450,6 +450,7 @@ def get_trend(dataset, station):
     global current_df
     loader = loaders[dataset]
     reshtml = trend_detection(full_station_ds, loader.cols_list)
+    # gr.show_dict_tree(loader.smo)
     # print("[ HTML ]:", reshtml)
     return { "trend": str(reshtml) }
 
