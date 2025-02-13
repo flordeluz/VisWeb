@@ -313,47 +313,47 @@ The dictionary is dynamic, it grows at any algorithm or action made. Data is mos
 The following is an excerpt from the dictionary. It repeats for each loader class.
 
 \begin{verbatim}
-loaders (dict)
-|-- aqp: GenLoader
-|-- brasil: GenLoader
-|-- btc: GenLoader
-|-- chiguata: GenLoader
-|-- india: GenLoader
-\-- madrid: GenLoader
+loaders (dict): Class type, one per dataset.
+|__ aqp: GenLoader
+|__ brasil: GenLoader
+|__ btc: GenLoader
+|__ chiguata: GenLoader
+|__ india: GenLoader
+|__ madrid: GenLoader
 
-aqp
-|-- RM (dict)
-|   \-- MAJES (dict)
-|       |-- PPT: function
-|       |-- TNM: function
-|       \-- TXM: function
-|-- cache (dict)
-|-- full: DataFrame
-|-- iqr: DataFrame
-|-- raw: DataFrame
-\-- redo (dict)
-    |-- fill (dict)
-    |   |-- decisiontree: bool
-    |   |-- gradientboosting: bool
-    |   |-- kneighbors: bool
-    |   |-- legendre: bool
-    |   |-- locallyweighted: bool
-    |   |-- meanmedian: bool
-    |   \-- randomforest: bool
-    |-- norm (dict)
-    |   |-- maxabs: bool
-    |   |-- minmax: bool
-    |   |-- robust: bool
-    |   \-- standard: bool
-    |-- outliers (dict)
-    |   |-- iqr: bool
-    |   \-- sdv: bool
-    \-- transform (dict)
-        |-- diff: bool
-        |-- linear: bool
-        |-- log: bool
-        |-- quadratic: bool
-        \-- sqrt: bool
+aqp: Main dataset.
+|__ RM (dict): Imputation algorithm applied.
+|   |__ MAJES (dict): Group or substation.
+|       |__ PPT: function     |
+|       |__ TNM: function     | Dimensions
+|       |__ TXM: function     |
+|__ cache (dict)
+|__ full: DataFrame: Full group or substation-treated data.
+|__ iqr: DataFrame:  An entry of data for each executed algorithm.
+|__ raw: DataFrame:  Full group or substations unchanged data.
+|__ redo (dict)
+    |__ fill (dict)
+    |   |__ decisiontree: bool
+    |   |__ gradientboosting: bool
+    |   |__ kneighbors: bool
+    |   |__ legendre: bool
+    |   |__ locallyweighted: bool
+    |   |__ meanmedian: bool
+    |   |__ randomforest: bool
+    |__ norm (dict)
+    |   |__ maxabs: bool
+    |   |__ minmax: bool
+    |   |__ robust: bool
+    |   |__ standard: bool
+    |__ outliers (dict)
+    |   |__ iqr: bool
+    |   |__ sdv: bool
+    |__ transform (dict)
+        |__ diff: bool
+        |__ linear: bool
+        |__ log: bool
+        |__ quadratic: bool
+        |__ sqrt: bool
 \end{verbatim}
 
 
@@ -386,19 +386,22 @@ Array [ "Clean", "Outliers" ]
 *Stage 3:*
 \begin{verbatim}
 [ Made Path ]:  
-Array(6) [ "Clean", "Nulls", "Rolling Mean", "Clean", "Outliers", "Interquartile Range" ]
+Array(6) [ "Clean", "Nulls", "Rolling Mean", "Clean", "Outliers",
+"Interquartile Range" ]
 
 [ Subprocesses ]: 
 Array [ "DimRed" ]
 
 [ Activities ]:
-Array(3) [ "Multicollinearity Dim.Reduction=['PPT']", "PCA Dim.Reduction", "FA Dim.Reduction=['PPT']" ]
+Array(3) [ "Multicollinearity Dim.Reduction=['PPT']", "PCA
+Dim.Reduction", "FA Dim.Reduction=['PPT']" ]
 \end{verbatim}
 
 *Stage 4:*
 \begin{verbatim}
 [ Made Path ]:  
-Array(8) [ "Clean", "Nulls", "Rolling Mean", "Clean", "Outliers", "Interquartile Range", "DimRed", "Factor Analysis" ]
+Array(8) [ "Clean", "Nulls", "Rolling Mean", "Clean", "Outliers",
+"Interquartile Range", "DimRed", "Factor Analysis" ]
 
 [ Subprocesses ]: 
 Array [ "Analysis" ]
