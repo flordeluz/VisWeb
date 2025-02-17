@@ -21,7 +21,7 @@
 - [x] Feature discovery
 - [x] Informative tooltip topics
 - [x] Legend
-- [ ] Import/Export data
+- [x] Import/Export data
 
 
 ## BUGS:
