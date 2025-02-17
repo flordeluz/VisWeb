@@ -1,5 +1,5 @@
 <template>
-<v-container class="my-6" fluid>
+<v-container fluid>
   <div class="text-center load-layer" v-if="loading_data">
     <v-progress-circular :size="100" class="loader" color="primary" indeterminate>
       Loading data...
@@ -14,10 +14,35 @@
     <h2>Dataset: {{ dataset.toUpperCase() }}, Station: {{ station.toUpperCase() }}</h2>
   </v-row>
   <v-row dense align="center" justify="center" v-if="datasetSelected">
+    <!-- <v-col cols="1"> -->
+      <!--   <div class="left-buttons"> -->
+	<!-- 	<button v-for="stage in leftStages" -->
+	<!-- 		:key="stage" -->
+	<!-- 		v-show="enabledStages.includes(stage)" -->
+	<!-- 		@click="undoStage(stage)" -->
+	<!-- 		class="stage-button rotate-left"> -->
+	  <!-- 	  Stage {{ stage }} -->
+	  <!-- 	</button> -->
+	<!--   </div> -->
+      <!-- </v-col> -->
     <v-col cols="1">
-      <!-- noop -->
+      <div class="left-buttons">
+	<button v-show="enabledStages.includes(0)" @click="undoStage(0)" class="stage-button rotate-left" :style="stagecolor[0]">
+	  Undo Nulls
+	</button>
+      </div>
+      <div class="left-buttons">
+	<button	v-show="enabledStages.includes(1)" @click="undoStage(1)" class="stage-button rotate-left" :style="stagecolor[1]">
+	  Undo Outliers
+	</button>
+      </div>
+      <div class="left-buttons">
+	<button v-show="enabledStages.includes(2)" @click="undoStage(2)" class="stage-button rotate-left" :style="stagecolor[2]">
+	  Undo Normalization
+	</button>
+      </div>
     </v-col>
-    <v-col cols="12">
+    <v-col cols="18">
       <div class="legend-tooltip" v-if="legendVisible">
 	<div class="legend-item">
           <span class="dot redlg"></span> Pending activities
@@ -44,8 +69,33 @@
 	{{ tooltipText }}
       </div>
     </v-col>
+    <!-- <v-col cols="1"> -->
+      <!--   <div class="right-buttons"> -->
+	<!-- 	<button v-for="stage in rightStages" -->
+	<!-- 		:key="stage" -->
+	<!-- 		v-show="enabledStages.includes(stage)" -->
+	<!-- 		@click="undoStage(stage)" -->
+	<!-- 		class="stage-button rotate-right"> -->
+	  <!-- 	  Stage {{ stage }} -->
+	  <!-- 	</button> -->
+	<!--   </div> -->
+      <!-- </v-col> -->
     <v-col cols="1">
-      <!-- noop -->
+      <div class="right-buttons">
+	<button	v-show="enabledStages.includes(3)" @click="undoStage(3)" class="stage-button rotate-right" :style="stagecolor[3]">
+	  Undo Transformation
+	</button>
+      </div>
+      <div class="right-buttons">
+	<button v-show="enabledStages.includes(4)" @click="undoStage(4)" class="stage-button rotate-right" :style="stagecolor[4]">
+	  Undo Dim. Reduction
+	</button>
+      </div>
+      <!-- <div class="right-buttons"> -->
+      <!-- 	<button	v-show="enabledStages.includes(5)" @click="undoStage(5)" class="stage-button rotate-right" :style="stagecolor[5]"> -->
+      <!-- 	  Undo Pending -->
+      <!-- 	</button> -->
+      <!-- </div> -->
     </v-col>
   </v-row>
   <v-dialog v-model="dialog" width="500">
@@ -62,16 +112,6 @@
 			      v-if="main_operation === 'reduce'" :rules="[v => !!v || 'At least one feature to drop']" />
                 <v-text-field label="Transform factor" v-model="factor" ref="factor"
 			      v-if="main_operation === 'transform'" :rules="[v => !!v || 'Required']" />
-                <!-- <v-select label="Feature" v-model="feature" -->
-		<!-- 	  :items="[ -->
-		<!-- 		  { text: 'Precipitation', value: 0 }, -->
-		<!-- 		  { text: 'Temp Max', value: 1 }, -->
-		<!-- 		  { text: 'Temp Min', value: 2 } -->
-		<!-- 		  ]" -->
-		<!-- 	  ref="feature" v-if="main_operation === 'trend' || -->
-		<!-- 			      main_operation === 'seasonality' || -->
-		<!-- 			      main_operation === 'cyclicity'" -->
-		<!-- 	  :rules="[v => !!v || 'Required']" /> -->
               </v-col>
               <v-col>
                 <v-btn @click="execActivityParams" large color="primary">
@@ -88,7 +128,6 @@
       <v-card-title class="headline grey lighten-2">
         Seasonality
       </v-card-title>
-      <!-- <v-img :src="seasim" :height="seashg" :width="seaswd"></v-img> -->
       <div v-html="vseason"></div>
     </v-card>
   </v-dialog>
@@ -97,7 +136,6 @@
       <v-card-title class="headline grey lighten-2">
         Trend
       </v-card-title>
-      <!-- <v-img :src="trenim" :height="trenhg" :width="trenwd"></v-img> -->
       <div v-html="vtrend"></div>
     </v-card>
   </v-dialog>
@@ -106,7 +144,6 @@
       <v-card-title class="headline grey lighten-2">
         Noise
       </v-card-title>
-      <!-- <v-img :src="noisim" :height="noishg" :width="noiswd"></v-img> -->
       <div v-html="vnoise"></div>
     </v-card>
   </v-dialog>
@@ -138,9 +175,9 @@ export default {
 	dataset: "",
 	station: null,
 	datasetSelected: false,
-	// rawcontainer: '<div id="container" style="width: 100vh; height: 80vh; background: #fff;"></div>',
-	rawcontainer: '<div id="container" style="height: 80vh; width: 1080px; background: #fff;"></div>',
-	container: null,
+	// rawcontainer: '<div id="container" style="height: 80vh; width: 1080px; background: #fff;"></div>',
+	rawcontainer: '<div id="netcontainer" style="height: 80vh; width: 100%; background: #fff;"></div>',
+	netcontainer: null,
 	graph: null,
 	renderer: null,
 	layout: null,
@@ -489,9 +526,36 @@ export default {
 	tooltipText: '',
 	messageVisible: true,
 	messageText: "A hint will appear here.",
-	legendVisible: true
+	legendVisible: true,
+	// stages: [0, 1, 2, 3, 4, 5],
+	stagecolor: [
+	    "background-color: black;",
+	    "background-color: black;",
+	    "background-color: black;",
+	    "background-color: black;",
+	    "background-color: black;",
+	    "background-color: black;"
+	],
+	enabledStages: [],
+	// leftStages: [0, 2, 4],
+	// rightStages: [1, 3, 5],
+	selectedStage: -1
     }),
     methods: {
+	// updatedStages(stage) {
+	//     if (!this.enabledStages.includes(stage)) {
+	// 	this.enabledStages.push(stage);
+	//     }
+	// },
+	async undoStage(stage) {
+	    try {
+		let actionst = await fetch("http://localhost:8080/undo/" + this.dataset + "/stage/" + stage, { crossdomain: true });
+		console.log(actionst);
+		location.reload();
+	    } catch (error) {
+		console.error('Error undoing stage:', error);
+	    }
+	},
 	async execActivity(event, itemType, item) {
 	    if (event === "clickNode") {
 		let label;
@@ -612,6 +676,11 @@ export default {
 	    let itextends = steprc.data[1];
 	    let itpath = steprc.data[2];
 	    let italgoprio = steprc.data[3];
+	    this.enabledStages = steprc.data[4];
+	    this.selectedStage = steprc.data[5];
+	    if (this.selectedStage >= 0) {
+		this.stagecolor[this.selectedStage] = "background-color: gray;";
+	    }
 	    console.log("[ It Recommends ]");
 	    console.log("[ Made Path ]: ", itpath);
 	    console.log("[ Algorithms priority ]: ", italgoprio);
@@ -766,8 +835,8 @@ export default {
 		}
 	    }
 	    await new Promise(r => setTimeout(r, 2000));
-	    this.container = document.getElementById("container");
-	    console.log("[ Container ]:", this.container);
+	    this.netcontainer = document.getElementById("netcontainer");
+	    console.log("[ Network Container ]:", this.netcontainer);
 	    this.graph = new Graph();
 	    
 	    // Node processes
@@ -961,7 +1030,7 @@ export default {
 		    }
 		}
 	    }
-	    this.renderer = new Sigma(this.graph, this.container, {
+	    this.renderer = new Sigma(this.graph, this.netcontainer, {
 		nodeProgramClasses: {
 		    // image: createNodeImageProgram(),
 		    gradient: NodeGradientProgram,
@@ -1144,11 +1213,12 @@ td.slideOp:hover {
 .dataframe tbody tr th:only-of-type {
     vertical-align: middle;
 }
-
+.container {
+    max-width: 100%;
+}
 .dataframe tbody tr th {
     vertical-align: top;
 }
-
 .dataframe thead th {
     text-align: right;
 }
@@ -1231,4 +1301,49 @@ div.load-layer {
     white-space: pre-line;  
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
+/* .flow-container { */
+/*   display: flex; */
+/*   justify-content: space-between; */
+/*   align-items: center; */
+/*   height: 100vh; */
+/*   padding: 20px; */
+/* } */
+.left-buttons {
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    flex-direction: column;
+    height: 24vh;
+    width: 24vh;
+}
+.right-buttons {
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    flex-direction: column;
+    height: 24vh;
+    width: 24vh;
+}
+.stage-button {
+    padding: 10px;
+    margin: 5px;
+    /* background-color: black; */
+    color: white;
+    border: 2px solid #09f;
+    cursor: pointer;
+    transform-origin: center;
+}
+.rotate-left {
+    transform: rotate(-90deg);
+}
+.rotate-right {
+    transform: rotate(90deg);
+}
+/* .main-screen { */
+/*   flex: 1; */
+/*   display: flex; */
+/*   justify-content: center; */
+/*   align-items: center; */
+/*   flex-direction: column; */
+/* } */
 </style>

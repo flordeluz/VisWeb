@@ -13,7 +13,7 @@
     <v-col v-if="shSetInterval" cols="1"><button @click="setInterval">Set</button></v-col>
   </v-row>
   <v-row justify="center" dense>
-    <v-col cols="10">
+    <v-col cols="20">
       <div id="graph1" class="firstRow graphOne" ref="timeChart" :diameter="200"></div>
     </v-col>
   </v-row>

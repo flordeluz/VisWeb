@@ -21,13 +21,13 @@ import pandas as pd
 
 import statsmodels.api as sm
 import numpy as np
-from matplotlib.pyplot import table
+# from matplotlib.pyplot import table
 from scipy import fft
 from scipy import signal as sig
 
-from sklearn.decomposition import PCA
-from sklearn.experimental import enable_iterative_imputer
-from sklearn.impute import IterativeImputer, KNNImputer, SimpleImputer
+# from sklearn.decomposition import PCA
+# from sklearn.experimental import enable_iterative_imputer
+# from sklearn.impute import IterativeImputer, KNNImputer, SimpleImputer
 # from sklearn.preprocessing import MinMaxScaler, MaxAbsScaler, StandardScaler
 
 # HINT: Main Loader Class For Multiple Data Sources
@@ -66,11 +66,12 @@ UPLOADED_FILE_LIST = os.path.join(UPLOAD_FOLDER, '.uploaded.dat')
 resultados_threads = {}
 
 # Loaders
-# HINT: Native datasets
+# HINT: Fabric Datasets
 # -------------------------------
 # DATA SOURCES MSG: A loop for reading folder names inside .data container
 # DATA SOURCES MSG: will create path variables to be used as GenLoader
 # DATA SOURCES MSG: objects derived from Mainloader Class.
+print("[ Fabric Datasets ]")
 ma_path = "./.data/Madrid/csvs_per_year/csvs_per_year/"
 ml = GenLoader(ma_path)
 in_path = "./.data/India/station_day.csv"
@@ -79,22 +80,6 @@ pe_path = "./.data/Peru/"
 aqpl = GenLoader(pe_path)
 br_path = "./.data/Brasil/Data_AirQuality/"
 bl = GenLoader(br_path)
-# -------------------------------
-# Scalers (Scale and Normalization)
-# minmax_scaler = MinMaxScaler()
-# sc_scaler = StandardScaler()
-
-# Transformers
-# HINT: Main Redo Class For Data Transformation
-# -------------------------------
-gr = GenRedo()
-# -------------------------------
-
-# Imputation For Completing Null Values
-knn_imputer = KNNImputer(missing_values=-1, n_neighbors=10, weights="uniform")
-simple_imp = SimpleImputer(missing_values=-1, strategy="mean")
-iter_imp = IterativeImputer(missing_values=-1, max_iter=20)
-
 
 loaders = {
     "madrid": ml,
@@ -104,7 +89,8 @@ loaders = {
 }
 
 # Loaders
-# HINT: Imported datasets
+# HINT: Imported Datasets
+print("[ Imported Datasets ]")
 if os.path.exists(UPLOADED_FILE_LIST):
     with open(UPLOADED_FILE_LIST, 'r') as f:
         for line in f:
@@ -115,17 +101,28 @@ if os.path.exists(UPLOADED_FILE_LIST):
                 loaders[filename] = GenLoader(csv_path)
                 #
 
+
+# Transformers
+# HINT: Main Redo Class For Data Transformation
+# -------------------------------
+gr = GenRedo()
+# -------------------------------
+
+# # Imputation For Completing Null Values
+# knn_imputer = KNNImputer(missing_values=-1, n_neighbors=10, weights="uniform")
+# simple_imp = SimpleImputer(missing_values=-1, strategy="mean")
+# iter_imp = IterativeImputer(missing_values=-1, max_iter=20)
+
+
 # Objects, Classes, Functions, Methods, And Procedures
 def enable_cors(fn):
     def wrapper(*args, **kwargs):
         bottle.response.set_header("Access-Control-Allow-Origin", "*")
         bottle.response.set_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         bottle.response.set_header("Access-Control-Allow-Headers", "Origin, Content-Type")
-
         # skip the function if it is not needed
         if bottle.request.method == "OPTIONS":
             return
-
         return fn(*args, **kwargs)
     return wrapper
 
@@ -178,7 +175,9 @@ init_state = False
 dic = {}
 # historial_df = {}
 made_path = []
-
+undo = dict()
+enabled_stages = []
+selected_stage = -1
 
 # Routers
 
@@ -289,6 +288,35 @@ def get_time_span(dataset, station, resample):
     return { "periods": np.unique(timespan).tolist(),
              "timespan": str(timespan),
              "status": str(timespan_status) }
+
+
+@route("/undo/<dataset>/stage/<num>")
+@enable_cors
+def undo_stage(dataset, num):
+    loader = loaders[dataset]
+    response.headers["Content-Type"] = "application/json"
+    global current_station
+    global full_station_ds
+    global current_df
+    global aux_df
+    global made_path
+    # saving stage
+    global undo
+    global enabled_stages
+    global selected_stage
+    loader.smo["full"] = undo[int(num)]["full"].copy()
+    loader.ds = undo[int(num)]["ds"].copy()
+    loader.smo["redo"] = copy.deepcopy(undo[int(num)]["redo"])
+    loader.cols_list = undo[int(num)]["cols_list"].copy()
+    made_path = undo[int(num)]["made_path"].copy()
+    enabled_stages = undo[int(num)]["enabled_stages"].copy()
+    selected_stage = int(num)
+    print("[ Old df:\n", current_df, "\n]")
+    json_data, df, full_station_ds = loader.get_data(current_station, resample="D")
+    current_df = df
+    aux_df = df
+    print("[ Current df:\n", current_df, "\n]")
+    return json_data
 
 
 @route("/setinterval/<dataset>/<station>/<minx>/<maxx>")
@@ -611,6 +639,8 @@ def recommendation_by_station(dataset, station):
     env.append(dic)
     env.append(made_path)
     env.append(algo_prio)
+    env.append(enabled_stages)
+    env.append(selected_stage)
     dic = {}
     return json.dumps(env)
 
@@ -626,6 +656,19 @@ def normalize_dataset(dataset, method):
     global current_df
     global aux_df
     global made_path
+    # saving stage
+    global undo
+    global enabled_stages
+    pstage = 2
+    if (pstage not in undo): undo[pstage] = dict()
+    undo[pstage]["full"] = loader.smo["full"].copy()
+    undo[pstage]["ds"] = loader.ds.copy()
+    undo[pstage]["redo"] = copy.deepcopy(loader.smo["redo"])
+    undo[pstage]["cols_list"] = loader.cols_list.copy()
+    undo[pstage]["made_path"] = made_path.copy()
+    undo[pstage]["enabled_stages"] = enabled_stages.copy()
+    if (pstage not in enabled_stages): enabled_stages.append(pstage)
+    # saving end
     made_path.append("Normalize")
     print("[ Old df:\n", current_df, "\n]")
     if method == "minmax":
@@ -680,6 +723,19 @@ def clean_dataset(dataset, method):
     global current_df
     global aux_df
     global made_path
+    # saving stage
+    global undo
+    global enabled_stages
+    pstage = 0
+    if (pstage not in undo): undo[pstage] = dict()
+    undo[pstage]["full"] = loader.smo["full"].copy()
+    undo[pstage]["ds"] = loader.ds.copy()
+    undo[pstage]["redo"] = copy.deepcopy(loader.smo["redo"])
+    undo[pstage]["cols_list"] = loader.cols_list.copy()
+    undo[pstage]["made_path"] = made_path.copy()
+    undo[pstage]["enabled_stages"] = enabled_stages.copy()
+    if (pstage not in enabled_stages): enabled_stages.append(pstage)
+    # saving end
     made_path.append("Clean")
     made_path.append("Nulls")
     if method == "rm":
@@ -752,6 +808,19 @@ def outliers_treatment(dataset, method):
     global current_df
     global aux_df
     global made_path
+    # saving stage
+    global undo
+    global enabled_stages
+    pstage = 1
+    if (pstage not in undo): undo[pstage] = dict()
+    undo[pstage]["full"] = loader.smo["full"].copy()
+    undo[pstage]["ds"] = loader.ds.copy()
+    undo[pstage]["redo"] = copy.deepcopy(loader.smo["redo"])
+    undo[pstage]["cols_list"] = loader.cols_list.copy()
+    undo[pstage]["made_path"] = made_path.copy()
+    undo[pstage]["enabled_stages"] = enabled_stages.copy()
+    if (pstage not in enabled_stages): enabled_stages.append(pstage)
+    # saving end
     made_path.append("Clean")
     made_path.append("Outliers")
     print("[ Old df:\n", current_df, "\n]")
@@ -789,6 +858,19 @@ def transform_dataset(dataset, method, number):
     global current_df
     global aux_df
     global made_path
+    # saving stage
+    global undo
+    global enabled_stages
+    pstage = 3
+    if (pstage not in undo): undo[pstage] = dict()
+    undo[pstage]["full"] = loader.smo["full"].copy()
+    undo[pstage]["ds"] = loader.ds.copy()
+    undo[pstage]["redo"] = copy.deepcopy(loader.smo["redo"])
+    undo[pstage]["cols_list"] = loader.cols_list.copy()
+    undo[pstage]["made_path"] = made_path.copy()
+    undo[pstage]["enabled_stages"] = enabled_stages.copy()
+    if (pstage not in enabled_stages): enabled_stages.append(pstage)
+    # saving end
     made_path.append("Transform")
     print("[ Old df:\n", current_df, "\n]")
     if method == "linear":
@@ -846,6 +928,19 @@ def reduce_dataset(dataset, method, n_comp):
     global current_df
     global aux_df
     global made_path
+    # saving stage
+    global undo
+    global enabled_stages
+    pstage = 4
+    if (pstage not in undo): undo[pstage] = dict()
+    undo[pstage]["full"] = loader.smo["full"].copy()
+    undo[pstage]["ds"] = loader.ds.copy()
+    undo[pstage]["redo"] = copy.deepcopy(loader.smo["redo"])
+    undo[pstage]["cols_list"] = loader.cols_list.copy()
+    undo[pstage]["made_path"] = made_path.copy()
+    undo[pstage]["enabled_stages"] = enabled_stages.copy()
+    if (pstage not in enabled_stages): enabled_stages.append(pstage)
+    # saving end
     made_path.append("DimRed")
     # res = True
     if method == "factor":
@@ -870,82 +965,62 @@ def reduce_dataset(dataset, method, n_comp):
     return json_data
 
 
-@route("/op/<dataset>/vbehavior/<operator>")
-@enable_cors
-def vbehavior_analyse(dataset, operator):
-    response.headers["Content-Type"] = "application/json"
-
-    global current_df
-
-    data = current_df.values
-
-    data[data < 0] = -1
-
-    if request.query:
-        feature = int(request.query.feature)
-
-    dataframe = pd.DataFrame(data, index=pd.DatetimeIndex(current_df.index))
-
-    resample = "W"
-
-    # If it is not precipitation then use the mean to resample
-    if feature > 0:
-        res_dataframe = dataframe.resample(resample).mean()[feature]
-
-    # Else use the maximum value to resample
-    else:
-        res_dataframe = dataframe.resample(resample).max()[feature]
-
-    # operator seasonal_decompose
-    if operator in ["trend", "seasonality"]:
-        decomposition = sm.tsa.seasonal_decompose(
-            res_dataframe, model="aditive")
-        if operator == "trend":
-            feature_data = decomposition.trend.values
-        elif operator == "seasonality":
-            feature_data = decomposition.seasonal.values
-        else:
-            feature_data = []
-
-    # Fourier
-    elif operator == "cyclicity":
-        y = res_dataframe.values
-        fourier_output = np.abs(fft.fft(y))
-        frecuencies = fft.fftfreq(len(y))
-        peaks = sig.find_peaks(fourier_output, prominence=10**2)[0]
-
-        print(peaks)
-        peak_freq = frecuencies[peaks]
-        peak_power = fourier_output[peaks]
-
-        output = pd.DataFrame()
-
-        output["index"] = peaks
-        output["freq (1/hour)"] = peak_freq
-        output["amplitude"] = peak_power
-        output["period (days)"] = 1/peak_freq
-        output["fft"] = fourier_output[peaks]
-        output = output.sort_values("amplitude", ascending=False)
-
-        print(output)
-
-        max_amp_index = output["index"].iloc[0:5:2]
-
-        filtered_fft_output = np.array(
-            [f if i in max_amp_index.values else 0 for i, f in enumerate(fourier_output)])
-
-        filtered_sig = fft.ifft(filtered_fft_output)
-        print("output shape:", filtered_fft_output.shape,
-              fourier_output.shape, y.shape)
-        feature_data = np.array(filtered_sig.astype("float"))
-
-    feature_data = np.array([feature_data]).T
-    feature_data = np.append(feature_data, np.array(
-        [res_dataframe.values]).T, axis=1)
-    # print(feature_data.shape, res_dataframe.values.shape, feature_data)
-
-    current_df = dataframe
-    return dataframe.reset_index().to_json(orient="records", index=True)
+# @route("/op/<dataset>/vbehavior/<operator>")
+# @enable_cors
+# def vbehavior_analyse(dataset, operator):
+#     response.headers["Content-Type"] = "application/json"
+#     global current_df
+#     data = current_df.values
+#     data[data < 0] = -1
+#     if request.query:
+#         feature = int(request.query.feature)
+#         #
+#     dataframe = pd.DataFrame(data, index=pd.DatetimeIndex(current_df.index))
+#     resample = "W"
+#     # If not precipitation then use the mean else max to resample
+#     if feature > 0:
+#         res_dataframe = dataframe.resample(resample).mean()[feature]
+#     else:
+#         res_dataframe = dataframe.resample(resample).max()[feature]
+#         #
+#     if operator in ["trend", "seasonality"]:
+#         decomposition = sm.tsa.seasonal_decompose(
+#             res_dataframe, model="aditive")
+#         if operator == "trend":
+#             feature_data = decomposition.trend.values
+#         elif operator == "seasonality":
+#             feature_data = decomposition.seasonal.values
+#         else:
+#             feature_data = []
+#     elif operator == "cyclicity":
+#         y = res_dataframe.values
+#         fourier_output = np.abs(fft.fft(y))
+#         frecuencies = fft.fftfreq(len(y))
+#         peaks = sig.find_peaks(fourier_output, prominence=10**2)[0]
+#         print(peaks)
+#         peak_freq = frecuencies[peaks]
+#         peak_power = fourier_output[peaks]
+#         output = pd.DataFrame()
+#         output["index"] = peaks
+#         output["freq (1/hour)"] = peak_freq
+#         output["amplitude"] = peak_power
+#         output["period (days)"] = 1/peak_freq
+#         output["fft"] = fourier_output[peaks]
+#         output = output.sort_values("amplitude", ascending=False)
+#         print(output)
+#         max_amp_index = output["index"].iloc[0:5:2]
+#         filtered_fft_output = np.array(
+#             [f if i in max_amp_index.values else 0 for i, f in enumerate(fourier_output)])
+#         filtered_sig = fft.ifft(filtered_fft_output)
+#         print("output shape:", filtered_fft_output.shape,
+#               fourier_output.shape, y.shape)
+#         feature_data = np.array(filtered_sig.astype("float"))
+#         #
+#     feature_data = np.array([feature_data]).T
+#     feature_data = np.append(feature_data, np.array(
+#         [res_dataframe.values]).T, axis=1)
+#     current_df = dataframe
+#     return dataframe.reset_index().to_json(orient="records", index=True)
 
 
 @route("/op/<dataset>/raw")
