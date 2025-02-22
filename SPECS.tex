@@ -1,4 +1,4 @@
-% Created 2025-02-13 Thu 12:19
+% Created 2025-02-22 Sat 10:08
 % Intended LaTeX compiler: pdflatex
 \documentclass[a4paper]{article}
 \usepackage[utf8]{inputenc}
@@ -12,6 +12,10 @@
 \usepackage{amssymb}
 \usepackage{capt-of}
 \usepackage{hyperref}
+\renewcommand*\familydefault{\sfdefault}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\usepackage[left=1.5cm,right=1cm,top=1cm,bottom=1cm]{geometry}
 \usepackage[table]{xcolor}
 \usepackage{booktabs}
 \usepackage{svg}
@@ -33,12 +37,12 @@
 
 
 \section{Introduction}
-\label{sec:orgc9a491c}
+\label{sec:org70c6fdc}
 
 The project explores, analyzes, and integrates Vue.JS and Python code with different models for clean and data completion.
 
 \section{Goals}
-\label{sec:orge7d6b49}
+\label{sec:org6aac51a}
 
 \begin{itemize}
 \item Complete the code by integrating different Python models into the software project.
@@ -49,7 +53,7 @@ The project explores, analyzes, and integrates Vue.JS and Python code with diffe
 \end{itemize}
 
 \section{State of the art}
-\label{sec:org134df44}
+\label{sec:org9d851e0}
 
 \begin{itemize}
 \item Source code of the project(1), with documentation to install and deploy the software. The software currently reads data and graphs time series. It has options for data completion through rolling mean and kNN and partially cleaning data alternatives. It tracks for changes while navigating through the Diagram Operator interface graphically. Integrates Radial Chart for time series cycles.
@@ -58,10 +62,10 @@ The project explores, analyzes, and integrates Vue.JS and Python code with diffe
 \end{itemize}
 
 \section{Pre-implementation analysis}
-\label{sec:org7be2826}
+\label{sec:org14ce080}
 
 \subsection{Multilayer design}
-\label{sec:org01ec52e}
+\label{sec:org4d094bd}
 
 The critical aspects of the software are:
 
@@ -72,47 +76,41 @@ The critical aspects of the software are:
 
 \item The data source layer primarily are CSV files \footnote{HDF5 detected}
 
-\sffamily \footnotesize
 \begin{center}
 \includesvg[width=.9\linewidth]{link-data-069cc0f38b52fd29f3cd19de9f17d6d1e8ec9344.edraw}
 \end{center}
-\rmfamily \normalsize
 \end{itemize}
 
 \subsection{Frontend specifics}
-\label{sec:org9a15311}
+\label{sec:org762717c}
 
-\sffamily \footnotesize
 \begin{center}
 \includesvg[width=.9\linewidth]{link-data-1250ef5082f07210935c7515e20cafdd9150c370.edraw}
 \end{center}
-\rmfamily \normalsize
 
 \subsection{Backend specifics}
-\label{sec:org29e08c7}
+\label{sec:org8f83290}
 
-\sffamily \footnotesize
 \begin{center}
 \includesvg[width=.9\linewidth]{link-data-2de380ab2182abb59bc5043236fa1864057da655.edraw}
 \end{center}
-\rmfamily \normalsize
 
 \subsection{Detected issues}
-\label{sec:orgfb1d883}
+\label{sec:orge4f1650}
 
 \begin{itemize}
 \item Data structures. It requires adapting the current data structures of the program to the new dictionary of the tested and trained models.
 
 \item Exceptional cases. There are some treatments in the frontend code for specific data sources \footnote{TimeSeries.vue, temperature, and precipitation, line 308}. Those treatments will done in the backend.
 
-\item The Radial Diagram component \footnote{Spiral.vue} hardcode for temperature and precipitation. We will rewrite the code to accept different datasets and features. Additionally, it is currently consuming the old backend\footnote{api/main.py}. The old backend has to be re-implemented in the new backend\footnote{new\textunderscore api/main.py}.
+\item The Radial Diagram component \footnote{Spiral.vue} hardcode for temperature and precipitation. We will rewrite the code to accept different datasets and features. Additionally, it is currently consuming the old backend\footnote{api/main.py}. The old backend has to be re-implemented in the new backend\footnote{new\_api/main.py}.
 \end{itemize}
 
-\section{{\bfseries\sffamily DONE} Implementation}
-\label{sec:org931e93b}
+\section{Implementation}
+\label{sec:org0b354f1}
 
 \subsection{Activities summary}
-\label{sec:orgaa0dbf3}
+\label{sec:org76f7092}
 
 \begin{itemize}
 \item Adapt the Backend Data Structure.
@@ -131,15 +129,14 @@ The critical aspects of the software are:
 \end{itemize}
 
 
-\subsection{{\bfseries\sffamily DONE} Activities execution}
-\label{sec:org0de527d}
+\subsection{Activities execution}
+\label{sec:org769784a}
 
 \subsubsection{Change log}
-\label{sec:orgb289699}
+\label{sec:orgf018222}
 
 Tracking changes on the program will be done by using diff to create a patch component that allows the creation of a checkpoint and registering the changes by the size of modify or created code\footnote{Tracking log in the appendix}. The folder structure is:
 
-\sffamily
 \begin{longtable}{lll}
 \caption{Change log folder structure}
 \\[0pt]
@@ -157,33 +154,31 @@ Tracking changes on the program will be done by using diff to create a patch com
 \endfoot
 \endlastfoot
 \hline
-drwx & VisWeb-AlgoritmosLimpieza.orig & Original Source Code\\[0pt]
 drwx & VisWeb-AlgoritmosLimpieza.incr & Incremental Checkpoint\\[0pt]
 drwx & VisWeb-AlgoritmosLimpieza.diff & Diff/Patch Repository\\[0pt]
 drwx & VisWeb-AlgoritmosLimpieza & Development Folder\\[0pt]
 -r-- & checkpoint.lisp & The program for recording changes\\[0pt]
 \end{longtable}
-\rmfamily
 
 \subsubsection{Backlog}
-\label{sec:orgd537de3}
+\label{sec:orgcfe7f4e}
 
 The pending activities are in the appendix backlog section. These activities correspond to changes or reviews that depend on multiple program files around the software, and their resolutions will come on the project's timeline. Bugs will gradually fixed.
 
-\subsubsection{{\bfseries\sffamily DONE} Backend data structures}
-\label{sec:orgd9ccf2b}
+\subsubsection{Backend data structures}
+\label{sec:orgfa76442}
 
-Programs adaptation in the new\textunderscore api.
+Programs adaptation in the new\_api.
 
 \begin{itemize}
 \item Creating a new MainloaderClass and its derived GenLoader class as a generic data loader that extends MainloaderClass\footnote{The new Class defines the notebook's data structure}. Methods' names remain unchanged to keep compatibility with the original code. \textbf{Created}.
 \end{itemize}
 
-\sffamily \footnotesize
+\large
 \begin{center}
 \includesvg[width=.9\linewidth]{link-data-b109f550576e09ad99add7f1f39939c296d2b388.edraw}
 \end{center}
-\rmfamily \normalsize
+\normalsize
 
 \begin{itemize}
 \item The derived class GenLoader improves:
@@ -194,7 +189,7 @@ Programs adaptation in the new\textunderscore api.
 \item Some old Classes' methods trunk data to 1000 rows for interprocess communication. \textbf{Fixed}.
 \end{itemize}
 
-\item Normalization will use MaxAbsScaler. Max scaler detected without considering negative values in some normalizations through the \emph{main.py} in the new\textunderscore api code. \textbf{Fixed}.
+\item Normalization will use MaxAbsScaler. Max scaler detected without considering negative values in some normalizations through the \emph{main.py} in the new\_api code. \textbf{Fixed}.
 
 \item The GenLoader-derived class allows different datasets to load. It returns a new loader object with the needed structure. It loads the data from the source when the constructor creates an instance of the class. The main program will map correctly the different datasets when the front end requires it. \textbf{Implemented}.
 
@@ -207,89 +202,85 @@ Programs adaptation in the new\textunderscore api.
 \item The transformations will be packed in the MainredoClass and its derived class GenRedo, where the methods will be different techniques to clean and complete data. \textbf{Created}.
 \end{itemize}
 
-\sffamily \footnotesize
+\large
 \begin{center}
 \includesvg[width=.9\linewidth]{link-data-41552ea8ba76b31fd563f0a168fb2c7cc54f6954.edraw}
 \end{center}
-\rmfamily \normalsize
+\normalsize
 
-\subsubsection{{\bfseries\sffamily DONE} Backend new specifications}
-\label{sec:org3bb93a0}
+\subsubsection{Backend new specifications}
+\label{sec:org0d2a09e}
 
 \begin{enumerate}
-\item {\bfseries\sffamily DONE} Classes and modules
-\label{sec:org9a57930}
+\item Classes and modules
+\label{sec:org5431e80}
 
-\sffamily \footnotesize
 \begin{center}
 \includesvg[width=.9\linewidth]{link-data-7390a9932dd2cb3129ada2c263fda3d0172031ac.edraw}
 \end{center}
-\rmfamily \normalsize
 
-\item {\bfseries\sffamily DONE} Sequence diagram
-\label{sec:orga2c3d90}
+\item Sequence diagram
+\label{sec:org2c9fcd2}
 
-\sffamily \scriptsize
+\small
 \begin{center}
 \includesvg[width=.9\linewidth]{link-data-abeb00b5b06a1ab332d0fe6ab7b8bcf777f1b970.edraw}
 \end{center}
-\rmfamily \normalsize
+\normalsize
 \end{enumerate}
 
-\subsubsection{{\bfseries\sffamily DONE} Backend new data structure and frontend integration}
-\label{sec:org06a52f3}
+\subsubsection{Backend new data structure and frontend integration}
+\label{sec:org6d2231c}
 
 The initial state of the front end had two APIs. All the methods to grab data were migrated and transformed in the new API, leaving just one centralized processing Python API.
 
 The main structure of the front end has not changed too much. The most relevant changes were in coding because the program was created for Peruvian temperature and precipitation datasets.
 
-\sffamily \footnotesize
 \begin{center}
 \includesvg[width=.9\linewidth]{link-data-2622180df0d470ec8299135efd823dc950ac899d.edraw}
 \end{center}
-\rmfamily \normalsize
 
 \subsubsection{Data repository and cache}
-\label{sec:org0f44987}
+\label{sec:org96ad333}
 
 The backend will support dataset uploading. The structure has been defined on folders as an ID inside a .data repository. It will allow us to keep the data treatment progress in folders with the same ID inside a .cache repository.
 
-\section{{\bfseries\sffamily DONE} Requirements}
-\label{sec:org26d5e70}
+\section{Requirements}
+\label{sec:org71317b5}
 
-\subsection{{\bfseries\sffamily DONE} Software}
-\label{sec:orgfbffa3e}
+\subsection{Software}
+\label{sec:org1ea8b40}
 
 \begin{itemize}
-\item Python 3.12.7
+\item Python 3.12.9
 
 \item NodeJS 18.19.1
 
-\item GNU/Linux distribution with kernel 5.15.19 or superior
+\item GNU/Linux distribution with kernel 5.15.19 or higher
 
-\item Windows has not been tested, but it may work
+\item Windows has not been tested, but it may work through Anaconda
 \end{itemize}
 
-\subsection{{\bfseries\sffamily DONE} Hardware}
-\label{sec:org0ff8b63}
+\subsection{Minimum Hardware}
+\label{sec:orgdb10fe5}
 
 \begin{itemize}
-\item Processor AMD64 or x86\textsubscript{64} architecture
+\item Processor AMD64 or x86\_64 architecture
 
-\item 16GB RAM
+\item 8GB RAM
 
-\item 32GB Swap
+\item 32GB SSD SWAP
 
-\item 64GB SSD (128GB SSD Recommended)
+\item 64GB HD (SSD recommended)
 
 \item GPU (Optional)
 \end{itemize}
 
-\section{{\bfseries\sffamily DONE} Visual Analytics Guidance Development}
-\label{sec:org2414a23}
+\section{Visual Analytics Guidance Development}
+\label{sec:org1e56fa9}
 
-\subsection{{\bfseries\sffamily DONE} Spiral diagram analysis improvement}
-\label{sec:orgd2159b3}
+\subsection{Spiral diagram analysis improvement}
+\label{sec:org60cbf03}
 
 \begin{itemize}
 \item Compute segments and timespan for the Spiral. \textbf{Done}.
@@ -299,8 +290,8 @@ The backend will support dataset uploading. The structure has been defined on fo
 \item Fix polygon coordinates when there are more than three dimensions. \textbf{Done}.
 \end{itemize}
 
-\subsection{{\bfseries\sffamily DONE} Independent section for statistics}
-\label{sec:org19e84e3}
+\subsection{Independent section for statistics}
+\label{sec:org9b384d0}
 
 \begin{itemize}
 \item Statistics of the time series (size, nulls, type of columns, or dimensions). \textbf{Done}.
@@ -312,8 +303,8 @@ The backend will support dataset uploading. The structure has been defined on fo
 \item Correlation matrix. \textbf{Done}.
 \end{itemize}
 
-\subsection{{\bfseries\sffamily DONE} Flow diagram improvement}
-\label{sec:orga782d07}
+\subsection{Flow diagram improvement}
+\label{sec:org76850a2}
 
 \begin{itemize}
 \item Data cleaning, Normalization and transformation, and Time-series behavior. \textbf{Done}.
@@ -323,8 +314,8 @@ The backend will support dataset uploading. The structure has been defined on fo
 \item Network graph controller. \textbf{Done}.
 \end{itemize}
 
-\section{{\bfseries\sffamily DONE} Format Multivariate Time Series Data}
-\label{sec:org4655f80}
+\section{Format Multivariate Time Series Data}
+\label{sec:orgaf8a77a}
 
 The program makes data preprocessing by inspecting data and giving recommendations through a hierarchical network graph navigation (3). The steps (5) related to this are:
 
@@ -347,7 +338,7 @@ The program makes data preprocessing by inspecting data and giving recommendatio
 \end{itemize}
 
 \section{References}
-\label{sec:org2c19417}
+\label{sec:orgf7a46e8}
 
 \begin{enumerate}
 \item \url{https://github.com/flordeluz/VisWeb}
@@ -359,15 +350,14 @@ The program makes data preprocessing by inspecting data and giving recommendatio
 
 \clearpage
 \section{Appendix}
-\label{sec:org3605781}
+\label{sec:org4b26bd4}
 
 \subsection{Time Estimation Plan}
-\label{sec:orgf2a5857}
+\label{sec:orge47bcdd}
 
 \begin{itemize}
 \item 2 months +4 backup weeks
 
-\sffamily
 \begin{longtable}{llllllllllllll}
 \caption{Activities in weeks}
 \\[0pt]
@@ -392,69 +382,68 @@ The program makes data preprocessing by inspecting data and giving recommendatio
 \cellcolor{gray!16}Frontend new ML models &  &  &  &  &  & \cellcolor{blue!16} & \cellcolor{blue!16} & \cellcolor{blue!16} &  &  &  &  & \\[0pt]
 \cellcolor{gray!16}Frontend UI changes &  &  &  &  &  &  & \cellcolor{blue!32} & \cellcolor{blue!32} & \cellcolor{blue!32} & \cellcolor{blue!32} & \cellcolor{blue!32} & \cellcolor{blue!32} & \cellcolor{blue!32}\\[0pt]
 \end{longtable}
-\rmfamily
 \end{itemize}
 
+
 \subsection{Testing functions}
-\label{sec:org24b9163}
+\label{sec:org5511dfd}
 
-Testing functions are executed to give advice when the system is processing the signal. In the case of nulls, it uses WMAPE to prioritize the imputation algorithms, the rest are selected by the majority because each algorithm evaluates the same. When testing, more than 50\% evaluate true and false otherwise. Trend algorithms do not detect, just use decomposition to break the signal in its main components.
+Testing functions are executed to give advice when the system is processing the signal. In the case of nulls, it uses WMAPE to prioritize the imputation algorithms; the rest are selected by the majority because each algorithm evaluates the same. When testing, more than 50\% evaluate true and false otherwise. Trend algorithms do not detect; they just use decomposition to break the signal into its main components.
 
-\sffamily
-\begin{longtable}{ll}
+\begin{longtable}{lll}
 \caption{Testing function modules}
 \\[0pt]
-\textbf{Module} & \textbf{Functions}\\[0pt]
+\textbf{Module} & \textbf{Functions} & \textbf{Hint}\\[0pt]
 \hline
 \endfirsthead
-\multicolumn{2}{l}{Continued from previous page} \\[0pt]
+\multicolumn{3}{l}{Continued from previous page} \\[0pt]
 \hline
 
-\textbf{Module} & \textbf{Functions} \\[0pt]
+\textbf{Module} & \textbf{Functions} & \textbf{Hint} \\[0pt]
 
 \hline
 \endhead
-\hline\multicolumn{2}{r}{Continued on next page} \\
+\hline\multicolumn{3}{r}{Continued on next page} \\
 \endfoot
 \endlastfoot
 \hline
-Nulls imputation & null\textunderscore values\textunderscore data(DF): bool\\[0pt]
- & fill\textunderscore w\textunderscore meanmedian(*dict)\\[0pt]
- & fill\textunderscore w\textunderscore decisiontree(*dict)\\[0pt]
- & fill\textunderscore w\textunderscore gradientboosting(*dict)\\[0pt]
- & fill\textunderscore w\textunderscore locallyweighted(*dict)\\[0pt]
- & fill\textunderscore w\textunderscore legendre(*dict)\\[0pt]
- & fill\textunderscore w\textunderscore randomforest(*dict)\\[0pt]
- & fill\textunderscore w\textunderscore kneighbors(*dict)\\[0pt]
+Nulls imputation & null\_values\_data(DF): bool & Nulls detection\\[0pt]
+ & fill\_w\_meanmedian(*dict) & Rolling mean\\[0pt]
+ & fill\_w\_decisiontree(*dict) & Decision tree regressor\\[0pt]
+ & fill\_w\_gradientboosting(*dict) & Gradient boosting\\[0pt]
+ & fill\_w\_locallyweighted(*dict) & Locally weighted regression\\[0pt]
+ & fill\_w\_legendre(*dict) & Legendre polynomials\\[0pt]
+ & fill\_w\_randomforest(*dict) & Random forest regressor\\[0pt]
+ & fill\_w\_kneighbors(*dict) & kNN regression\\[0pt]
 \hline
-Cleaning & obtener\textunderscore ruido\textunderscore de(DF, int): bool\\[0pt]
- & obtener\textunderscore ruido\textunderscore cv(DF, float): bool\\[0pt]
- & obtener\textunderscore outlier\textunderscore iqr(DF): bool\\[0pt]
- & obtener\textunderscore outlier\textunderscore zscore(DF, int): bool\\[0pt]
- & obtener\textunderscore outlier\textunderscore grubbs(DF, float): bool\\[0pt]
+Cleaning & obtener\_ruido\_de(DF, int): bool & Standard deviation of noise\\[0pt]
+ & obtener\_ruido\_cv(DF, float): bool & Noise covariance Kalman filter\\[0pt]
+ & obtener\_outlier\_iqr(DF): bool & Interquartile range\\[0pt]
+ & obtener\_outlier\_zscore(DF, int): bool & Z-score\\[0pt]
+ & obtener\_outlier\_grubbs(DF, float): bool & Grubbs\\[0pt]
 \hline
-Normalization & obtener\textunderscore no\textunderscore patrones\textunderscore estacionalidad(DF, int): bool\\[0pt]
- & obtener\textunderscore distribucion\textunderscore conocida(DF): bool\\[0pt]
+Normalization & obtener\_no\_patrones\_estacionalidad(DF, int): bool & Variance and noise\\[0pt]
+ & obtener\_distribucion\_conocida(DF): bool & Deviation and log-normal\\[0pt]
 \hline
-Transformation & obtener\textunderscore no\textunderscore estacionariedad\textunderscore adf(DF, float): bool\\[0pt]
- & obtener\textunderscore no\textunderscore estacionariedad\textunderscore kpss(DF, float): bool\\[0pt]
- & obtener\textunderscore comportamiento\textunderscore persistente\textunderscore hurst(DF): bool\\[0pt]
+Transformation & obtener\_no\_estacionariedad\_adf(DF, float): bool & Augmented Dickey-Fuller\\[0pt]
+ & obtener\_no\_estacionariedad\_kpss(DF, float): bool & KPSS\\[0pt]
+ & obtener\_comportamiento\_persistente\_hurst(DF): bool & Hurst\\[0pt]
 \hline
-Reduction & verificar\textunderscore correlacion\textunderscore pearson(DF, float): bool\\[0pt]
- & verificar\textunderscore correlacion\textunderscore spearman(DF, float): bool\\[0pt]
- & verificar\textunderscore correlacion\textunderscore kendall(DF, float): bool\\[0pt]
- & check\textunderscore multicollinearity(DF, int): bool\\[0pt]
- & check\textunderscore dimensionality\textunderscore reduction\textunderscore pca(DF, float): bool\\[0pt]
- & check\textunderscore dimensionality\textunderscore reduction\textunderscore fa(DF, int, float): bool\\[0pt]
+Reduction & verificar\_correlacion\_pearson(DF, float): bool & Pearson correlation\\[0pt]
+ & verificar\_correlacion\_spearman(DF, float): bool & Spearman correlation\\[0pt]
+ & verificar\_correlacion\_kendall(DF, float): bool & Kendall correlation\\[0pt]
+ & check\_multicollinearity(DF, int): bool & Multicollinearity test\\[0pt]
+ & check\_dimensionality\_reduction\_pca(DF, float): bool & PCA\\[0pt]
+ & check\_dimensionality\_reduction\_fa(DF, int, float): bool & Factor Analysis\\[0pt]
 \hline
-Decomposition & seasonality\textunderscore detection(Series, Array): LOB\\[0pt]
- & trend\textunderscore detection(Series, Array): LOB\\[0pt]
- & noise\textunderscore detection(Series, Array): LOB\\[0pt]
+Decomposition & seasonality\_detection(Series, Array): LOB & Seasonal decompose\\[0pt]
+ & trend\_detection(Series, Array): LOB & Seasonal decompose trending\\[0pt]
+ & noise\_detection(Series, Array): LOB & Seasonal decompose residuals\\[0pt]
 \end{longtable}
-\rmfamily
+
 
 \subsection{Dictionary}
-\label{sec:org8fbc7c1}
+\label{sec:org88d0e5e}
 
 The dictionary is dynamic, it grows at any algorithm or action made. Data is mostly held on Dataframes. Classes can retain information on the object like testing functions described in the previous subsection. The function contains the signal.
 
@@ -510,7 +499,7 @@ The following is an excerpt from the dictionary. It repeats for each loader clas
 
 
 \subsection{Network coloring}
-\label{sec:org540d609}
+\label{sec:org2358d7d}
 
 Color attributes are applied with information that comes from the backend as arrays.
 
@@ -564,9 +553,8 @@ Trace:
 
 
 \subsection{Change Log}
-\label{sec:org9b9fe99}
+\label{sec:orgeff8805}
 
-\sffamily
 \begin{longtable}{lrlrrl}
 \caption{List of patches by timestamp}
 \\[0pt]
@@ -584,45 +572,44 @@ Trace:
 \endfoot
 \endlastfoot
 \hline
--rw-r--r-- & 918794 & May & 22 & 01:38 & 20240522-013818.diff\\[0pt]
--rw-r--r-- & 32116 & May & 24 & 01:39 & 20240524-013931.diff\\[0pt]
--rw-r--r-- & 55590 & May & 24 & 18:17 & 20240524-181739.diff\\[0pt]
--rw-r--r-- & 40553 & May & 27 & 01:09 & 20240527-010932.diff\\[0pt]
--rw-r--r-- & 64068 & May & 28 & 01:45 & 20240528-014458.diff\\[0pt]
--rw-r--r-- & 160383 & Jun & 2 & 03:04 & 20240602-030410.diff\\[0pt]
--rw-r--r-- & 110627 & Jun & 4 & 02:45 & 20240604-024500.diff\\[0pt]
--rw-r--r-- & 63591 & Jun & 5 & 00:46 & 20240605-004621.diff\\[0pt]
--rw-r--r-- & 68193 & Jun & 6 & 02:31 & 20240606-023122.diff\\[0pt]
--rw-r--r-- & 33434 & Jun & 7 & 03:04 & 20240607-030453.diff\\[0pt]
--rw-r--r-- & 91512 & Jun & 8 & 01:59 & 20240608-015902.diff\\[0pt]
--rw-r--r-- & 76847 & Jun & 10 & 18:28 & 20240610-182855.diff\\[0pt]
--rw-r--r-- & 78312 & Jun & 16 & 01:54 & 20240616-015442.diff\\[0pt]
--rw-r--r-- & 24940 & Jun & 17 & 02:10 & 20240617-021030.diff\\[0pt]
--rw-r--r-- & 73776 & Jun & 18 & 01:05 & 20240618-010542.diff\\[0pt]
--rw-r--r-- & 27856 & Jun & 18 & 10:28 & 20240618-102832.diff\\[0pt]
--rw-r--r-- & 138469 & Jun & 25 & 02:45 & 20240625-024532.diff\\[0pt]
--rw-r--r-- & 65443 & Jun & 26 & 02:59 & 20240626-025901.diff\\[0pt]
--rw-r--r-- & 56919 & Jun & 27 & 00:56 & 20240627-005611.diff\\[0pt]
--rw-r--r-- & 24307 & Jul & 1 & 00:37 & 20240701-003738.diff\\[0pt]
--rw-r--r-- & 30011 & Jul & 3 & 16:51 & 20240703-165116.diff\\[0pt]
--rw-r--r-- & 91786 & Jul & 7 & 01:55 & 20240707-015505.diff\\[0pt]
--rw-r--r-- & 46989 & Jul & 9 & 01:33 & 20240709-013313.diff\\[0pt]
--rw-r--r-- & 96392 & Jul & 12 & 01:51 & 20240712-015153.diff\\[0pt]
--rw-r--r-- & 231634 & Jul & 17 & 01:38 & 20240717-013822.diff\\[0pt]
--rw-rw-r-- & 1025353 & Jan & 5 & 16:25 & 20250105-162546.diff\\[0pt]
--rw-rw-r-- & 52880 & Jan & 20 & 12:08 & 20250120-120815.diff\\[0pt]
--rw-rw-r-- & 108172 & Jan & 21 & 23:19 & 20250121-231951.diff\\[0pt]
--rw-rw-r-- & 48118 & Jan & 29 & 01:22 & 20250129-012158.diff\\[0pt]
--rw-rw-r-- & 12685 & Jan & 30 & 10:32 & 20250130-103221.diff\\[0pt]
--rw-rw-r-- & 36912 & Feb & 2 & 00:08 & 20250202-000816.diff\\[0pt]
--rw-rw-r-- & 115526 & Feb & 10 & 09:59 & 20250210-095953.diff\\[0pt]
+-rw-r--r-- & 918794 & May & 22 & 01:38 & 20240522\_013818.diff\\[0pt]
+-rw-r--r-- & 32116 & May & 24 & 01:39 & 20240524\_013931.diff\\[0pt]
+-rw-r--r-- & 55590 & May & 24 & 18:17 & 20240524\_181739.diff\\[0pt]
+-rw-r--r-- & 40553 & May & 27 & 01:09 & 20240527\_010932.diff\\[0pt]
+-rw-r--r-- & 64068 & May & 28 & 01:45 & 20240528\_014458.diff\\[0pt]
+-rw-r--r-- & 160383 & Jun & 2 & 03:04 & 20240602\_030410.diff\\[0pt]
+-rw-r--r-- & 110627 & Jun & 4 & 02:45 & 20240604\_024500.diff\\[0pt]
+-rw-r--r-- & 63591 & Jun & 5 & 00:46 & 20240605\_004621.diff\\[0pt]
+-rw-r--r-- & 68193 & Jun & 6 & 02:31 & 20240606\_023122.diff\\[0pt]
+-rw-r--r-- & 33434 & Jun & 7 & 03:04 & 20240607\_030453.diff\\[0pt]
+-rw-r--r-- & 91512 & Jun & 8 & 01:59 & 20240608\_015902.diff\\[0pt]
+-rw-r--r-- & 76847 & Jun & 10 & 18:28 & 20240610\_182855.diff\\[0pt]
+-rw-r--r-- & 78312 & Jun & 16 & 01:54 & 20240616\_015442.diff\\[0pt]
+-rw-r--r-- & 24940 & Jun & 17 & 02:10 & 20240617\_021030.diff\\[0pt]
+-rw-r--r-- & 73776 & Jun & 18 & 01:05 & 20240618\_010542.diff\\[0pt]
+-rw-r--r-- & 27856 & Jun & 18 & 10:28 & 20240618\_102832.diff\\[0pt]
+-rw-r--r-- & 138469 & Jun & 25 & 02:45 & 20240625\_024532.diff\\[0pt]
+-rw-r--r-- & 65443 & Jun & 26 & 02:59 & 20240626\_025901.diff\\[0pt]
+-rw-r--r-- & 56919 & Jun & 27 & 00:56 & 20240627\_005611.diff\\[0pt]
+-rw-r--r-- & 24307 & Jul & 1 & 00:37 & 20240701\_003738.diff\\[0pt]
+-rw-r--r-- & 30011 & Jul & 3 & 16:51 & 20240703\_165116.diff\\[0pt]
+-rw-r--r-- & 91786 & Jul & 7 & 01:55 & 20240707\_015505.diff\\[0pt]
+-rw-r--r-- & 46989 & Jul & 9 & 01:33 & 20240709\_013313.diff\\[0pt]
+-rw-r--r-- & 96392 & Jul & 12 & 01:51 & 20240712\_015153.diff\\[0pt]
+-rw-r--r-- & 231634 & Jul & 17 & 01:38 & 20240717\_013822.diff\\[0pt]
+-rw-rw-r-- & 1025353 & Jan & 5 & 16:25 & 20250105\_162546.diff\\[0pt]
+-rw-rw-r-- & 52880 & Jan & 20 & 12:08 & 20250120\_120815.diff\\[0pt]
+-rw-rw-r-- & 108172 & Jan & 21 & 23:19 & 20250121\_231951.diff\\[0pt]
+-rw-rw-r-- & 48118 & Jan & 29 & 01:22 & 20250129\_012158.diff\\[0pt]
+-rw-rw-r-- & 12685 & Jan & 30 & 10:32 & 20250130\_103221.diff\\[0pt]
+-rw-rw-r-- & 36912 & Feb & 2 & 00:08 & 20250202\_000816.diff\\[0pt]
+-rw-rw-r-- & 115526 & Feb & 10 & 09:59 & 20250210\_095953.diff\\[0pt]
 \end{longtable}
-\rmfamily
+
 
 \subsection{Backlog}
-\label{sec:orga57f501}
+\label{sec:org380ec93}
 
-\sffamily
 \begin{longtable}{ll}
 \caption{List of Backlog activities}
 \\[0pt]
@@ -672,5 +659,4 @@ KNN gave better predictions. It is too risky to exclude slower algos & \\[0pt]
 in the early stage of nulls' pre-evaluation. & \\[0pt]
 \hline
 \end{longtable}
-\rmfamily
 \end{document}

@@ -1,9 +1,13 @@
-#+title: DATA ANALYSIS AND VISUALIZATION OF MULTIVARIATE TIME SERIES SOFTWARE
-#+author: Victor C, Flor De Luz
-#+date: 2024-05-20
-#+language: en
-#+STARTUP: indent
+#+TITLE: DATA ANALYSIS AND VISUALIZATION OF MULTIVARIATE TIME SERIES SOFTWARE
+#+AUTHOR: Victor C, Flor De Luz
+#+DATE: 2024-05-20
+#+LANGUAGE: en
 #+LATEX_CLASS_OPTIONS: [a4paper]
+#+OPTIONS: ^:nil
+#+LATEX_HEADER: \renewcommand*\familydefault{\sfdefault}
+#+LATEX_HEADER: \setlength{\parindent}{0pt}
+#+LATEX_HEADER: \setlength{\parskip}{3pt}
+#+LATEX_HEADER: \usepackage[left=1.5cm,right=1cm,top=1cm,bottom=1cm]{geometry}
 #+LATEX_HEADER: \usepackage[table]{xcolor}
 #+LATEX_HEADER: \usepackage{booktabs}
 #+LATEX_HEADER: \usepackage{svg}
@@ -39,21 +43,15 @@ The critical aspects of the software are:
 
 - The data source layer primarily are CSV files [fn:1:HDF5 detected]
 
-  \sffamily \footnotesize
   [[edraw:data=H4sIADMTSmYAA72VUW+bMBDHv4p1fS3BdliUVDEP3bSHqZMmVeo7AwNWiB3ZTgn79LONWdC0aVorIgQn4Pz/Hfc/5L15bdDl2EnDoLX29JCmfd+v+vVK6SalGOPUZcCY8nDphDz8KZHsdrs0vAXUi8q2DD5sMKCWi6a1DJwQoFeujVCSAVkRyPealxZdGLg3Q7j+daGoGPBKF33yvSgPjVZnWQEyVqsDZyCV5IBq0XUM7uq6BpTm+2a+SFXDxJvStv64atwR7I/pQRJLoddCttcCCR1L9o9c/RkOxKXkQwecPu86cTL8/xF68CIuOjHf2jJql752uoA42fymfipsG6VHs/6t68z7ut7g+y1+8oHgGGmMWYybdxGybSD44Akh0hizGCPB8ssveyfNWkmbGPGD+2+Ot3VxFJ1rgimkSQzXws2jX5sUsmyVZnAUVdXx4HBw2vXJsSF/OfPVl+d96pOXxVH3Sfm3wbZK3gLnpyD/+Pwysd7oFYn2k2iS+y/uyTsHjMaJymaTRZfze273UzFwjciSBsztHnH0Brhg94hbL4nLZs38rN1qLqsb8EI3H902dBtc6OanwhZGnXXJJ2LauNNtzPlP0Es61MAHAAA=]]
-  \rmfamily \normalsize
   
 ** Frontend specifics
 
-\sffamily \footnotesize
 [[edraw:data=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]]
-\rmfamily \normalsize
 
 ** Backend specifics
 
-\sffamily \footnotesize
 [[edraw:data=H4sIAPbTS2YAA81ZbW/iOBD+K1H2SysRcBzHTVcFabd30p3U7krdle7lm48YyDUknBMK3V9/9ngC4aXdO4irJYUhieNnxn7mjd5UT1NvPc+LaujP6nrxfjBYrVb9VdQv1XRACSEDPcK3Q96v86x4PDYwvL6+HsBd31tlaT0b+jEnvjeT2XRWD32e6JMnqaqsLIZ+2A/90U0qJ5WXpUNfpkqsAnOqr86FepRq93pAAqFUufI9e/c3i8Cb818aFN9bKFlJ9SQ/VAs5rh9EnZVDvygLqeEzufpYrod+EBLPvKn58z0lJ78PffvlD/hSqkwWej6xrEvfq2pVPspmlkmW50P/XUjMofVdiHrmaWXv9Yy94MpM3LvyWI/86XuD0c3AaviCXeEPZ5cQom2UtQlMCv6jTfRHt+k7GzUwRBzdKK2StwaIZ/h8kdZb8/8S48epKpdF+oImk8kEwKbth8r02Ue8Zlhiju0cDdvwQoCq0K0ibKtgSKzKZrnWVmjEWq7rPe56k7Kogyr7phFCjqcTMc9y/XQliirQu5Nphc2zgSjGs1IN/XmWprkEBMb7DDCutCPMRVb0F883AzMaVxvVTUU105wQz6Dyrg1hszZ2nQ4sBhJS0mPkLmRWcCsSEDpC9RjBRT2YejNdQsyx3QdijjYpzDzUTsfJXURiEAaY93n7dQVXcShF8rSt1UFQ/l1mOswhEwxmUC7EOKsNk/ohjTeKEHhZMw3oEbRXVTn2CPJ56njTqXaE0ceyrnPZbHp3HKaWw4nlMFDaEYlhboNhzPlJ1OKuFKlUzkyKqHubos0mgVUP5bKWO475qssdWGPIycAv9GcCn1r7O25FYoV+9xqbTscwMxlBrWBWWGRq70XMgkXMISkY2QS2qaybtQMos77h5naXyCOdD5d53T31GNmxKsSV6xyAEtcAfBfAyd4jBjXl3b1IVZbuhgQXoJS2QH8t0kwchiInuEkL98M/i13EE/3Y5GvjwSAZSo4ysdI4M0gcR3EcxXE0sQkfFDw9pGwgGMhzpwIrbEQ6v+SICERTIyDeUdqP7TcIhHtpncNlHJ90WXcg8BHA72r0wpNuK5AmY0dQgIhKHiFtR5UnpTYlUUxNFHMexaQX7Sc92zMh1/4fx/a2c3vDNiZBVQulo+JS5RfvDjrIy80wWaQHg+hmUKOf3tRbDmp6kEu38gW1TQ/VtvJU64D4HOLACVN0nlCihLjNWGwv5zopyUk7Y8lapDp3uMwarJ0iH+S4nM817Uz/XjSw50VGTZDIND2m1dPhJyYooRG0srmv3x3GQkAiRxDt9W1gO9s+TQzQP8bZY7SLJSjxvpZd25ccQbTX3QbuxtmMT0Cr9WWvtHbkF4B3//NX70u9w1GXrvGmmO11vRdjVdaieqy8i8+LS2fNROy61o/foNaP22W3YaR3gft16XLD4nbV/XkhFUBWncVObRbEDs6tZ4PUns7DqB+1X3C1GR13+msW4B7iva7NsWfcxqSYtXznU6nmIs++OffYuB0lbnMpiqyYvgXjAPCr0k9MjK2u7eTtCPwg0+XYOSJtIX6UM/GUlUp7ddXzbp+dOjVvM+lBrDpooiNshiNsmk0lYn8FP7uTZdh/M+y/GfbfDDtcxs+HQO0Zah8jZIz9eHx+Px6j9jFqHyNkjL8exO1fD7rqCRO7ehGWihGuZsRQ8r0N6hKXI+7mPwKI2xTL3A2uWc8I1xVSxevryl7tRslONwpmJeQ2shWoZ6Te1kbe7pxz4oE6/JTm0WUBYRpnnckbnzfZyvzffPQvH7giR18fAAA=]]
-\rmfamily \normalsize
 
 ** Detected issues
 
@@ -61,9 +59,9 @@ The critical aspects of the software are:
 
 - Exceptional cases. There are some treatments in the frontend code for specific data sources [fn:2:TimeSeries.vue, temperature, and precipitation, line 308]. Those treatments will done in the backend.
 
-- The Radial Diagram component [fn:3:Spiral.vue] hardcode for temperature and precipitation. We will rewrite the code to accept different datasets and features. Additionally, it is currently consuming the old backend[fn:4:api/main.py]. The old backend has to be re-implemented in the new backend[fn:5:new\textunderscore api/main.py].  
+- The Radial Diagram component [fn:3:Spiral.vue] hardcode for temperature and precipitation. We will rewrite the code to accept different datasets and features. Additionally, it is currently consuming the old backend[fn:4:api/main.py]. The old backend has to be re-implemented in the new backend[fn:5:new_api/main.py].  
 
-* DONE Implementation
+* Implementation
 
 ** Activities summary
 
@@ -82,37 +80,34 @@ The critical aspects of the software are:
 - Format multivariate time series data.
   
 
-** DONE Activities execution
+** Activities execution
 
 *** Change log
 
 Tracking changes on the program will be done by using diff to create a patch component that allows the creation of a checkpoint and registering the changes by the size of modify or created code[fn:6:Tracking log in the appendix]. The folder structure is:
 
-\sffamily
 #+ATTR_LATEX: :mode table :environment longtable :booktabs
 #+CAPTION: Change log folder structure
 | *A*  | *File System Structure*        | *Description*                     |
 |------+--------------------------------+-----------------------------------|
-| drwx | VisWeb-AlgoritmosLimpieza.orig | Original Source Code              |
 | drwx | VisWeb-AlgoritmosLimpieza.incr | Incremental Checkpoint            |
 | drwx | VisWeb-AlgoritmosLimpieza.diff | Diff/Patch Repository             |
 | drwx | VisWeb-AlgoritmosLimpieza      | Development Folder                |
 | -r-- | checkpoint.lisp                | The program for recording changes |
-\rmfamily
 
 *** Backlog
 
 The pending activities are in the appendix backlog section. These activities correspond to changes or reviews that depend on multiple program files around the software, and their resolutions will come on the project's timeline. Bugs will gradually fixed.
 
-*** DONE Backend data structures
+*** Backend data structures
 
-Programs adaptation in the new\textunderscore api.
+Programs adaptation in the new_api.
   
 - Creating a new MainloaderClass and its derived GenLoader class as a generic data loader that extends MainloaderClass[fn:7:The new Class defines the notebook's data structure]. Methods' names remain unchanged to keep compatibility with the original code. *Created*.
 
-\sffamily \footnotesize
+\large
 [[edraw:data=H4sIALj1fGYAA7VX2Y7bNhT9FYJ5ySDWaKHkaAzLQBe0fUj60JcuyAtjUTIxEimQHNuTr+/lonoWTzq2PLCta1FH5x6SR5fiUm9btO87oSu8MWZYxPFut7vekWup2jhLkiQGBPaQxb7j4vYYML25uYndVYx2vDabChfzBKMN4+3GVHhuT7ZMaS5FhdPrFK+WNWs04nWFWa3oLrKn0NpTdcvU4/YoiahScoeRv/qnz5BmY8NvIU2WYzQoppnash/0wNbmD2q4rLCQgoEAznY/yn2FozRB9pfZL0aKNX9BY+H+/V1haJKKMwGM9M5IjLRR8paNNA3vugq/SxP7AckDNRsEej+nySz6iOD4EUX5LPkHo3i1jL1E+GN7uFoqUIX2Lsm9O744Xocx+ErXt62Sd6J+QUvTNC5Z+/AmWd/jkG+ElfZz4Bj7EBqiICU7CMmzg8I88Zoz2wY9SPPEJZ2WIS2PZPAJMs/vxtfz+07/P7mbjTyZZXnyCRK4CGb2MQsxXM/mIQYcCTgScCTg8tBe+HMnzbC9cYJJ8dQXqJHCRJp/A6HpPJw2tOcd4DUVOgKbcpg2yxFRsd5IVeGe13XHXO8JAXP9ysQnSWumlrHFnT0Y0BeQPnfH0h3TxAd/xQ6WDR6RekjmIZmH5C5MmREgKJ2I0okovYjSiyi9iNKLKL2I0osovYjSiygfj/0bDL11+Ooz5aJzY/9TR7UeJ8Clte6fB68WF8qvDVUGHlijByrQ2uYcH2WHg+rq1dnMqw+6lwtU87X58gWk2XteeSuqQUXKeuCoqaEL9PMvEyhANVRYWBtQx/UELbVGFbJ6zqfY0C1D4q7rQMxXKTtGxflkbNC8k2KBGvDAlH4NfIG4mMDQc6FpP3RsIs+WdrWwplwg5eaMdueT3aOaDQv7mHPRnk+zh+FV02nWstPOf1NduKamvQiR4T17QPQfzbQqbgtkkfjSaKOtjS5mIYbrdklzMeBIwJGAIwFX+Hgop3bZSS5ZzmyFhCL/mrJml7sPLTOoZ4baSvD+6vRZII+Kk2ULBerACiN7dXrlfJm4bizlDK03cLB158qW1NmJZfU5/yjWk47Hh1n8YzO7SLaxN4B9sx457hN79fTJcTZ94s9jvnutZ+G0GN9ni1f51MEixWhtDfo7PL4nlYni2bBM8fsRugsZ/jvMl/HHkQRvafnv9Odynj+S5K1MP7Eoz73n4YV+ZRejUcGjBcrvXCN3U4XvVPf+3bM9+RU+Zx2zW6nEv/7D2uVj2JPA2uVj2B6QgCMBRwKOBBwJ+wcSNhAkbA/iFn56267+BZ2PGbzjEAAA]]
-\rmfamily \normalsize
+\normalsize
 
 - The derived class GenLoader improves:
 
@@ -120,7 +115,7 @@ Programs adaptation in the new\textunderscore api.
     
   * Some old Classes' methods trunk data to 1000 rows for interprocess communication. *Fixed*.
 
-- Normalization will use MaxAbsScaler. Max scaler detected without considering negative values in some normalizations through the /main.py/ in the new\textunderscore api code. *Fixed*.
+- Normalization will use MaxAbsScaler. Max scaler detected without considering negative values in some normalizations through the /main.py/ in the new_api code. *Fixed*.
 
 - The GenLoader-derived class allows different datasets to load. It returns a new loader object with the needed structure. It loads the data from the source when the constructor creates an instance of the class. The main program will map correctly the different datasets when the front end requires it. *Implemented*.
 
@@ -132,65 +127,61 @@ Programs adaptation in the new\textunderscore api.
 
 - The transformations will be packed in the MainredoClass and its derived class GenRedo, where the methods will be different techniques to clean and complete data. *Created*.
 
-\sffamily \footnotesize
+\large
 [[edraw:data=H4sIAFD5fGYAA71Y247bNhD9FYIBCge1VlfLa9cy0DZI+5C85KUX5IVrUTKxEmmQXNvp13d4ke1ovenGlguvNRJ1ds6ZGZIjeaG2Ndq3DVcFXmu9mYfhbre726V3QtZhEkVRCAjsIPN9w/jjOWA8m81CexejHSv1usCTPMJoTVm91gWemostlYoJXuD4LsbLRUkrhVhZYFpKsgvMJYy2RD5S+fV4EAVESrHDyN39wzHESTfwu6dJMow2kioqt/RntaEr/YloJgrMBacggNHdL2Jf4CCOkPkm5g8jSas/YXBiz/4qMAwJySgHj+RJC4yUluKRdm4q1jQFfhNH5gOSN0SvEej9GEfjYIrgOEVBNo7+xihcLkInEU5MhMuFBFVob0m+2OOL+Trm4IGsHmspnnj5gpaqqixZffpPovyCPV8Huzefo48uBj8QeCnJUUiWHRVmkdOcGgsRxOZeeIzIpPJioiR/TpQ4/za/zrEL+r+92mpk0ThNog/xzNkk9jb1duLt1FuPSz0u9bjU4zI/PnF+rTRN99qmJJ705wWqBNeBYv+A0Dj3lxVpWQN4RbgKYJoyKJvxERC+WgtZ4JaVZUNtelNI7/I3yj/RUixCg7o4FUk0zqIPU3uc2WMcO5M6M3HGIWIHSRwkcZDM+rimHuAgtyJyKyJ3InInIncicicidyJyJyJ3InInIu9lfvjEJ1Dc5UfCuITM/9oQpbr0W1Iz8yd+JQzFrjSRGi85aencZI/x+sqSm9kP68gXs6tmV043+62deutxqcelHpd63MT5O+bezNBoyOhNQu/NfqrVhnC0Monv9jILh/biVwagfjRXRCItwWslZDtiXI/Ru/djVLIVnDVM6bfzw8Dnz5BQ4/h1/lEJamLaAtEPjf6JNDV0BL1ulyeEN+AqWYle5DOugeVBiOZyBg6e0K5HcqtQzpMNEoeZd9+Kw84Ge4Dl4cI6BHd9YM/Zh4rrgSrTrjXSwrKMXDg2CDh49S6Uy1lgxcFzEUfm8QayxPQpzUmWBuVRZEtf4LmiGlJsUEWJfoLnvtFR85kwDhSnu3lv/zq3L712T4PLLPGPRpNXbWQWFuxasqEj44QqSI21ILxqBPmuxNiudMhM0FLoI6vq4NhPT2PQ1W63VTfdv3eCnHVXVtXosPNcr47Iym4F3uUgEompkkyqXqG+yusVJLxivFTVyQ7mVvu795c7vWWP7DHdtkn2yG7RJXsUN2yTZ4IZtE/2/P+fjfJMaEN2yp77W7XKHs3teuW3iAZqlv2KXN4t7XuI+y0jsI2xwE+yGb159ivNW3zJ60oUjZN7eF0Bm0beJt5m3ubeelzmcZnHZR6XGVzibWZt75Vx0Le2QyPfSFHzZt5l7/iMYTint+GE3rQmjatbxxnW8FXbevkv39oTf90TAAA=]]
-\rmfamily \normalsize
+\normalsize
 
-*** DONE Backend new specifications
+*** Backend new specifications
 
-**** DONE Classes and modules
+**** Classes and modules
 
-\sffamily \footnotesize
 [[edraw:data=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]]
-\rmfamily \normalsize
 
-**** DONE Sequence diagram
+**** Sequence diagram
 
-\sffamily \scriptsize
+\small
 [[edraw:data=H4sIAASxeGYAA81ZW2/iRhT+KyPvSytBPL7bq4DUjdT2ge1KUaV2V/syiwewAjYaOyHpr++Ziy9AHMBmvFESJhj7fPOdc+bcuM2fluh5s07zibEqiu1H09ztdjc75yZjS9PGGJtwhyFv+fi8TtKH1260oigyxacG2iVxsZoYAcYGWtFkuSrgTQhvnijLkyydGNaNZUxvY7rIURJPDBozshvzt3B1Q9gDZfvXx3hMGMt2BpKf/iMR/PL9nwoFLmwZzSl7or/lWzov7kmRZBMjzVIK8AndfcqeJ8bYwoj/2fzXQIwu/p0Y8p+v4p+MJTQFeeSxyAyUFyx7oKWURbJeT4wPFuY/sN8tKVYINvsZJI7GARc8CpA7wt8MZE5vTbnDFl6Wfl6hZl4mt9v0lsGu0LNAeRGvrV5Qa+AHmT8sWfaYxi2bWSwWAmzZfCiLXwyFV94W8p9aRklCXRirrdj1Rtx6gxaWW+Yag/1bPhaQBX0u+GXHO1QNWmRpMc6T/yi/W71dkE2yhttzkuZjMFQCG+cixiSdrzI2MTZJHK+pgLCFfot8S1I0X5M8L6mJB+AMNW77BCqiafz9+60pHjjzORTDXiy6Mab32WNBq4dNfqs+5Tm4obxrau1FonIID7TyB01nGYkpKwlVzgobGtl8NxJdetNpamYtosejnx0fj6ywC7oui7iudou4EVjky5YyHpPSfM/HjnZ8xOmA82lGXqidke9IH7uncab7yNj62QCZ3xk8DHFk77yo3cYkX0EWIjzYGcKNAzzy8QxeA7/zSWoVDuGJS+eLDvEQH7h4vugQD67BxfOlm/irGTovCCuEnSNpZzgXU0ZJjDa0ICgmBSmtrQFTeDF3X/Df6ZIWGkEpLw84pKMyAPj1tIJDOS30QfoNSCDPA9wg6rVxbdOcriH20BipDeiEtQ6sqguyVLDtvqLgpm7fPo2Qevhp5Mu7OY12cKBDyBzZZtMIvlfXoqO8xZUhQMHtp2MNTF23wfSvjG3IGmShL1uNmI7SrodlEFhl+tTK1SkS6B6/WPfZd70BKeIGxfmaklQ3O8dvOM2dQNTqMJ7dwPubwQMLsKRmTGc4C3p+w4IVvwMvFVFUNuxjeHBiPLL1Lx+OxhC/VuUfpHdRoYk0362EOhtO4FiyZLMs/XgCx1X83IHwAoUX9C1J6w/e2AA+VnAoCvrTzenF9EAqAAh29gDWEzi29JYejf5F1rM9xc8biF8oaxq70yjhMjyO41j4Tq2I4zfWQfhCUr9TKxL7qNdh+Ieyo3MG0DfHcdV5cQfSL1QUwp/cAfxX4KgO2e3egF+mz0jpMxpGn5DfhT5Fnh9An54r9ekNkK0EjspW3gDnD9IHhNg7ucioU6/vo6Nz3Fea8bqAPMX3OBk7tkjGTqf0df0hR9mw8mqVV405LUbaO3/HaqAqsJHslTVW5n5zbHVP48e5mDicb8zjYOBbMhj4nYK5Do5Wa/dxeeiBtkKEHv99+KpfzrQr+/XqdAQzVdz5PzfcVAy9xrnYsmxO8/xCjscBx5fjfP+9zMj8sI6ofET2g67IU5Kxzv2qH4kUAotIHY31nRCOGnFnvqLzh56cxdcnWI0+OzXpGlgG+IqRJ7DU1yw/N66W5zJwGpGnn+0EKzWACDqVdNdn5+L9GuBi9zwOOoEnv0Ps3nRUw4vuU6griKjujKLo8LbQaCLM1KRlH+n1AU7YGA6Vw6/WclsgvylHjV9mqrzsLEeNVWZq7NFZjhpfzNRYoRcvp8zQrenrtBzV3s9U+91LTtXetmaX8+RUbV0Pu6vabKYqmV5yqojbGpPOs5ev2vH2k3+e/ziB8p/Wscx5cqrxRw//Ue3+TLXjveRUHUOPc6ry/kxlyhNyzCX85U/L6f/k8alh7ikAAA==]]
-\rmfamily \normalsize
+\normalsize
 
-*** DONE Backend new data structure and frontend integration
+*** Backend new data structure and frontend integration
 
 The initial state of the front end had two APIs. All the methods to grab data were migrated and transformed in the new API, leaving just one centralized processing Python API.
 
 The main structure of the front end has not changed too much. The most relevant changes were in coding because the program was created for Peruvian temperature and precipitation datasets.
 
-\sffamily \footnotesize
 [[edraw:data=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]]
-\rmfamily \normalsize
 
 *** Data repository and cache
 
 The backend will support dataset uploading. The structure has been defined on folders as an ID inside a .data repository. It will allow us to keep the data treatment progress in folders with the same ID inside a .cache repository.
 
-* DONE Requirements
+* Requirements
 
-** DONE Software
+** Software
 
-- Python 3.12.7
+- Python 3.12.9
   
 - NodeJS 18.19.1
 
-- GNU/Linux distribution with kernel 5.15.19 or superior
+- GNU/Linux distribution with kernel 5.15.19 or higher
 
-- Windows has not been tested, but it may work
+- Windows has not been tested, but it may work through Anaconda
 
-** DONE Hardware
+** Minimum Hardware
 
 - Processor AMD64 or x86_64 architecture
 
-- 16GB RAM
+- 8GB RAM
 
-- 32GB Swap
+- 32GB SSD SWAP
 
-- 64GB SSD (128GB SSD Recommended)
+- 64GB HD (SSD recommended)
 
 - GPU (Optional)
 
-* DONE Visual Analytics Guidance Development
+* Visual Analytics Guidance Development
 
-** DONE Spiral diagram analysis improvement
+** Spiral diagram analysis improvement
 
 - Compute segments and timespan for the Spiral. *Done*.
 
@@ -198,7 +189,7 @@ The backend will support dataset uploading. The structure has been defined on fo
 
 - Fix polygon coordinates when there are more than three dimensions. *Done*.
 
-** DONE Independent section for statistics
+** Independent section for statistics
 
 - Statistics of the time series (size, nulls, type of columns, or dimensions). *Done*.
 
@@ -208,7 +199,7 @@ The backend will support dataset uploading. The structure has been defined on fo
 
 - Correlation matrix. *Done*.
 
-** DONE Flow diagram improvement
+** Flow diagram improvement
 
 - Data cleaning, Normalization and transformation, and Time-series behavior. *Done*.
 
@@ -216,7 +207,7 @@ The backend will support dataset uploading. The structure has been defined on fo
 
 - Network graph controller. *Done*.
 
-* DONE Format Multivariate Time Series Data
+* Format Multivariate Time Series Data
 
 The program makes data preprocessing by inspecting data and giving recommendations through a hierarchical network graph navigation (3). The steps (5) related to this are:
 
@@ -251,7 +242,6 @@ The program makes data preprocessing by inspecting data and giving recommendatio
 
 - 2 months +4 backup weeks
 
-  \sffamily
   #+ATTR_LATEX: :mode table :environment longtable :booktabs
   #+CAPTION: Activities in weeks
   | \cellcolor{gray!16} *Activities*          | \cellcolor{gray!16} *1* | \cellcolor{gray!16} *2* | \cellcolor{gray!16} *3* | \cellcolor{gray!16} *4* | \cellcolor{gray!16} *5* | \cellcolor{gray!16} *6* | \cellcolor{gray!16} *7* | \cellcolor{gray!16} *8* | \cellcolor{gray!16} *9* | \cellcolor{gray!16} *10* | \cellcolor{gray!16} *11* | \cellcolor{gray!16} *12* | \cellcolor{gray!16} *13* |
@@ -262,50 +252,49 @@ The program makes data preprocessing by inspecting data and giving recommendatio
   | \cellcolor{gray!16}New ML Backend models  |                         |                         | \cellcolor{blue!32}     | \cellcolor{blue!32}     | \cellcolor{blue!32}     |                         |                         |                         |                         |                          |                          |                          |                          |
   | \cellcolor{gray!16}Frontend new ML models |                         |                         |                         |                         |                         | \cellcolor{blue!16}     | \cellcolor{blue!16}     | \cellcolor{blue!16}     |                         |                          |                          |                          |                          |
   | \cellcolor{gray!16}Frontend UI changes    |                         |                         |                         |                         |                         |                         | \cellcolor{blue!32}     | \cellcolor{blue!32}     | \cellcolor{blue!32}     | \cellcolor{blue!32}      | \cellcolor{blue!32}      | \cellcolor{blue!32}      | \cellcolor{blue!32}      |
-  \rmfamily
+
 
 ** Testing functions
 
-Testing functions are executed to give advice when the system is processing the signal. In the case of nulls, it uses WMAPE to prioritize the imputation algorithms, the rest are selected by the majority because each algorithm evaluates the same. When testing, more than 50% evaluate true and false otherwise. Trend algorithms do not detect, just use decomposition to break the signal in its main components.
+Testing functions are executed to give advice when the system is processing the signal. In the case of nulls, it uses WMAPE to prioritize the imputation algorithms; the rest are selected by the majority because each algorithm evaluates the same. When testing, more than 50% evaluate true and false otherwise. Trend algorithms do not detect; they just use decomposition to break the signal into its main components.
 
-\sffamily
 #+ATTR_LATEX: :mode table :environment longtable :booktabs
 #+CAPTION: Testing function modules
-| *Module*         | *Functions*                                                                                          |
-|------------------+------------------------------------------------------------------------------------------------------|
-| Nulls imputation | null\textunderscore values\textunderscore data(DF): bool                                             |
-|                  | fill\textunderscore w\textunderscore meanmedian(*dict)                                               |
-|                  | fill\textunderscore w\textunderscore decisiontree(*dict)                                             |
-|                  | fill\textunderscore w\textunderscore gradientboosting(*dict)                                         |
-|                  | fill\textunderscore w\textunderscore locallyweighted(*dict)                                          |
-|                  | fill\textunderscore w\textunderscore legendre(*dict)                                                 |
-|                  | fill\textunderscore w\textunderscore randomforest(*dict)                                             |
-|                  | fill\textunderscore w\textunderscore kneighbors(*dict)                                               |
-|------------------+------------------------------------------------------------------------------------------------------|
-| Cleaning         | obtener\textunderscore ruido\textunderscore de(DF, int): bool                                        |
-|                  | obtener\textunderscore ruido\textunderscore cv(DF, float): bool                                      |
-|                  | obtener\textunderscore outlier\textunderscore iqr(DF): bool                                          |
-|                  | obtener\textunderscore outlier\textunderscore zscore(DF, int): bool                                  |
-|                  | obtener\textunderscore outlier\textunderscore grubbs(DF, float): bool                                |
-|------------------+------------------------------------------------------------------------------------------------------|
-| Normalization    | obtener\textunderscore no\textunderscore patrones\textunderscore estacionalidad(DF, int): bool       |
-|                  | obtener\textunderscore distribucion\textunderscore conocida(DF): bool                                |
-|------------------+------------------------------------------------------------------------------------------------------|
-| Transformation   | obtener\textunderscore no\textunderscore estacionariedad\textunderscore adf(DF, float): bool         |
-|                  | obtener\textunderscore no\textunderscore estacionariedad\textunderscore kpss(DF, float): bool        |
-|                  | obtener\textunderscore comportamiento\textunderscore persistente\textunderscore hurst(DF): bool      |
-|------------------+------------------------------------------------------------------------------------------------------|
-| Reduction        | verificar\textunderscore correlacion\textunderscore pearson(DF, float): bool                         |
-|                  | verificar\textunderscore correlacion\textunderscore spearman(DF, float): bool                        |
-|                  | verificar\textunderscore correlacion\textunderscore kendall(DF, float): bool                         |
-|                  | check\textunderscore multicollinearity(DF, int): bool                                                |
-|                  | check\textunderscore dimensionality\textunderscore reduction\textunderscore pca(DF, float): bool     |
-|                  | check\textunderscore dimensionality\textunderscore reduction\textunderscore fa(DF, int, float): bool |
-|------------------+------------------------------------------------------------------------------------------------------|
-| Decomposition    | seasonality\textunderscore detection(Series, Array): LOB                                             |
-|                  | trend\textunderscore detection(Series, Array): LOB                                                   |
-|                  | noise\textunderscore detection(Series, Array): LOB                                                   |
-\rmfamily
+| *Module*         | *Functions*                                             | *Hint*                         |
+|------------------+---------------------------------------------------------+--------------------------------|
+| Nulls imputation | null_values_data(DF): bool                              | Nulls detection                |
+|                  | fill_w_meanmedian(*dict)                                | Rolling mean                   |
+|                  | fill_w_decisiontree(*dict)                              | Decision tree regressor        |
+|                  | fill_w_gradientboosting(*dict)                          | Gradient boosting              |
+|                  | fill_w_locallyweighted(*dict)                           | Locally weighted regression    |
+|                  | fill_w_legendre(*dict)                                  | Legendre polynomials           |
+|                  | fill_w_randomforest(*dict)                              | Random forest regressor        |
+|                  | fill_w_kneighbors(*dict)                                | kNN regression                 |
+|------------------+---------------------------------------------------------+--------------------------------|
+| Cleaning         | obtener_ruido_de(DF, int): bool                         | Standard deviation of noise    |
+|                  | obtener_ruido_cv(DF, float): bool                       | Noise covariance Kalman filter |
+|                  | obtener_outlier_iqr(DF): bool                           | Interquartile range            |
+|                  | obtener_outlier_zscore(DF, int): bool                   | Z-score                        |
+|                  | obtener_outlier_grubbs(DF, float): bool                 | Grubbs                         |
+|------------------+---------------------------------------------------------+--------------------------------|
+| Normalization    | obtener_no_patrones_estacionalidad(DF, int): bool       | Variance and noise             |
+|                  | obtener_distribucion_conocida(DF): bool                 | Deviation and log-normal       |
+|------------------+---------------------------------------------------------+--------------------------------|
+| Transformation   | obtener_no_estacionariedad_adf(DF, float): bool         | Augmented Dickey-Fuller        |
+|                  | obtener_no_estacionariedad_kpss(DF, float): bool        | KPSS                           |
+|                  | obtener_comportamiento_persistente_hurst(DF): bool      | Hurst                          |
+|------------------+---------------------------------------------------------+--------------------------------|
+| Reduction        | verificar_correlacion_pearson(DF, float): bool          | Pearson correlation            |
+|                  | verificar_correlacion_spearman(DF, float): bool         | Spearman correlation           |
+|                  | verificar_correlacion_kendall(DF, float): bool          | Kendall correlation            |
+|                  | check_multicollinearity(DF, int): bool                  | Multicollinearity test         |
+|                  | check_dimensionality_reduction_pca(DF, float): bool     | PCA                            |
+|                  | check_dimensionality_reduction_fa(DF, int, float): bool | Factor Analysis                |
+|------------------+---------------------------------------------------------+--------------------------------|
+| Decomposition    | seasonality_detection(Series, Array): LOB               | Seasonal decompose             |
+|                  | trend_detection(Series, Array): LOB                     | Seasonal decompose trending    |
+|                  | noise_detection(Series, Array): LOB                     | Seasonal decompose residuals   |
+
 
 ** Dictionary
 
@@ -421,48 +410,46 @@ Trace:
 
 ** Change Log
 
-\sffamily
 #+ATTR_LATEX: :mode table :environment longtable :booktabs
 #+CAPTION: List of patches by timestamp
 | *A*        |  *Size* | *M* | *D* |   *H* | *Patch*              |
 |------------+---------+-----+-----+-------+----------------------|
-| -rw-r--r-- |  918794 | May |  22 | 01:38 | 20240522-013818.diff |
-| -rw-r--r-- |   32116 | May |  24 | 01:39 | 20240524-013931.diff |
-| -rw-r--r-- |   55590 | May |  24 | 18:17 | 20240524-181739.diff |
-| -rw-r--r-- |   40553 | May |  27 | 01:09 | 20240527-010932.diff |
-| -rw-r--r-- |   64068 | May |  28 | 01:45 | 20240528-014458.diff |
-| -rw-r--r-- |  160383 | Jun |   2 | 03:04 | 20240602-030410.diff |
-| -rw-r--r-- |  110627 | Jun |   4 | 02:45 | 20240604-024500.diff |
-| -rw-r--r-- |   63591 | Jun |   5 | 00:46 | 20240605-004621.diff |
-| -rw-r--r-- |   68193 | Jun |   6 | 02:31 | 20240606-023122.diff |
-| -rw-r--r-- |   33434 | Jun |   7 | 03:04 | 20240607-030453.diff |
-| -rw-r--r-- |   91512 | Jun |   8 | 01:59 | 20240608-015902.diff |
-| -rw-r--r-- |   76847 | Jun |  10 | 18:28 | 20240610-182855.diff |
-| -rw-r--r-- |   78312 | Jun |  16 | 01:54 | 20240616-015442.diff |
-| -rw-r--r-- |   24940 | Jun |  17 | 02:10 | 20240617-021030.diff |
-| -rw-r--r-- |   73776 | Jun |  18 | 01:05 | 20240618-010542.diff |
-| -rw-r--r-- |   27856 | Jun |  18 | 10:28 | 20240618-102832.diff |
-| -rw-r--r-- |  138469 | Jun |  25 | 02:45 | 20240625-024532.diff |
-| -rw-r--r-- |   65443 | Jun |  26 | 02:59 | 20240626-025901.diff |
-| -rw-r--r-- |   56919 | Jun |  27 | 00:56 | 20240627-005611.diff |
-| -rw-r--r-- |   24307 | Jul |   1 | 00:37 | 20240701-003738.diff |
-| -rw-r--r-- |   30011 | Jul |   3 | 16:51 | 20240703-165116.diff |
-| -rw-r--r-- |   91786 | Jul |   7 | 01:55 | 20240707-015505.diff |
-| -rw-r--r-- |   46989 | Jul |   9 | 01:33 | 20240709-013313.diff |
-| -rw-r--r-- |   96392 | Jul |  12 | 01:51 | 20240712-015153.diff |
-| -rw-r--r-- |  231634 | Jul |  17 | 01:38 | 20240717-013822.diff |
-| -rw-rw-r-- | 1025353 | Jan |   5 | 16:25 | 20250105-162546.diff |
-| -rw-rw-r-- |   52880 | Jan |  20 | 12:08 | 20250120-120815.diff |
-| -rw-rw-r-- |  108172 | Jan |  21 | 23:19 | 20250121-231951.diff |
-| -rw-rw-r-- |   48118 | Jan |  29 | 01:22 | 20250129-012158.diff |
-| -rw-rw-r-- |   12685 | Jan |  30 | 10:32 | 20250130-103221.diff |
-| -rw-rw-r-- |   36912 | Feb |   2 | 00:08 | 20250202-000816.diff |
-| -rw-rw-r-- |  115526 | Feb |  10 | 09:59 | 20250210-095953.diff |
-\rmfamily
+| -rw-r--r-- |  918794 | May |  22 | 01:38 | 20240522_013818.diff |
+| -rw-r--r-- |   32116 | May |  24 | 01:39 | 20240524_013931.diff |
+| -rw-r--r-- |   55590 | May |  24 | 18:17 | 20240524_181739.diff |
+| -rw-r--r-- |   40553 | May |  27 | 01:09 | 20240527_010932.diff |
+| -rw-r--r-- |   64068 | May |  28 | 01:45 | 20240528_014458.diff |
+| -rw-r--r-- |  160383 | Jun |   2 | 03:04 | 20240602_030410.diff |
+| -rw-r--r-- |  110627 | Jun |   4 | 02:45 | 20240604_024500.diff |
+| -rw-r--r-- |   63591 | Jun |   5 | 00:46 | 20240605_004621.diff |
+| -rw-r--r-- |   68193 | Jun |   6 | 02:31 | 20240606_023122.diff |
+| -rw-r--r-- |   33434 | Jun |   7 | 03:04 | 20240607_030453.diff |
+| -rw-r--r-- |   91512 | Jun |   8 | 01:59 | 20240608_015902.diff |
+| -rw-r--r-- |   76847 | Jun |  10 | 18:28 | 20240610_182855.diff |
+| -rw-r--r-- |   78312 | Jun |  16 | 01:54 | 20240616_015442.diff |
+| -rw-r--r-- |   24940 | Jun |  17 | 02:10 | 20240617_021030.diff |
+| -rw-r--r-- |   73776 | Jun |  18 | 01:05 | 20240618_010542.diff |
+| -rw-r--r-- |   27856 | Jun |  18 | 10:28 | 20240618_102832.diff |
+| -rw-r--r-- |  138469 | Jun |  25 | 02:45 | 20240625_024532.diff |
+| -rw-r--r-- |   65443 | Jun |  26 | 02:59 | 20240626_025901.diff |
+| -rw-r--r-- |   56919 | Jun |  27 | 00:56 | 20240627_005611.diff |
+| -rw-r--r-- |   24307 | Jul |   1 | 00:37 | 20240701_003738.diff |
+| -rw-r--r-- |   30011 | Jul |   3 | 16:51 | 20240703_165116.diff |
+| -rw-r--r-- |   91786 | Jul |   7 | 01:55 | 20240707_015505.diff |
+| -rw-r--r-- |   46989 | Jul |   9 | 01:33 | 20240709_013313.diff |
+| -rw-r--r-- |   96392 | Jul |  12 | 01:51 | 20240712_015153.diff |
+| -rw-r--r-- |  231634 | Jul |  17 | 01:38 | 20240717_013822.diff |
+| -rw-rw-r-- | 1025353 | Jan |   5 | 16:25 | 20250105_162546.diff |
+| -rw-rw-r-- |   52880 | Jan |  20 | 12:08 | 20250120_120815.diff |
+| -rw-rw-r-- |  108172 | Jan |  21 | 23:19 | 20250121_231951.diff |
+| -rw-rw-r-- |   48118 | Jan |  29 | 01:22 | 20250129_012158.diff |
+| -rw-rw-r-- |   12685 | Jan |  30 | 10:32 | 20250130_103221.diff |
+| -rw-rw-r-- |   36912 | Feb |   2 | 00:08 | 20250202_000816.diff |
+| -rw-rw-r-- |  115526 | Feb |  10 | 09:59 | 20250210_095953.diff |
+
 
 ** Backlog
 
-\sffamily
 #+ATTR_LATEX: :mode table :environment longtable :booktabs
 #+CAPTION: List of Backlog activities
 |-------------------------------------------------------------------------+------------|
@@ -498,4 +485,4 @@ Trace:
 | KNN gave better predictions. It is too risky to exclude slower algos    |            |
 | in the early stage of nulls' pre-evaluation.                            |            |
 |-------------------------------------------------------------------------+------------|
-\rmfamily
+
