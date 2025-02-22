@@ -26,19 +26,19 @@
 	<!--   </div> -->
       <!-- </v-col> -->
     <v-col cols="1">
-      <div class="left-buttons">
+      <div class="left-buttons undo-nulls">
 	<button v-show="enabledStages.includes(0)" @click="undoStage(0)" class="stage-button rotate-left" :style="stagecolor[0]">
-	  Undo Nulls
+	  Null imputations undo
 	</button>
       </div>
-      <div class="left-buttons">
+      <div class="left-buttons undo-outliers">
 	<button	v-show="enabledStages.includes(1)" @click="undoStage(1)" class="stage-button rotate-left" :style="stagecolor[1]">
-	  Undo Outliers
+	  Outliers treatment undo
 	</button>
       </div>
-      <div class="left-buttons">
+      <div class="left-buttons undo-norm">
 	<button v-show="enabledStages.includes(2)" @click="undoStage(2)" class="stage-button rotate-left" :style="stagecolor[2]">
-	  Undo Normalization
+	  Normalization undo
 	</button>
       </div>
     </v-col>
@@ -81,14 +81,14 @@
 	<!--   </div> -->
       <!-- </v-col> -->
     <v-col cols="1">
-      <div class="right-buttons">
+      <div class="right-buttons undo-transform">
 	<button	v-show="enabledStages.includes(3)" @click="undoStage(3)" class="stage-button rotate-right" :style="stagecolor[3]">
-	  Undo Transformation
+	  Transformation undo
 	</button>
       </div>
-      <div class="right-buttons">
+      <div class="right-buttons undo-dimred">
 	<button v-show="enabledStages.includes(4)" @click="undoStage(4)" class="stage-button rotate-right" :style="stagecolor[4]">
-	  Undo Dim. Reduction
+	  Dim. Reduction undo
 	</button>
       </div>
       <!-- <div class="right-buttons"> -->
@@ -1310,23 +1310,48 @@ div.load-layer {
 /* } */
 .left-buttons {
     display: flex;
-    justify-content: center;
+    justify-content: stretch;
     /* align-items: center; */
     flex-direction: column;
-    height: 24vh;
-    width: 24vh;
+    height: 0vh;
+    width: 32vh;
+}
+.undo-nulls {
+    position: absolute;
+    top: -16vh;
+    left: -120px;
+}
+.undo-outliers {
+    position: absolute;
+    top: -16vh;
+    left: -80px;
+}
+.undo-norm {
+    position: absolute;
+    top: -16vh;
+    left: -40px;
 }
 .right-buttons {
     display: flex;
-    justify-content: center;
+    justify-content: stretch;
     /* align-items: center; */
     flex-direction: column;
-    height: 24vh;
-    width: 24vh;
+    height: 0vh;
+    width: 32vh;
+}
+.undo-transform {
+    position: absolute;
+    top: -16vh;
+    left: -40px;
+}
+.undo-dimred {
+    position: absolute;
+    top: -16vh;
+    left: -80px;
 }
 .stage-button {
-    padding: 10px;
-    margin: 5px;
+    padding: 4px;
+    margin: 4px;
     /* background-color: black; */
     color: white;
     border: 2px solid #09f;

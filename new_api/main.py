@@ -224,6 +224,8 @@ def data(dataset, station):
     global aux_df
     global last_station
     global init_state
+    global enabled_stages
+    global selected_stage
     loader = loaders[dataset]
     station = station.upper()
     response.headers["Content-Type"] = "application/json"
@@ -239,6 +241,8 @@ def data(dataset, station):
         last_station = station
         print("[ last station", last_station, "updated ]")
         init_state = False
+        enabled_stages = []
+        selected_stage = -1
         #
     json_data, df, full_station_ds = loader.get_data(station, resample="D")
     # historial_df = {}
@@ -309,7 +313,7 @@ def undo_stage(dataset, num):
     loader.smo["redo"] = copy.deepcopy(undo[int(num)]["redo"])
     loader.cols_list = undo[int(num)]["cols_list"].copy()
     made_path = undo[int(num)]["made_path"].copy()
-    enabled_stages = undo[int(num)]["enabled_stages"].copy()
+    # enabled_stages = undo[int(num)]["enabled_stages"].copy()
     selected_stage = int(num)
     print("[ Old df:\n", current_df, "\n]")
     json_data, df, full_station_ds = loader.get_data(current_station, resample="D")
@@ -659,6 +663,8 @@ def normalize_dataset(dataset, method):
     # saving stage
     global undo
     global enabled_stages
+    global selected_stage
+    selected_stage = -1
     pstage = 2
     if (pstage not in undo): undo[pstage] = dict()
     undo[pstage]["full"] = loader.smo["full"].copy()
@@ -726,6 +732,8 @@ def clean_dataset(dataset, method):
     # saving stage
     global undo
     global enabled_stages
+    global selected_stage
+    selected_stage = -1
     pstage = 0
     if (pstage not in undo): undo[pstage] = dict()
     undo[pstage]["full"] = loader.smo["full"].copy()
@@ -811,6 +819,8 @@ def outliers_treatment(dataset, method):
     # saving stage
     global undo
     global enabled_stages
+    global selected_stage
+    selected_stage = -1
     pstage = 1
     if (pstage not in undo): undo[pstage] = dict()
     undo[pstage]["full"] = loader.smo["full"].copy()
@@ -861,6 +871,8 @@ def transform_dataset(dataset, method, number):
     # saving stage
     global undo
     global enabled_stages
+    global selected_stage
+    selected_stage = -1
     pstage = 3
     if (pstage not in undo): undo[pstage] = dict()
     undo[pstage]["full"] = loader.smo["full"].copy()
@@ -931,6 +943,8 @@ def reduce_dataset(dataset, method, n_comp):
     # saving stage
     global undo
     global enabled_stages
+    global selected_stage
+    selected_stage = -1
     pstage = 4
     if (pstage not in undo): undo[pstage] = dict()
     undo[pstage]["full"] = loader.smo["full"].copy()
