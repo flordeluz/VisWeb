@@ -7,46 +7,20 @@ import pandas as pd
 import numpy as np
 from numpy.linalg import LinAlgError
 from statsmodels.tsa.seasonal import seasonal_decompose
-from statsmodels.tsa.stattools import adfuller
 from scipy.stats import gaussian_kde, norm, lognorm
 from sklearn.preprocessing import MinMaxScaler #, MaxAbsScaler
 
-#Librería para la ejecución paralela
+# Librería para la ejecución paralela
 import concurrent.futures
 from functools import partial
 import time
-# import sys
 
-# Definir un diccionario compartido para almacenar los resultados
+# Array of results
 res_threads = []
 
 
-# Definir MinMax fraction scale
+# MinMax fraction testing scale
 mmx_fs = 1 / 1000
-# mmx_fs = sys.float_info.epsilon
-
-
-# Stationarity does not guarantee normal distribution
-# def obtener_estacionaria_mv(X, significance_level = 0.05):
-#     # NANS NOT ALLOWED
-#     if "date" in X.columns:
-#         X["date"] = pd.to_datetime(X["date"])
-#         X = X.set_index("date")
-#         #
-#     sc = MinMaxScaler(feature_range=(0 + mmx_fs, 1 + mmx_fs))
-#     # sc = MaxAbsScaler()
-#     df = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
-#     stationary = True
-#     for column in df.columns:
-#         result = adfuller(df[column])
-#         if result[1] >= significance_level:  # adf p-value >= 0.05
-#             stationary = False
-#             print("[", column, "is not stationary, ADF p-value:", result[1], "]")
-#             break
-#         #
-#     print("[ Dickey-Fuller Stationarity Test:", stationary, "]")
-#     res_threads.append({"message": "Dickey-Fuller Stationarity Test", "status": stationary})
-#     return stationary
 
 
 def obtener_no_patrones_estacionalidad(X, periodo = 12):
@@ -112,12 +86,11 @@ def obtener_distribucion_conocida(X):
 
 
 # Crear un array con las funciones
-array_funciones = [ # obtener_estacionaria_mv,
-                    obtener_no_patrones_estacionalidad,
+array_funciones = [ obtener_no_patrones_estacionalidad,
                     obtener_distribucion_conocida ]
 
 
-#CREACION DE FUNCIONES MULTIHILO
+# Creacion de funciones multihilo
 def ejecutarFuncionesMultihilo(df, arr_func):
     # Crear un objeto ThreadPoolExecutor
     executor = concurrent.futures.ThreadPoolExecutor()
@@ -132,7 +105,6 @@ def comprobarNormalizacion(dataframe, par = True):
         ejecutarFuncionesMultihilo(dataframe, array_funciones)
         #
     else:
-        # obtener_estacionaria_mv(dataframe)
         obtener_no_patrones_estacionalidad(dataframe)
         obtener_distribucion_conocida(dataframe)
         #
@@ -145,9 +117,10 @@ def comprobarNormalizacion(dataframe, par = True):
             messages.append(valor["message"])
             #
     res_threads.clear()
-    print("[ Algoritmos Normalizacion", val_positivos, "de", analyzed, "son positivos. ]")
-    # Si el 50% de los algoritmos son True, retornar
+    print("[ NORMALIZATION TESTS:", val_positivos, "OUT OF", analyzed, "ARE POSITIVE. ]")
+    # >= 50%, positive
     if val_positivos >= (analyzed*50/100):
         return True, messages
     else:
         return False, messages
+

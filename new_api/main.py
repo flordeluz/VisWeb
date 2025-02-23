@@ -21,14 +21,8 @@ import pandas as pd
 
 import statsmodels.api as sm
 import numpy as np
-# from matplotlib.pyplot import table
 from scipy import fft
 from scipy import signal as sig
-
-# from sklearn.decomposition import PCA
-# from sklearn.experimental import enable_iterative_imputer
-# from sklearn.impute import IterativeImputer, KNNImputer, SimpleImputer
-# from sklearn.preprocessing import MinMaxScaler, MaxAbsScaler, StandardScaler
 
 # HINT: Main Loader Class For Multiple Data Sources
 # -------------------------------
@@ -38,8 +32,7 @@ from Dataloader.GenLoader import GenLoader
 
 # HINT: Data Transformation Testers Refactored
 # -------------------------------
-from helpers import get_period_days
-from AlgoritmosLimpieza import comprobarLimpieza
+from AlgoritmosLimpieza import comprobarLimpieza, outliers_sufficiency_test
 from algoritmosNormalizacion import comprobarNormalizacion
 from algoritmosTransformacion import comprobarTransformacion
 from algoritmosReduccion2 import comprobarReduccion, check_dimensionality_reduction_fa, choose_dimensionality_reduction
@@ -607,6 +600,9 @@ def recommendation_by_station(dataset, station):
                     #
                 if gr.did_sdv_treatment(loader.smo):
                     dic["Excluded Activities"]["Outliers"].append("Z-Score")
+                    #
+                if len(dic["Excluded Activities"]["Outliers"]) == 0:
+                    algo_prio.append(outliers_sufficiency_test(current_df))
                     #
         if status_norm:
             recommendations["Data Quality"].append("Normalize")

@@ -15,12 +15,12 @@ from scipy.stats import pearsonr
 from scipy.optimize import curve_fit
 from sklearn.preprocessing import MaxAbsScaler
 
-#Librería para la ejecución paralela
+# Librería para la ejecución paralela
 import concurrent.futures
 from functools import partial
 import time
 
-# Definir un diccionario compartido para almacenar los resultados
+# Array of results
 res_threads = []
 
             
@@ -349,11 +349,12 @@ def verificar_frecuencia_acf(X):
 
 # Crear un array con las funciones
 array_funciones = [ verificar_ciclo_fft, verificar_consistencia_fft,
-                    verificar_consistencia_acf, verificar_consistencia_forma_duracion,
-                    verificar_consistencia_varianza, verificar_consistencia_pearsonr,
-                    verificar_ciclos_sinusoidal, verificar_frecuencia_fft,
-                    verificar_frecuencia_acf
-                   ]
+                    verificar_consistencia_acf,
+                    verificar_consistencia_forma_duracion,
+                    verificar_consistencia_varianza,
+                    verificar_consistencia_pearsonr,
+                    verificar_ciclos_sinusoidal,
+                    verificar_frecuencia_fft, verificar_frecuencia_acf ]
 
 
 # CREACION DE FUNCIONES MULTIHILO
@@ -390,8 +391,8 @@ def comprobarCiclicidad(dataframe, par = True):
             messages.append(valor["message"])
             #
     res_threads.clear()
-    print("[ Algoritmos Ciclicidad ",val_positivos, " de ", analized, " son positivos. ]")
-    #Si el 50% de los algoritmos son True, retornar
+    print("[ CYCLICITY TESTS:", val_positivos, "OUT OF", analized, "ARE POSITIVE. ]")
+    # >= 50%, positive
     if val_positivos >= (analized*50/100): return True, messages
     else: return False, messages
 

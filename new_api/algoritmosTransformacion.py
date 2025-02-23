@@ -11,19 +11,17 @@ import matplotlib.pyplot as plt
 from hurst import compute_Hc
 from sklearn.preprocessing import MinMaxScaler #, MaxAbsScaler
 
-#Librería para la ejecución paralela
+# Librería para la ejecución paralela
 import concurrent.futures
 from functools import partial
 import time
-# import sys
 
-# Definir un diccionario compartido para almacenar los resultados
+# Array of results
 res_threads = []
 
 
-# Definir MinMax fraction scale
+# MinMax fraction testing scale
 mmx_fs = 1 / 1000
-# mmx_fs = sys.float_info.epsilon
 
 
 def obtener_no_estacionariedad_adf(X, significance_level = 0.05):
@@ -142,8 +140,9 @@ def comprobarTransformacion(dataframe, par = True):
             #
     res_threads.clear()
     print("[ Algoritmos Transformacion", val_positivos, "de", analyzed, "son positivos. ]")
-    # Si el 50% de los algoritmos son True, retornar
+    # >= 50%, positive
     if val_positivos >= (analyzed*50/100):
         return True, messages
     else:
         return False, messages
+

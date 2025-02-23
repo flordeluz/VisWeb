@@ -9,9 +9,8 @@ import pandas as pd
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
-import statsmodels.api as sm
 from pywt import cwt
-from statsmodels.tsa.stattools import acf, pacf, q_stat
+from statsmodels.tsa.stattools import acf, pacf
 from scipy.fftpack import fft
 from statsmodels.stats.diagnostic import acorr_ljungbox
 from statsmodels.tsa.seasonal import STL
@@ -23,12 +22,11 @@ import concurrent.futures
 from functools import partial
 import time
 
-# Definir un diccionario compartido para almacenar los resultados
+# Array of results
 res_threads = []
 
 
 def seasonality_detection(ds, cols_list):
-    # reshtml = '<p style="text-align:center"><h5><b>Estacionalidad</b></h5></p>'
     reshtml = ''
     pltid = 1
     rows = len(cols_list)
@@ -52,7 +50,6 @@ def seasonality_detection(ds, cols_list):
 
 
 def trend_detection(ds, cols_list):
-    # reshtml = '<p style="text-align:center"><h5><b>Tendencia</b></h5></p>'
     reshtml = '';
     pltid = 1
     rows = len(cols_list)
@@ -76,7 +73,6 @@ def trend_detection(ds, cols_list):
 
 
 def noise_detection(ds, cols_list):
-    # reshtml = '<p style="text-align:center"><h5><b>Tendencia</b></h5></p>'
     reshtml = '';
     pltid = 1
     rows = len(cols_list)
@@ -98,37 +94,7 @@ def noise_detection(ds, cols_list):
     reshtml += '<img src="data:image/png;base64,%s">' % s
     return reshtml
 
-
 # PERIODICIDAD
-
-# def check_box_pierce(data, alpha = 0.05):
-#     # Calcula la ACF
-#     acf_values, confint = acf(data, nlags=len(data), alpha=alpha)
-#     # Realiza la prueba de Box-Pierce
-#     q_stat_values, p_values = q_stat(acf_values, len(data))
-#     return np.any(p_values < alpha)
-
-
-# def verificar_box_pierce(X):
-#     if "date" in X.columns:
-#         X["date"] = pd.to_datetime(X["date"])
-#         X = X.set_index("date")
-#         #
-#     sc = MaxAbsScaler()
-#     dataframe = pd.DataFrame(sc.fit_transform(X), index = X.index, columns = X.columns)
-#     is_periodic = False
-#     cantidad_true = 0
-#     for feature in dataframe.columns:
-#         if check_box_pierce(dataframe[feature]):
-#             cantidad_true += 1
-#             #
-#     if cantidad_true >= len(dataframe.columns)-1:
-#         is_periodic = True
-#         #
-#     print("[ Box-Pierce Periodic Test:", is_periodic, "]")
-#     res_threads.append({"message": "Box-Pierce Periodic Test", "status": is_periodic})
-#     return is_periodic
-
 
 def check_box_pierce2(data, alpha = 0.05):
     # Realiza la prueba de Box-Pierce
@@ -537,16 +503,18 @@ def verificar_duracion(X):
 
 
 # Crear un array con las funciones
-array_funciones = [ # verificar_box_pierce,
-                    verificar_box_pierce2, verificar_periodicidad_fft,
-                    verificar_periodicidad_fft2, verificar_periodicidad_fft3,
-                    verificar_periodicidad_acf_pacf, verificar_periodicidad_wavelet,
-                    verificar_descomposiocion_stl, verificar_estacionalidad_fisher,
-                    verificar_amplitud, verificar_amplitud_fft, verificar_frecuencia_fft,
-                    verificar_frecuencia_acf, verificar_duracion ] 
+array_funciones = [ verificar_box_pierce2, verificar_periodicidad_fft,
+                    verificar_periodicidad_fft2,
+                    verificar_periodicidad_fft3,
+                    verificar_periodicidad_acf_pacf,
+                    verificar_periodicidad_wavelet,
+                    verificar_descomposiocion_stl,
+                    verificar_estacionalidad_fisher, verificar_amplitud,
+                    verificar_amplitud_fft, verificar_frecuencia_fft,
+                    verificar_frecuencia_acf, verificar_duracion ]
 
 
-# CREACION DE FUNCIONES MULTIHILO
+# Creacion de funciones multihilo
 def ejecutarFuncionesMultihilo(df, arr_func):
     # Crear un objeto ThreadPoolExecutor
     executor = concurrent.futures.ThreadPoolExecutor()
@@ -561,7 +529,6 @@ def comprobarEstacionalidad(dataframe, par = True):
         ejecutarFuncionesMultihilo(dataframe, array_funciones)
         #
     else:
-        # verificar_box_pierce(dataframe)
         verificar_box_pierce2(dataframe)
         verificar_periodicidad_fft(dataframe)
         verificar_periodicidad_fft2(dataframe)
@@ -585,8 +552,8 @@ def comprobarEstacionalidad(dataframe, par = True):
             messages.append(valor["message"])
             #
     res_threads.clear()
-    print("[ Algoritmos Estacionalidad", val_positivos, "de", analyzed, "son positivos. ]")
-    # Si el 50% de los algoritmos son True, retornar
+    print("[ SEASONALITY TESTS:", val_positivos, "OUT OF", analyzed, "ARE POSITIVE. ]")
+    # >= 50%, positive
     if val_positivos >= (analyzed*50/100): return True, messages
     else: return False, messages
 

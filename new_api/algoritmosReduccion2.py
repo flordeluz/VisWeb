@@ -15,13 +15,12 @@ import concurrent.futures
 from functools import partial
 import time
 
-# Definir un diccionario compartido para almacenar los resultados
+# Array of results
 res_threads = []
 
 
-# Definir MinMax fraction scale
+# MinMax fraction testing scale
 mmx_fs = 1 / 1000
-# mmx_fs = sys.float_info.epsilon
 
 # CORRELACION ENTRE VARIABLES
 
@@ -221,8 +220,8 @@ def comprobarReduccion(dataframe, par = True):
             messages.append(valor["message"])
             #
     res_threads.clear()
-    print("[ Algoritmos Reduccion", val_positivos, "de", analyzed, "son positivos. ]")
-    # Si el 50% de los algoritmos son True, retornar
+    print("[ REDUCTION TESTS:", val_positivos, "OUT OF", analyzed, "ARE POSITIVE. ]")
+    # >= 50%, positive
     if val_positivos >= (analyzed*50/100):
         return True, messages
     else:
