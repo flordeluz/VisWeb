@@ -5,3 +5,4 @@ simplejson
 tables
 pingouin
 hurst
+factor_analyzer

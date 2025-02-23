@@ -42,7 +42,7 @@ from helpers import get_period_days
 from AlgoritmosLimpieza import comprobarLimpieza
 from algoritmosNormalizacion import comprobarNormalizacion
 from algoritmosTransformacion import comprobarTransformacion
-from algoritmosReduccion2 import comprobarReduccion, check_dimensionality_reduction_fa
+from algoritmosReduccion2 import comprobarReduccion, check_dimensionality_reduction_fa, choose_dimensionality_reduction
 from algoritmosEstacionalidad import comprobarEstacionalidad, seasonality_detection, trend_detection, noise_detection
 from algoritmosCiclicidad2 import comprobarCiclicidad, verificar_ciclo_fft
 from algoritmosEstadisticas import describe_data, null_values_data, addinfo_data, corrmat_data, bivaran_data, boxplot_data
@@ -633,6 +633,9 @@ def recommendation_by_station(dataset, station):
                     dic["Excluded Activities"]["DimRed"] = []
                     dic["Excluded Activities"]["DimRed"].append("Factor Analysis")
                     recommendations["Variables Behavior"].append("Analysis")
+                    #
+                else:
+                    algo_prio.append(choose_dimensionality_reduction(current_df))
                     #
             else:
                 recommendations["Variables Behavior"].append("Analysis")
