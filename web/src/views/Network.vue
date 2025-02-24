@@ -543,6 +543,22 @@ export default {
 	selectedStage: -1
     }),
     methods: {
+	getMajorityCommonElements(...arrays) {
+	    const allElements = arrays.flat();
+	    const totalArrays = arrays.length;
+	    const elementCount = {};
+	    allElements.forEach(el => {
+		elementCount[el] = (elementCount[el] || 0) + 1;
+	    });
+	    const majorityThreshold = Math.ceil(totalArrays / 2);
+	    const commonElements = Object.keys(elementCount)
+		  .filter(el => elementCount[el] >= majorityThreshold);
+	    if (commonElements.length > 0) {
+		return commonElements;
+	    }
+	    return arrays.reduce((maxArr, currentArr) => 
+		currentArr.length > maxArr.length ? currentArr : maxArr, []);
+	},	   
 	// updatedStages(stage) {
 	//     if (!this.enabledStages.includes(stage)) {
 	// 	this.enabledStages.push(stage);
@@ -784,55 +800,48 @@ export default {
 		}
 		if (this.n_comp == "") {
 		    const foundMC = itextends["DimRed"].find(item => item.includes("Multicollinearity Dim.Reduction"));
+		    var valuesMC = [];
 		    if (foundMC) {
 			const regex = /\[(.*?)\]/;
 			const matchMC = foundMC.match(regex);
 			if (matchMC) {
-			    const valuesMC = matchMC[1].split(',').map(item => item.trim().replace(/'/g, ''));
+			    valuesMC = matchMC[1].split(',').map(item => item.trim().replace(/'/g, ''));
 			    console.log(valuesMC);
-			    this.n_comp = valuesMC.join(',');
-			    console.log(this.n_comp);
 			}
 		    }
-		}
-		if (this.n_comp == "") {
 		    const foundPR = itextends["DimRed"].find(item => item.includes("Pearson Dim.Reduction"));
+		    var valuesPR = [];
 		    if (foundPR) {
 			const regex = /\[(.*?)\]/;
 			const matchPR = foundPR.match(regex);
 			if (matchPR) {
-			    const valuesPR = matchPR[1].split(',').map(item => item.trim().replace(/'/g, ''));
+			    valuesPR = matchPR[1].split(',').map(item => item.trim().replace(/'/g, ''));
 			    console.log(valuesPR);
-			    this.n_comp = valuesPR.join(',');
-			    console.log(this.n_comp);
 			}
 		    }
-		}
-		if (this.n_comp == "") {
 		    const foundSP = itextends["DimRed"].find(item => item.includes("Spearman Dim.Reduction"));
+		    var valuesSP = [];
 		    if (foundSP) {
 			const regex = /\[(.*?)\]/;
 			const matchSP = foundSP.match(regex);
 			if (matchSP) {
-			    const valuesSP = matchSP[1].split(',').map(item => item.trim().replace(/'/g, ''));
+			    valuesSP = matchSP[1].split(',').map(item => item.trim().replace(/'/g, ''));
 			    console.log(valuesSP);
-			    this.n_comp = valuesSP.join(',');
-			    console.log(this.n_comp);
 			}
 		    }
-		}
-		if (this.n_comp == "") {
 		    const foundKN = itextends["DimRed"].find(item => item.includes("Kendall Dim.Reduction"));
+		    var valuesKN = [];
 		    if (foundKN) {
 			const regex = /\[(.*?)\]/;
 			const matchKN = foundKN.match(regex);
 			if (matchKN) {
-			    const valuesKN = matchKN[1].split(',').map(item => item.trim().replace(/'/g, ''));
+			    valuesKN = matchKN[1].split(',').map(item => item.trim().replace(/'/g, ''));
 			    console.log(valuesKN);
-			    this.n_comp = valuesKN.join(',');
-			    console.log(this.n_comp);
 			}
 		    }
+		    const valuesPCA = this.getMajorityCommonElements(valuesMC, valuesPR, valuesSP, valuesKN);
+		    this.n_comp = valuesPCA.join(',');
+		    console.log(this.n_comp);
 		}
 	    }
 	    await new Promise(r => setTimeout(r, 2000));
