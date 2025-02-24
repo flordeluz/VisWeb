@@ -139,7 +139,7 @@ def comprobarTransformacion(dataframe, par = True):
             messages.append(valor["message"])
             #
     res_threads.clear()
-    print("[ Algoritmos Transformacion", val_positivos, "de", analyzed, "son positivos. ]")
+    print("[ TRANSFORMATION TESTS:", val_positivos, "OUT OF", analyzed, "ARE POSITIVE. ]")
     # >= 50%, positive
     if val_positivos >= (analyzed*50/100):
         return True, messages

@@ -1,4 +1,4 @@
-% Created 2025-02-22 Sat 10:08
+% Created 2025-02-24 Mon 08:23
 % Intended LaTeX compiler: pdflatex
 \documentclass[a4paper]{article}
 \usepackage[utf8]{inputenc}
@@ -37,12 +37,12 @@
 
 
 \section{Introduction}
-\label{sec:org70c6fdc}
+\label{sec:orgb855402}
 
 The project explores, analyzes, and integrates Vue.JS and Python code with different models for clean and data completion.
 
 \section{Goals}
-\label{sec:org6aac51a}
+\label{sec:org64c6e1f}
 
 \begin{itemize}
 \item Complete the code by integrating different Python models into the software project.
@@ -53,7 +53,7 @@ The project explores, analyzes, and integrates Vue.JS and Python code with diffe
 \end{itemize}
 
 \section{State of the art}
-\label{sec:org9d851e0}
+\label{sec:orgd0c4aaa}
 
 \begin{itemize}
 \item Source code of the project(1), with documentation to install and deploy the software. The software currently reads data and graphs time series. It has options for data completion through rolling mean and kNN and partially cleaning data alternatives. It tracks for changes while navigating through the Diagram Operator interface graphically. Integrates Radial Chart for time series cycles.
@@ -62,10 +62,10 @@ The project explores, analyzes, and integrates Vue.JS and Python code with diffe
 \end{itemize}
 
 \section{Pre-implementation analysis}
-\label{sec:org14ce080}
+\label{sec:org646a1b8}
 
 \subsection{Multilayer design}
-\label{sec:org4d094bd}
+\label{sec:org568df6d}
 
 The critical aspects of the software are:
 
@@ -82,21 +82,21 @@ The critical aspects of the software are:
 \end{itemize}
 
 \subsection{Frontend specifics}
-\label{sec:org762717c}
+\label{sec:orgcb7c181}
 
 \begin{center}
 \includesvg[width=.9\linewidth]{link-data-1250ef5082f07210935c7515e20cafdd9150c370.edraw}
 \end{center}
 
 \subsection{Backend specifics}
-\label{sec:org8f83290}
+\label{sec:org17f228d}
 
 \begin{center}
 \includesvg[width=.9\linewidth]{link-data-2de380ab2182abb59bc5043236fa1864057da655.edraw}
 \end{center}
 
 \subsection{Detected issues}
-\label{sec:orge4f1650}
+\label{sec:orga2c6925}
 
 \begin{itemize}
 \item Data structures. It requires adapting the current data structures of the program to the new dictionary of the tested and trained models.
@@ -107,10 +107,10 @@ The critical aspects of the software are:
 \end{itemize}
 
 \section{Implementation}
-\label{sec:org0b354f1}
+\label{sec:org13a3e7c}
 
 \subsection{Activities summary}
-\label{sec:org76f7092}
+\label{sec:orgc1d58ce}
 
 \begin{itemize}
 \item Adapt the Backend Data Structure.
@@ -130,10 +130,10 @@ The critical aspects of the software are:
 
 
 \subsection{Activities execution}
-\label{sec:org769784a}
+\label{sec:org115b6c7}
 
 \subsubsection{Change log}
-\label{sec:orgf018222}
+\label{sec:org0cd0ff3}
 
 Tracking changes on the program will be done by using diff to create a patch component that allows the creation of a checkpoint and registering the changes by the size of modify or created code\footnote{Tracking log in the appendix}. The folder structure is:
 
@@ -161,12 +161,12 @@ drwx & VisWeb-AlgoritmosLimpieza & Development Folder\\[0pt]
 \end{longtable}
 
 \subsubsection{Backlog}
-\label{sec:orgcfe7f4e}
+\label{sec:orgf3c11a0}
 
 The pending activities are in the appendix backlog section. These activities correspond to changes or reviews that depend on multiple program files around the software, and their resolutions will come on the project's timeline. Bugs will gradually fixed.
 
 \subsubsection{Backend data structures}
-\label{sec:orgfa76442}
+\label{sec:org65d6d6c}
 
 Programs adaptation in the new\_api.
 
@@ -209,18 +209,18 @@ Programs adaptation in the new\_api.
 \normalsize
 
 \subsubsection{Backend new specifications}
-\label{sec:org0d2a09e}
+\label{sec:org3b006ae}
 
 \begin{enumerate}
 \item Classes and modules
-\label{sec:org5431e80}
+\label{sec:org8075eb5}
 
 \begin{center}
 \includesvg[width=.9\linewidth]{link-data-7390a9932dd2cb3129ada2c263fda3d0172031ac.edraw}
 \end{center}
 
 \item Sequence diagram
-\label{sec:org2c9fcd2}
+\label{sec:orgfce1023}
 
 \small
 \begin{center}
@@ -230,7 +230,7 @@ Programs adaptation in the new\_api.
 \end{enumerate}
 
 \subsubsection{Backend new data structure and frontend integration}
-\label{sec:org6d2231c}
+\label{sec:orgee30619}
 
 The initial state of the front end had two APIs. All the methods to grab data were migrated and transformed in the new API, leaving just one centralized processing Python API.
 
@@ -241,15 +241,15 @@ The main structure of the front end has not changed too much. The most relevant 
 \end{center}
 
 \subsubsection{Data repository and cache}
-\label{sec:org96ad333}
+\label{sec:org8c8854d}
 
 The backend will support dataset uploading. The structure has been defined on folders as an ID inside a .data repository. It will allow us to keep the data treatment progress in folders with the same ID inside a .cache repository.
 
 \section{Requirements}
-\label{sec:org71317b5}
+\label{sec:org3f6bbcd}
 
 \subsection{Software}
-\label{sec:org1ea8b40}
+\label{sec:org50fc679}
 
 \begin{itemize}
 \item Python 3.12.9
@@ -262,7 +262,7 @@ The backend will support dataset uploading. The structure has been defined on fo
 \end{itemize}
 
 \subsection{Minimum Hardware}
-\label{sec:orgdb10fe5}
+\label{sec:orgfaaeb85}
 
 \begin{itemize}
 \item Processor AMD64 or x86\_64 architecture
@@ -277,10 +277,10 @@ The backend will support dataset uploading. The structure has been defined on fo
 \end{itemize}
 
 \section{Visual Analytics Guidance Development}
-\label{sec:org1e56fa9}
+\label{sec:orgd110472}
 
 \subsection{Spiral diagram analysis improvement}
-\label{sec:org60cbf03}
+\label{sec:org80f89ed}
 
 \begin{itemize}
 \item Compute segments and timespan for the Spiral. \textbf{Done}.
@@ -291,7 +291,7 @@ The backend will support dataset uploading. The structure has been defined on fo
 \end{itemize}
 
 \subsection{Independent section for statistics}
-\label{sec:org9b384d0}
+\label{sec:org6e65b70}
 
 \begin{itemize}
 \item Statistics of the time series (size, nulls, type of columns, or dimensions). \textbf{Done}.
@@ -304,7 +304,7 @@ The backend will support dataset uploading. The structure has been defined on fo
 \end{itemize}
 
 \subsection{Flow diagram improvement}
-\label{sec:org76850a2}
+\label{sec:orgb70445b}
 
 \begin{itemize}
 \item Data cleaning, Normalization and transformation, and Time-series behavior. \textbf{Done}.
@@ -315,7 +315,7 @@ The backend will support dataset uploading. The structure has been defined on fo
 \end{itemize}
 
 \section{Format Multivariate Time Series Data}
-\label{sec:orgaf8a77a}
+\label{sec:orgecd0a00}
 
 The program makes data preprocessing by inspecting data and giving recommendations through a hierarchical network graph navigation (3). The steps (5) related to this are:
 
@@ -338,7 +338,7 @@ The program makes data preprocessing by inspecting data and giving recommendatio
 \end{itemize}
 
 \section{References}
-\label{sec:orgf7a46e8}
+\label{sec:orgd4fe27f}
 
 \begin{enumerate}
 \item \url{https://github.com/flordeluz/VisWeb}
@@ -350,10 +350,10 @@ The program makes data preprocessing by inspecting data and giving recommendatio
 
 \clearpage
 \section{Appendix}
-\label{sec:org4b26bd4}
+\label{sec:org6661e9e}
 
 \subsection{Time Estimation Plan}
-\label{sec:orge47bcdd}
+\label{sec:org5c27369}
 
 \begin{itemize}
 \item 2 months +4 backup weeks
@@ -386,7 +386,7 @@ The program makes data preprocessing by inspecting data and giving recommendatio
 
 
 \subsection{Testing functions}
-\label{sec:org5511dfd}
+\label{sec:org0b42990}
 
 Testing functions are executed to give advice when the system is processing the signal. In the case of nulls, it uses WMAPE to prioritize the imputation algorithms; the rest are selected by the majority because each algorithm evaluates the same. When testing, more than 50\% evaluate true and false otherwise. Trend algorithms do not detect; they just use decomposition to break the signal into its main components.
 
@@ -443,7 +443,7 @@ Decomposition & seasonality\_detection(Series, Array): LOB & Seasonal decompose\
 
 
 \subsection{Dictionary}
-\label{sec:org88d0e5e}
+\label{sec:org36715b4}
 
 The dictionary is dynamic, it grows at any algorithm or action made. Data is mostly held on Dataframes. Classes can retain information on the object like testing functions described in the previous subsection. The function contains the signal.
 
@@ -499,7 +499,7 @@ The following is an excerpt from the dictionary. It repeats for each loader clas
 
 
 \subsection{Network coloring}
-\label{sec:org2358d7d}
+\label{sec:org9272f9b}
 
 Color attributes are applied with information that comes from the backend as arrays.
 
@@ -553,7 +553,7 @@ Trace:
 
 
 \subsection{Change Log}
-\label{sec:orgeff8805}
+\label{sec:org03eceac}
 
 \begin{longtable}{lrlrrl}
 \caption{List of patches by timestamp}
@@ -608,7 +608,7 @@ Trace:
 
 
 \subsection{Backlog}
-\label{sec:org380ec93}
+\label{sec:org66255ab}
 
 \begin{longtable}{ll}
 \caption{List of Backlog activities}
@@ -644,7 +644,7 @@ Does get-raw-data() revert .ds to .smo["raw"] when invoked in the & \emph{Closed
 frontend? if so, uncomment the referred line in the get-raw-data(). & \\[0pt]
 \textbf{Resolution:} We are using different structures inside .smo. & \\[0pt]
 \hline
-For large datasets the prediction time of null values pre-evaluation & \emph{Unsolved}\\[0pt]
+For large datasets the prediction time of null values pre-evaluation & \emph{Closed}\\[0pt]
 goes like: & \\[0pt]
 decisiontree    : too slow,  >   2 mins & \\[0pt]
 kneighbors      : too slow,  >   2 mins & \\[0pt]

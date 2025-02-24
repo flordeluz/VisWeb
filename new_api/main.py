@@ -188,26 +188,6 @@ def meta_data(dataset):
     return json.dumps(loader.get_metadata())
 
 
-# @route("/meta_data/<dataset>/<station>")
-# @enable_cors
-# def station_meta_data(dataset, station):
-#     global last_station
-#     loader = loaders[dataset]
-#     station = station.upper()
-#     print("[ pre-process last and current stations:", last_station, ",", station, "]")
-#     if ("cache" not in loader.smo):
-#         loader.smo["cache"] = dict()
-#         #
-#     if (last_station != "" & last_station in loader.smo["cache"]):
-#         loader.smo = gr.station_auto_save(loader.smo, last_station)
-#         #
-#     loader.smo = gr.station_auto_init(loader.smo, station)
-#     last_station = station
-#     print("[ last station", last_station, "updated ]")
-#     # return json.dumps(loader.get_station_metadata(station=station))
-#     return json.dumps(loader.get_station_metadata(station))
-
-
 @route("/data/<dataset>/<station>")
 @enable_cors
 def data(dataset, station):
@@ -549,13 +529,17 @@ def recommendation_by_station(dataset, station):
         tmp_loader_x_flr = copy.deepcopy(loader.x_flr)
         tmp_loader_cols_list = copy.deepcopy(loader.cols_list)
         tmp_loader_time_list = copy.deepcopy(loader.time_list)
-        tmp_loader_smo = gr.fill_w_meanmedian(tmp_full_station_ds, tmp_loader_smo, tmp_loader_minsample, tmp_loader_valdnsize, tmp_loader_x_flr, tmp_loader_cols_list, tmp_loader_time_list)
-        tmp_loader_smo = gr.fill_w_decisiontree(tmp_full_station_ds, tmp_loader_smo, tmp_loader_minsample, tmp_loader_valdnsize, tmp_loader_x_flr, tmp_loader_cols_list, tmp_loader_time_list)
-        tmp_loader_smo = gr.fill_w_gradientboosting(tmp_full_station_ds, tmp_loader_smo, tmp_loader_minsample, tmp_loader_valdnsize, tmp_loader_x_flr, tmp_loader_cols_list, tmp_loader_time_list)
         tmp_loader_smo = gr.fill_w_locallyweighted(tmp_full_station_ds, tmp_loader_smo, tmp_loader_minsample, tmp_loader_valdnsize, tmp_loader_x_flr, tmp_loader_cols_list, tmp_loader_time_list)
         tmp_loader_smo = gr.fill_w_legendre(tmp_full_station_ds, tmp_loader_smo, tmp_loader_minsample, tmp_loader_valdnsize, tmp_loader_x_flr, tmp_loader_cols_list, tmp_loader_time_list)
+        tmp_loader_smo = gr.fill_w_meanmedian(tmp_full_station_ds, tmp_loader_smo, tmp_loader_minsample, tmp_loader_valdnsize, tmp_loader_x_flr, tmp_loader_cols_list, tmp_loader_time_list)
         tmp_loader_smo = gr.fill_w_randomforest(tmp_full_station_ds, tmp_loader_smo, tmp_loader_minsample, tmp_loader_valdnsize, tmp_loader_x_flr, tmp_loader_cols_list, tmp_loader_time_list)
-        tmp_loader_smo = gr.fill_w_kneighbors(tmp_full_station_ds, tmp_loader_smo, tmp_loader_minsample, tmp_loader_valdnsize, tmp_loader_x_flr, tmp_loader_cols_list, tmp_loader_time_list)
+        # time processing exception for large datasets
+        if ( tmp_full_station_ds.shape[0] * len(tmp_loader_cols_list) < 500000 ):
+            tmp_loader_smo = gr.fill_w_gradientboosting(tmp_full_station_ds, tmp_loader_smo, tmp_loader_minsample, tmp_loader_valdnsize, tmp_loader_x_flr, tmp_loader_cols_list, tmp_loader_time_list)
+            if ( tmp_full_station_ds.shape[0] * len(tmp_loader_cols_list) < 100000 ):
+                tmp_loader_smo = gr.fill_w_decisiontree(tmp_full_station_ds, tmp_loader_smo, tmp_loader_minsample, tmp_loader_valdnsize, tmp_loader_x_flr, tmp_loader_cols_list, tmp_loader_time_list)
+                tmp_loader_smo = gr.fill_w_kneighbors(tmp_full_station_ds, tmp_loader_smo, tmp_loader_minsample, tmp_loader_valdnsize, tmp_loader_x_flr, tmp_loader_cols_list, tmp_loader_time_list)
+                #
         print("[ Computed metrics ]:")
         tmp_hdf = gr.best_algo_metrics(tmp_loader_smo)
         tmp_hdf = tmp_hdf[["PROG", "WMAPE"]].copy()
@@ -978,64 +962,6 @@ def reduce_dataset(dataset, method, n_comp):
     aux_df = df
     print("[ Current df:\n", current_df, "\n]")
     return json_data
-
-
-# @route("/op/<dataset>/vbehavior/<operator>")
-# @enable_cors
-# def vbehavior_analyse(dataset, operator):
-#     response.headers["Content-Type"] = "application/json"
-#     global current_df
-#     data = current_df.values
-#     data[data < 0] = -1
-#     if request.query:
-#         feature = int(request.query.feature)
-#         #
-#     dataframe = pd.DataFrame(data, index=pd.DatetimeIndex(current_df.index))
-#     resample = "W"
-#     # If not precipitation then use the mean else max to resample
-#     if feature > 0:
-#         res_dataframe = dataframe.resample(resample).mean()[feature]
-#     else:
-#         res_dataframe = dataframe.resample(resample).max()[feature]
-#         #
-#     if operator in ["trend", "seasonality"]:
-#         decomposition = sm.tsa.seasonal_decompose(
-#             res_dataframe, model="aditive")
-#         if operator == "trend":
-#             feature_data = decomposition.trend.values
-#         elif operator == "seasonality":
-#             feature_data = decomposition.seasonal.values
-#         else:
-#             feature_data = []
-#     elif operator == "cyclicity":
-#         y = res_dataframe.values
-#         fourier_output = np.abs(fft.fft(y))
-#         frecuencies = fft.fftfreq(len(y))
-#         peaks = sig.find_peaks(fourier_output, prominence=10**2)[0]
-#         print(peaks)
-#         peak_freq = frecuencies[peaks]
-#         peak_power = fourier_output[peaks]
-#         output = pd.DataFrame()
-#         output["index"] = peaks
-#         output["freq (1/hour)"] = peak_freq
-#         output["amplitude"] = peak_power
-#         output["period (days)"] = 1/peak_freq
-#         output["fft"] = fourier_output[peaks]
-#         output = output.sort_values("amplitude", ascending=False)
-#         print(output)
-#         max_amp_index = output["index"].iloc[0:5:2]
-#         filtered_fft_output = np.array(
-#             [f if i in max_amp_index.values else 0 for i, f in enumerate(fourier_output)])
-#         filtered_sig = fft.ifft(filtered_fft_output)
-#         print("output shape:", filtered_fft_output.shape,
-#               fourier_output.shape, y.shape)
-#         feature_data = np.array(filtered_sig.astype("float"))
-#         #
-#     feature_data = np.array([feature_data]).T
-#     feature_data = np.append(feature_data, np.array(
-#         [res_dataframe.values]).T, axis=1)
-#     current_df = dataframe
-#     return dataframe.reset_index().to_json(orient="records", index=True)
 
 
 @route("/op/<dataset>/raw")

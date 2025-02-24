@@ -200,6 +200,7 @@ export default {
 	// noiswd: 300,
 	vnoise: '<img src="data:image/png;base64,' + vcteicon + '">',
 	n_comp: "",
+	f_comp: "",
 	factor: 1,
 	main_operation: "",
 	main_path: "",
@@ -777,8 +778,8 @@ export default {
 		    if (matchFA) {
 			const valuesFA = matchFA[1].split(',').map(item => item.trim().replace(/'/g, ''));
 			console.log(valuesFA);
-			this.n_comp = valuesFA.join(',');
-			console.log(this.n_comp);
+			this.f_comp = valuesFA.join(',');
+			console.log(this.f_comp);
 		    }
 		}
 		if (this.n_comp == "") {
@@ -874,7 +875,7 @@ export default {
 	    this.graph.addNode("Differencing", { x: -64, y: -36, size: this.ACTVSZ, label: "Differencing", forceLabel: true, path: "transform/diff/" + this.factor, type: "gradient", color: this.ACTVCO["Data Quality"]["Transform"]["Differencing"] });
 	    
 	    this.graph.addNode("DimRed", { x: 20, y: -30, size: this.SUBPSZ, label: "Dim. Reduction", forceLabel: true, type: "gradient", color: this.SUBPCO["Data Reduction"]["DimRed"] });
-	    this.graph.addNode("Factor Analysis", { x: 50, y: -40, size: this.ACTVSZ, label: "Factor Analysis", forceLabel: true, path: "reduce/factor/" + this.n_comp, type: "gradient", color: this.ACTVCO["Data Reduction"]["DimRed"]["Factor Analysis"] });
+	    this.graph.addNode("Factor Analysis", { x: 50, y: -40, size: this.ACTVSZ, label: "Factor Analysis", forceLabel: true, path: "reduce/factor/" + this.f_comp, type: "gradient", color: this.ACTVCO["Data Reduction"]["DimRed"]["Factor Analysis"] });
 	    this.graph.addNode("PCA and correlation", { x: 40, y: -10, size: this.ACTVSZ, label: "PCA and correlation", forceLabel: true, path: "reduce/manual/" /* + this.n_comp */, type: "gradient", color: this.ACTVCO["Data Reduction"]["DimRed"]["PCA and correlation"] });
 	    
 	    this.graph.addNode("Analysis", { x: 90, y: 36, size: this.SUBPSZ, label: "Analysis", forceLabel: true, type: "gradient", color: this.SUBPCO["Variables Behavior"]["Analysis"] });
