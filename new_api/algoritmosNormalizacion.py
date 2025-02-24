@@ -6,9 +6,9 @@ warnings.simplefilter("ignore", InterpolationWarning)
 import pandas as pd
 import numpy as np
 from numpy.linalg import LinAlgError
-from statsmodels.tsa.seasonal import seasonal_decompose
+from statsmodels.tsa.seasonal import seasonal_decompose, STL
 from scipy.stats import gaussian_kde, norm, lognorm
-from sklearn.preprocessing import MinMaxScaler #, MaxAbsScaler
+from sklearn.preprocessing import MaxAbsScaler, MinMaxScaler, StandardScaler, RobustScaler
 
 # Librería para la ejecución paralela
 import concurrent.futures
@@ -21,6 +21,64 @@ res_threads = []
 
 # MinMax fraction testing scale
 mmx_fs = 1 / 1000
+
+
+def keep_correlation_test(X):
+    dataframe = X.copy()
+    if "date" in dataframe.columns:
+        dataframe["date"] = pd.to_datetime(dataframe["date"])
+        dataframe = dataframe.set_index("date")
+        #
+    ma_dataframe = dataframe.copy()
+    ma = MaxAbsScaler()
+    ma_dataframe[list(dataframe.columns)] = ma.fit_transform(ma_dataframe[list(dataframe.columns)])
+    mm_dataframe = dataframe.copy()
+    mm = MinMaxScaler()
+    mm_dataframe[list(dataframe.columns)] = mm.fit_transform(mm_dataframe[list(dataframe.columns)])
+    sc_dataframe = dataframe.copy()
+    sc = StandardScaler()
+    sc_dataframe[list(dataframe.columns)] = sc.fit_transform(sc_dataframe[list(dataframe.columns)])
+    rb_dataframe = dataframe.copy()
+    rb = RobustScaler()
+    rb_dataframe[list(dataframe.columns)] = rb.fit_transform(rb_dataframe[list(dataframe.columns)])
+    # Average target metrics
+    avg_ma = 0
+    avg_mm = 0
+    avg_sc = 0
+    avg_rb = 0
+    for feature in dataframe.columns:
+        # Original
+        stl_df = STL(dataframe[feature]).fit()
+        # Targets
+        stl_ma = STL(ma_dataframe[feature]).fit()
+        stl_mm = STL(mm_dataframe[feature]).fit()
+        stl_sc = STL(sc_dataframe[feature]).fit()
+        stl_rb = STL(rb_dataframe[feature]).fit()
+        # MaxAbs
+        cor_tre_ma = np.corrcoef(stl_df.trend, stl_ma.trend)[0, 1]
+        cor_sea_ma = np.corrcoef(stl_df.seasonal, stl_ma.seasonal)[0, 1]
+        avg_ma += (cor_tre_ma + cor_sea_ma) / 2
+        # MinMax
+        cor_tre_mm = np.corrcoef(stl_df.trend, stl_mm.trend)[0, 1]
+        cor_sea_mm = np.corrcoef(stl_df.seasonal, stl_mm.seasonal)[0, 1]
+        avg_mm += (cor_tre_mm + cor_sea_mm) / 2
+        # Standard
+        cor_tre_sc = np.corrcoef(stl_df.trend, stl_sc.trend)[0, 1]
+        cor_sea_sc = np.corrcoef(stl_df.seasonal, stl_sc.seasonal)[0, 1]
+        avg_sc += (cor_tre_sc + cor_sea_sc) / 2
+        # Robust
+        cor_tre_rb = np.corrcoef(stl_df.trend, stl_rb.trend)[0, 1]
+        cor_sea_rb = np.corrcoef(stl_df.seasonal, stl_rb.seasonal)[0, 1]
+        avg_rb += (cor_tre_rb + cor_sea_rb) / 2
+        #
+    avg_ma /= len(dataframe.columns)
+    avg_mm /= len(dataframe.columns)
+    avg_sc /= len(dataframe.columns)
+    avg_rb /= len(dataframe.columns)
+    corrls = { avg_ma: "MaxAbs", avg_mm: "MinMax", avg_sc: "Standard", avg_rb: "Robust" }
+    print("[ Keep correlation test ]:", corrls)
+    print("[ Keep correlation selected ]:", corrls[[sorted(corrls)[-1]]])
+    return corrls[[sorted(corrls)[-1]]]
 
 
 def obtener_no_patrones_estacionalidad(X, periodo = 12):

@@ -573,32 +573,32 @@ export default {
 			path = this.graph.getNodeAttribute(item, "path");
 			x_i = this.graph.getNodeAttribute(item, "x");
 			y_i = this.graph.getNodeAttribute(item, "y");
-			if (label == "Seasonality" && (color == this.RED || color == this.ORANGE || color == this.BLUE) && size == this.ACTVSZ) {
+			if (label == "Seasonality" && (this.REDLS.includes(color) || color == this.ORANGE || color == this.BLUE) && size == this.ACTVSZ) {
 			    let behavss = await axios.get(
 				"http://localhost:8080/behavior/seasonality/" + this.dataset + "/" + this.station,
 				{ crossdomain: true }
 			    );
 			    this.vseason = behavss.data.seasonality;
 			    this.seasdl = true;
-			} else if (label == "Trend" && (color == this.RED || color == this.ORANGE || color == this.BLUE) && size == this.ACTVSZ) {
+			} else if (label == "Trend" && (this.REDLS.includes(color) || color == this.ORANGE || color == this.BLUE) && size == this.ACTVSZ) {
 			    let behavtr = await axios.get(
 				"http://localhost:8080/behavior/trend/" + this.dataset + "/" + this.station,
 				{ crossdomain: true }
 			    );
 			    this.vtrend = behavtr.data.trend;
 			    this.trendl = true;
-			} else if (label == "Noise" && (color == this.RED || color == this.ORANGE || color == this.BLUE) && size == this.ACTVSZ) {
+			} else if (label == "Noise" && (this.REDLS.includes(color) || color == this.ORANGE || color == this.BLUE) && size == this.ACTVSZ) {
 			    let behavns = await axios.get(
 				"http://localhost:8080/behavior/noise/" + this.dataset + "/" + this.station,
 				{ crossdomain: true }
 			    );
 			    this.vnoise = behavns.data.noise;
 			    this.noisdl = true;
-			} else if (label == "Linear" && (color == this.RED || color == this.ORANGE || color == this.BLUE) && size == this.ACTVSZ) {
+			} else if (label == "Linear" && (this.REDLS.includes(color) || color == this.ORANGE || color == this.BLUE) && size == this.ACTVSZ) {
 			    this.main_operation = "transform";
 			    this.main_path = path; // "transform/linear/";
 			    this.dialog = true;
-			} else if (label == "PCA and correlation" && (color == this.RED || color == this.ORANGE || color == this.BLUE) && size == this.ACTVSZ) {
+			} else if (label == "PCA and correlation" && (this.REDLS.includes(color) || color == this.ORANGE || color == this.BLUE) && size == this.ACTVSZ) {
 			    this.main_operation = "reduce";
 			    this.main_path = path; // "reduce/manual/";
 			    this.dialog = true;

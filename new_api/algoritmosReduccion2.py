@@ -166,12 +166,17 @@ def check_dimensionality_reduction_fa(X, factor_count = 1, threshold = 0.4):
 
 
 def choose_dimensionality_reduction(X):
-    # UNSCALED DATA
-    if "date" in X.columns:
-        X["date"] = pd.to_datetime(X["date"])
-        X = X.set_index("date")
+    data = X.copy()
+    if "date" in data.columns:
+        data["date"] = pd.to_datetime(data["date"])
+        data = data.set_index("date")
         #
-    data = X
+    print(data)
+    # mm = MinMaxScaler(feature_range=(0 + mmx_fs, 1 + mmx_fs))
+    # data[list(data.columns)] = mm.fit_transform(data[list(data.columns)])
+    # print(data)
+    data = data.loc[:, data.std() > 0]
+    print(data)
     kmo_all, kmo_overall = calculate_kmo(data)
     print(f"[ KMO Overall Score: {kmo_overall:.4f} ]")
     if kmo_overall >= 0.7:

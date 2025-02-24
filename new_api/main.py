@@ -33,7 +33,7 @@ from Dataloader.GenLoader import GenLoader
 # HINT: Data Transformation Testers Refactored
 # -------------------------------
 from AlgoritmosLimpieza import comprobarLimpieza, outliers_sufficiency_test
-from algoritmosNormalizacion import comprobarNormalizacion
+from algoritmosNormalizacion import comprobarNormalizacion, keep_correlation_test
 from algoritmosTransformacion import comprobarTransformacion
 from algoritmosReduccion2 import comprobarReduccion, check_dimensionality_reduction_fa, choose_dimensionality_reduction
 from algoritmosEstacionalidad import comprobarEstacionalidad, seasonality_detection, trend_detection, noise_detection
@@ -606,6 +606,8 @@ def recommendation_by_station(dataset, station):
                     #
         if status_norm:
             recommendations["Data Quality"].append("Normalize")
+            algo_prio.append(keep_correlation_test(current_df))
+            #
         else:
             if not recommendations["Data Quality"] and np.any(current_df.values < 0):
                 recommendations["Data Quality"].append("Normalize")
