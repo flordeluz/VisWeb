@@ -5,10 +5,12 @@ warnings.simplefilter("ignore", InterpolationWarning)
 
 import io
 import base64
+import math
 import pandas as pd
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 from pywt import cwt
 from statsmodels.tsa.stattools import acf, pacf
 from scipy.fftpack import fft
@@ -28,17 +30,21 @@ res_threads = []
 
 def seasonality_detection(ds, cols_list):
     reshtml = ''
-    pltid = 1
     rows = len(cols_list)
-    plt.figure(figsize = (9, 6), dpi = 100)
-    _, ax = plt.subplots(rows, 1)
-    for coln in cols_list:
+    fig, axes = plt.subplots(rows, 1, figsize=(6, 4 * math.ceil(rows / 2)), dpi=100)
+    if rows == 1:
+        axes = [axes]
+        #
+    for idx, coln in enumerate(cols_list):
         decomp = seasonal_decompose(ds[coln], period=1, model="additive", extrapolate_trend="freq")
         seasonal = decomp.seasonal
-        ax = plt.subplot(rows, 1, pltid)
-        ax.plot(seasonal, label=coln, marker='.', markersize=1)
-        ax.legend(loc='upper left')
-        pltid += 1
+        ax = axes[idx]
+        ax.plot(ds.index, seasonal, label=coln, marker='.', markersize=1)
+        ax.legend(loc='upper left', fontsize=8)
+        ax.xaxis.set_major_locator(mdates.AutoDateLocator())
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+        plt.setp(ax.xaxis.get_majorticklabels(), rotation=45, ha="right", fontsize=8)
+        ax.tick_params(axis='both', labelsize=8)
         #
     plt.tight_layout()
     s = io.BytesIO()
@@ -50,18 +56,22 @@ def seasonality_detection(ds, cols_list):
 
 
 def trend_detection(ds, cols_list):
-    reshtml = '';
-    pltid = 1
+    reshtml = ''
     rows = len(cols_list)
-    plt.figure(figsize = (9, 6), dpi = 100)
-    _, ax = plt.subplots(rows, 1)
-    for coln in cols_list:
+    fig, axes = plt.subplots(rows, 1, figsize=(6, 4 * math.ceil(rows / 2)), dpi=100)
+    if rows == 1:
+        axes = [axes]
+        #
+    for idx, coln in enumerate(cols_list):
         decomp = seasonal_decompose(ds[coln], period=1, model="additive", extrapolate_trend="freq")
         trend = decomp.trend
-        ax = plt.subplot(rows, 1, pltid)
-        ax.plot(trend, label=coln, marker='.', markersize=1)
-        ax.legend(loc='upper left')
-        pltid += 1
+        ax = axes[idx]
+        ax.plot(ds.index, trend, label=coln, marker='.', markersize=1)
+        ax.legend(loc='upper left', fontsize=8)
+        ax.xaxis.set_major_locator(mdates.AutoDateLocator())
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+        plt.setp(ax.xaxis.get_majorticklabels(), rotation=45, ha="right", fontsize=8)
+        ax.tick_params(axis='both', labelsize=8)
         #
     plt.tight_layout()
     s = io.BytesIO()
@@ -73,18 +83,22 @@ def trend_detection(ds, cols_list):
 
 
 def noise_detection(ds, cols_list):
-    reshtml = '';
-    pltid = 1
+    reshtml = ''
     rows = len(cols_list)
-    plt.figure(figsize = (9, 6), dpi = 100)
-    _, ax = plt.subplots(rows, 1)
-    for coln in cols_list:
+    fig, axes = plt.subplots(rows, 1, figsize=(6, 4 * math.ceil(rows / 2)), dpi=100)
+    if rows == 1:
+        axes = [axes]
+        #
+    for idx, coln in enumerate(cols_list):
         decomp = seasonal_decompose(ds[coln], period=1, model="additive", extrapolate_trend="freq")
         noise = decomp.resid
-        ax = plt.subplot(rows, 1, pltid)
-        ax.plot(noise, label=coln, marker='.', markersize=1)
-        ax.legend(loc='upper left')
-        pltid += 1
+        ax = axes[idx]
+        ax.plot(ds.index, noise, label=coln, marker='.', markersize=1)
+        ax.legend(loc='upper left', fontsize=8)
+        ax.xaxis.set_major_locator(mdates.AutoDateLocator())
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+        plt.setp(ax.xaxis.get_majorticklabels(), rotation=45, ha="right", fontsize=8)
+        ax.tick_params(axis='both', labelsize=8)
         #
     plt.tight_layout()
     s = io.BytesIO()
@@ -93,6 +107,7 @@ def noise_detection(ds, cols_list):
     s = base64.b64encode(s.getvalue()).decode("utf-8").replace("\n", "")
     reshtml += '<img src="data:image/png;base64,%s">' % s
     return reshtml
+
 
 # PERIODICIDAD
 

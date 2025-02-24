@@ -1042,7 +1042,7 @@ export default {
 		// defaultEdgeType: "curve",
 		edgeProgramClasses: {
 		    curve: EdgeCurveProgram,
-		}
+		},
 	    });
 	    
 	    // Create the spring layout and start it
@@ -1050,8 +1050,13 @@ export default {
 	    this.loading_data = false
 	    //* this.layout.start();
 	    
-	    //* setTimeout(() => {this.layout.stop();}, 4000);
+	    // Disabling graph dragging
+	    this.renderer.getMouseCaptor().on("mousedown", (e) => { e.preventSigmaDefault(); });
+	    this.renderer.getMouseCaptor().on("mousemove", (e) => { e.preventSigmaDefault(); });
+	    this.renderer.getMouseCaptor().on("mouseup", (e) => { e.preventSigmaDefault(); });
 	    
+	    //* setTimeout(() => {this.layout.stop();}, 4000);
+	    // Actions
 	    this.renderer.on("clickNode", ({ node }) => this.execActivity("clickNode", "node", node));
 	    this.renderer.on("enterNode", ({ node }) => this.showGuide("enterNode", "node", node));
 	    this.renderer.on("leaveNode", ({ node }) => this.hideGuide("leaveNode", "node", node));
